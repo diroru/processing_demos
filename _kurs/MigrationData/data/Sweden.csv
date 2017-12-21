@@ -1,0 +1,374 @@
+Type	Coverage	OdName	AREA	AreaName	REG	RegName	DEV	DevName	1980	1981	1982	1983	1984	1985	1986	1987	1988	1989	1990	1991	1992	1993	1994	1995	1996	1997	1998	1999	2000	2001	2002	2003	2004	2005	2006	2007	2008	2009	2010	2011	2012	2013
+Emigrants	Foreigners	Afghanistan	935	Asia	5501	Southern Asia	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	22	13	6	21	11	26	30	31	31	26	60	34	64	58	69	63
+Emigrants	Foreigners	Albania	908	Europe	925	Southern Europe	901	Developed regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	0	1	1	0	2	2	4	6	13	8	9	5	12	14	18	17
+Emigrants	Foreigners	Algeria	903	Africa	912	Northern Africa	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	3	15	5	6	13	7	17	7	16	24	9	6	17	16	18	14
+Emigrants	Foreigners	Angola	903	Africa	911	Middle Africa	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	2	4	0	0	2	3	3	1	4	3	3	..	..	8	1	6
+Emigrants	Foreigners	Antigua and Barbuda	904	Latin America and the Caribbean	915	Caribbean	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	0	0	0	0	0	0	0	0	0	0	..	..	..	0	1	0
+Emigrants	Foreigners	Argentina	904	Latin America and the Caribbean	931	South America	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	27	28	30	21	26	28	17	23	43	36	22	22	20	28	29	21
+Emigrants	Foreigners	Armenia	935	Asia	922	Western Asia	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	1	1	0	1	1	1	8	1	9	5	8	6	7	10	20	17
+Emigrants	Foreigners	Australia	909	Oceania	927	Australia and New Zealand	901	Developed regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	152	192	185	187	230	205	204	186	284	204	181	114	141	202	200	158
+Emigrants	Foreigners	Austria	908	Europe	926	Western Europe	901	Developed regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	46	65	73	57	79	69	92	60	117	110	78	119	142	126	122	114
+Emigrants	Foreigners	Azerbaijan	935	Asia	922	Western Asia	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	0	0	0	0	1	3	2	3	7	10	7	5	10	21	23	30
+Emigrants	Foreigners	Bahamas	904	Latin America and the Caribbean	915	Caribbean	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	0	1	0	0	0	0	0	1	1	0	1	..	1	1	2	4
+Emigrants	Foreigners	Bahrain	935	Asia	922	Western Asia	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	0	0	3	0	0	7	1	2	0	0	1	1	1	0	3	7
+Emigrants	Foreigners	Bangladesh	935	Asia	5501	Southern Asia	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	10	23	15	28	28	29	38	49	103	121	95	76	134	162	238	194
+Emigrants	Foreigners	Barbados	904	Latin America and the Caribbean	915	Caribbean	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	4	6	3	1	5	1	0	1	4	3	..	4	1	0	0	2
+Emigrants	Foreigners	Belarus	908	Europe	923	Eastern Europe	901	Developed regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	2	3	5	4	7	3	12	15	15	17	17	11	20	24	34	20
+Emigrants	Foreigners	Belgium	908	Europe	926	Western Europe	901	Developed regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	41	57	71	70	76	64	59	49	75	64	51	72	119	100	92	100
+Emigrants	Foreigners	Benin	903	Africa	914	Western Africa	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	0	0	0	0	0	0	0	0	0	0	..	..	2	3	0	2
+Emigrants	Foreigners	Bhutan	935	Asia	5501	Southern Asia	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	0	0	0	0	1	0	1	0	1	1	2	1	..	6	4	0
+Emigrants	Foreigners	Bolivia (Plurinational State of)	904	Latin America and the Caribbean	931	South America	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	13	12	15	11	17	19	20	10	21	18	11	11	22	15	23	34
+Emigrants	Foreigners	Bosnia and Herzegovina	908	Europe	925	Southern Europe	901	Developed regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	533	230	162	129	114	114	68	58	85	79	84	52	79	94	50	55
+Emigrants	Foreigners	Botswana	903	Africa	913	Southern Africa	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	0	4	1	1	2	1	1	1	2	2	1	..	6	0	0	1
+Emigrants	Foreigners	Brazil	904	Latin America and the Caribbean	931	South America	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	65	59	88	62	72	115	81	93	147	127	118	125	141	119	145	144
+Emigrants	Foreigners	Brunei Darussalam	935	Asia	920	South-Eastern Asia	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	0	0	0	0	0	0	0	0	0	0	..	..	1	1	2	0
+Emigrants	Foreigners	Bulgaria	908	Europe	923	Eastern Europe	901	Developed regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	28	15	20	19	14	50	39	9	29	68	117	145	162	215	231	223
+Emigrants	Foreigners	Burkina Faso	903	Africa	914	Western Africa	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	0	0	0	0	0	0	0	0	2	2	..	..	..	6	2	3
+Emigrants	Foreigners	Burundi	903	Africa	910	Eastern Africa	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	0	0	1	2	0	2	0	2	1	2	4	2	6	9	4	7
+Emigrants	Foreigners	Cabo Verde	903	Africa	914	Western Africa	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	0	1	2	1	2	1	1	1	2	1	1	1	..	0	0	1
+Emigrants	Foreigners	Cambodia	935	Asia	920	South-Eastern Asia	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	0	1	0	1	0	0	1	1	0	2	2	1	..	2	6	2
+Emigrants	Foreigners	Cameroon	903	Africa	911	Middle Africa	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	1	0	2	1	6	5	4	30	66	67	84	49	64	106	116	70
+Emigrants	Foreigners	Canada	905	Northern America	905	Northern America	901	Developed regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	122	165	146	139	162	126	144	125	206	154	152	111	179	162	238	159
+Emigrants	Foreigners	Central African Republic	903	Africa	911	Middle Africa	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	0	0	0	0	0	0	0	0	0	0	..	..	..	2	0	0
+Emigrants	Foreigners	Chad	903	Africa	911	Middle Africa	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	0	0	0	1	0	0	0	0	0	1	..	1	..	0	0	0
+Emigrants	Foreigners	Chile	904	Latin America and the Caribbean	931	South America	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	312	219	103	108	123	126	117	134	142	148	89	66	122	109	140	146
+Emigrants	Foreigners	China (including Hong Kong Special Administrative Region)	935	Asia	906	Eastern Asia	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	350	295	416	326	715	807	532	376	549	1047	1379	1015
+Emigrants	Foreigners	China, Taiwan Province of China	935	Asia	906	Eastern Asia	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	0	0	0	0	..	0	9	11	33	30	11	17	25	38	64	35
+Emigrants	Foreigners	Colombia	904	Latin America and the Caribbean	931	South America	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	23	16	19	18	16	27	16	30	55	46	53	37	32	55	56	48
+Emigrants	Foreigners	Congo	903	Africa	911	Middle Africa	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	0	1	0	1	0	3	0	2	9	0	4	2	2	4	1	5
+Emigrants	Foreigners	Costa Rica	904	Latin America and the Caribbean	916	Central America	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	2	7	9	3	7	2	6	3	11	1	3	2	5	8	11	10
+Emigrants	Foreigners	Côte d'Ivoire	903	Africa	914	Western Africa	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	0	2	0	0	4	0	3	10	1	7	3	..	5	3	3	4
+Emigrants	Foreigners	Croatia	908	Europe	925	Southern Europe	901	Developed regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	80	63	30	28	52	48	24	26	47	43	34	21	39	36	40	28
+Emigrants	Foreigners	Cuba	904	Latin America and the Caribbean	915	Caribbean	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	10	10	8	24	19	33	20	18	26	23	19	12	23	23	21	13
+Emigrants	Foreigners	Cyprus	935	Asia	922	Western Asia	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	10	9	7	4	8	12	2	8	4	12	6	9	11	14	12	8
+Emigrants	Foreigners	Czech Republic	908	Europe	923	Eastern Europe	901	Developed regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	19	15	17	25	38	35	58	56	42	64	70	88	97	117	119	118
+Emigrants	Foreigners	Democratic People's Republic of Korea	935	Asia	906	Eastern Asia	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	0	0	0	1	0	5	2	4	0	0	..	1	1	1	4	0
+Emigrants	Foreigners	Democratic Republic of the Congo	903	Africa	911	Middle Africa	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	0	0	0	0	8	2	9	3	7	0	5	2	10	14	6	13
+Emigrants	Foreigners	Denmark	908	Europe	924	Northern Europe	901	Developed regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	1199	973	1055	1171	1347	1628	1990	2154	2117	2510	2883	3056	3159	3081	2835	3035
+Emigrants	Foreigners	Djibouti	903	Africa	910	Eastern Africa	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	0	0	1	0	1	0	0	0	0	3	..	..	1	0	1	0
+Emigrants	Foreigners	Dominica	904	Latin America and the Caribbean	915	Caribbean	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	0	1	0	0	0	0	1	1	3	0	..	..	..	1	0	0
+Emigrants	Foreigners	Dominican Republic	904	Latin America and the Caribbean	915	Caribbean	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	3	2	0	4	2	5	5	6	6	10	13	8	5	8	11	6
+Emigrants	Foreigners	Ecuador	904	Latin America and the Caribbean	931	South America	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	4	6	5	12	5	4	9	9	25	16	11	10	17	10	21	11
+Emigrants	Foreigners	Egypt	903	Africa	912	Northern Africa	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	33	22	14	10	20	34	44	41	60	34	28	16	55	49	35	70
+Emigrants	Foreigners	El Salvador	904	Latin America and the Caribbean	916	Central America	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	20	15	6	9	9	4	7	4	6	5	7	..	9	2	8	6
+Emigrants	Foreigners	Equatorial Guinea	903	Africa	911	Middle Africa	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	0	0	0	0	0	0	0	0	6	0	..	..	1	0	0	0
+Emigrants	Foreigners	Eritrea	903	Africa	910	Eastern Africa	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	3	0	6	4	8	8	10	10	25	15	16	23	18	29	73	40
+Emigrants	Foreigners	Estonia	908	Europe	924	Northern Europe	901	Developed regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	45	43	35	51	68	62	98	107	108	129	120	91	166	163	237	229
+Emigrants	Foreigners	Ethiopia	903	Africa	910	Eastern Africa	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	63	68	45	21	39	31	34	34	66	71	48	16	72	69	128	80
+Emigrants	Foreigners	Fiji	909	Oceania	928	Melanesia	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	1	0	1	0	1	0	0	2	1	2	..	..	..	0	0	0
+Emigrants	Foreigners	Finland	908	Europe	924	Northern Europe	901	Developed regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	2870	2710	2673	2996	2771	2871	2876	3171	2731	2428	2517	2296	2153	2092	1987	1871
+Emigrants	Foreigners	France	908	Europe	926	Western Europe	901	Developed regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	218	304	333	371	382	406	442	383	595	655	471	482	610	511	651	555
+Emigrants	Foreigners	Gabon	903	Africa	911	Middle Africa	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	4	0	0	0	0	0	0	0	0	0	..	..	..	0	1	1
+Emigrants	Foreigners	Gambia	903	Africa	914	Western Africa	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	22	36	15	13	17	27	20	21	22	40	16	9	20	21	26	23
+Emigrants	Foreigners	Georgia	935	Asia	922	Western Asia	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	2	0	2	4	3	3	5	8	12	14	12	6	6	17	17	21
+Emigrants	Foreigners	Germany	908	Europe	926	Western Europe	901	Developed regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	465	602	546	542	666	674	792	777	961	1099	1014	1278	1305	1369	1303	1356
+Emigrants	Foreigners	Ghana	903	Africa	914	Western Africa	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	8	13	18	4	8	16	37	18	43	84	55	23	35	45	53	35
+Emigrants	Foreigners	Greece	908	Europe	925	Southern Europe	901	Developed regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	254	249	172	136	189	216	175	164	269	300	230	211	290	204	256	268
+Emigrants	Foreigners	Grenada	904	Latin America and the Caribbean	915	Caribbean	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	1	0	0	0	2	1	1	0	3	2	..	1	..	2	0	0
+Emigrants	Foreigners	Guatemala	904	Latin America and the Caribbean	916	Central America	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	3	10	3	0	7	0	4	2	3	1	3	..	5	4	3	2
+Emigrants	Foreigners	Guinea	903	Africa	914	Western Africa	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	1	0	0	0	1	2	0	0	0	2	..	..	2	0	3	0
+Emigrants	Foreigners	Guinea-Bissau	903	Africa	914	Western Africa	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	0	0	0	0	0	0	0	1	0	1	1	1	..	0	0	1
+Emigrants	Foreigners	Guyana	904	Latin America and the Caribbean	931	South America	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	0	2	0	0	0	0	1	0	0	0	..	1	..	0	0	0
+Emigrants	Foreigners	Haiti	904	Latin America and the Caribbean	915	Caribbean	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	0	1	0	0	1	0	0	0	1	0	1	1	1	2	0	0
+Emigrants	Foreigners	Honduras	904	Latin America and the Caribbean	916	Central America	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	2	1	0	2	3	2	0	1	3	4	4	1	4	9	2	4
+Emigrants	Foreigners	Hungary	908	Europe	923	Eastern Europe	901	Developed regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	70	65	79	64	91	97	89	80	98	149	159	153	273	326	283	308
+Emigrants	Foreigners	Iceland	908	Europe	924	Northern Europe	901	Developed regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	477	441	403	279	341	317	301	381	308	369	279	222	351	358	461	490
+Emigrants	Foreigners	India	935	Asia	5501	Southern Asia	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	40	62	96	87	160	193	239	371	625	669	661	595	673	921	1228	1235
+Emigrants	Foreigners	Indonesia	935	Asia	920	South-Eastern Asia	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	9	17	28	21	35	33	19	23	54	45	23	19	34	53	60	40
+Emigrants	Foreigners	Iran (Islamic Republic of)	935	Asia	5501	Southern Asia	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	385	306	176	174	217	213	231	198	294	331	287	131	256	375	515	447
+Emigrants	Foreigners	Iraq	935	Asia	922	Western Asia	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	148	140	124	125	125	190	266	207	216	191	341	252	400	462	651	589
+Emigrants	Foreigners	Ireland	908	Europe	924	Northern Europe	901	Developed regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	64	81	79	73	95	80	63	86	111	139	99	95	139	134	174	120
+Emigrants	Foreigners	Israel	935	Asia	922	Western Asia	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	36	51	21	29	35	19	34	38	96	49	31	19	56	24	46	29
+Emigrants	Foreigners	Italy	908	Europe	925	Southern Europe	901	Developed regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	136	164	140	143	221	182	224	196	266	284	195	247	308	295	359	320
+Emigrants	Foreigners	Jamaica	904	Latin America and the Caribbean	915	Caribbean	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	1	4	2	3	2	1	1	2	1	4	8	1	1	2	7	4
+Emigrants	Foreigners	Japan	935	Asia	906	Eastern Asia	901	Developed regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	239	247	232	289	230	293	241	195	309	306	228	226	262	208	239	291
+Emigrants	Foreigners	Jordan	935	Asia	922	Western Asia	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	15	7	8	14	8	14	29	13	26	28	28	13	22	28	46	45
+Emigrants	Foreigners	Kazakhstan	935	Asia	5500	Central Asia	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	3	1	2	2	2	2	2	2	1	6	5	1	10	5	15	20
+Emigrants	Foreigners	Kenya	903	Africa	910	Eastern Africa	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	9	11	15	3	12	13	16	11	28	29	11	15	24	20	35	28
+Emigrants	Foreigners	Kiribati	909	Oceania	954	Micronesia	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	0	0	0	0	0	0	0	1	0	0	1	..	..	0	0	0
+Emigrants	Foreigners	Kuwait	935	Asia	922	Western Asia	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	10	2	6	1	1	0	4	7	1	1	2	1	1	0	2	1
+Emigrants	Foreigners	Kyrgyzstan	935	Asia	5500	Central Asia	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	0	0	0	0	1	0	0	4	3	3	3	2	4	11	12	9
+Emigrants	Foreigners	Lao People's Democratic Republic	935	Asia	920	South-Eastern Asia	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	7	2	6	6	2	1	4	2	1	1	6	2	2	2	5	3
+Emigrants	Foreigners	Latvia	908	Europe	924	Northern Europe	901	Developed regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	3	15	12	34	26	40	37	36	54	99	104	67	141	130	186	235
+Emigrants	Foreigners	Lebanon	935	Asia	922	Western Asia	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	79	85	48	32	56	38	35	46	63	69	61	44	52	101	79	60
+Emigrants	Foreigners	Lesotho	903	Africa	913	Southern Africa	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	0	0	0	0	0	0	0	0	1	0	..	..	..	0	1	0
+Emigrants	Foreigners	Liberia	903	Africa	914	Western Africa	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	2	1	0	0	1	1	0	1	0	2	3	2	2	4	2	6
+Emigrants	Foreigners	Libya	903	Africa	912	Northern Africa	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	21	28	10	9	7	6	3	11	10	25	13	11	6	28	61	36
+Emigrants	Foreigners	Liechtenstein	908	Europe	926	Western Europe	901	Developed regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	0	1	0	1	1	0	3	0	0	0	..	..	1	0	1	0
+Emigrants	Foreigners	Lithuania	908	Europe	924	Northern Europe	901	Developed regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	20	19	16	45	15	43	52	35	87	124	160	123	182	226	371	339
+Emigrants	Foreigners	Luxembourg	908	Europe	926	Western Europe	901	Developed regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	2	0	1	6	1	1	3	4	7	2	4	1	4	2	4	10
+Emigrants	Foreigners	Madagascar	903	Africa	910	Eastern Africa	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	0	0	0	0	0	4	0	0	4	0	..	..	..	1	0	1
+Emigrants	Foreigners	Malawi	903	Africa	910	Eastern Africa	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	0	0	0	0	1	0	0	0	0	0	2	1	..	6	2	2
+Emigrants	Foreigners	Malaysia	935	Asia	920	South-Eastern Asia	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	35	32	19	27	24	31	29	16	55	30	31	25	46	36	34	36
+Emigrants	Foreigners	Maldives	935	Asia	5501	Southern Asia	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	0	0	0	0	0	0	0	0	0	1	..	..	..	0	2	0
+Emigrants	Foreigners	Mali	903	Africa	914	Western Africa	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	1	1	0	1	0	1	0	0	0	1	..	1	1	2	1	3
+Emigrants	Foreigners	Malta	908	Europe	925	Southern Europe	901	Developed regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	1	1	1	4	2	3	1	3	7	3	2	3	8	11	5	6
+Emigrants	Foreigners	Mauritania	903	Africa	914	Western Africa	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	4	0	0	0	0	0	0	0	0	0	..	..	..	0	0	1
+Emigrants	Foreigners	Mauritius	903	Africa	910	Eastern Africa	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	4	1	0	2	0	2	7	4	5	1	2	6	..	5	1	7
+Emigrants	Foreigners	Mexico	904	Latin America and the Caribbean	916	Central America	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	25	30	43	40	47	33	56	45	129	90	55	36	66	75	96	61
+Emigrants	Foreigners	Mongolia	935	Asia	906	Eastern Asia	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	0	0	0	0	1	2	2	2	4	0	6	9	4	9	18	36
+Emigrants	Foreigners	Montenegro	908	Europe	925	Southern Europe	901	Developed regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	0	0	7	8	2	6	3	4
+Emigrants	Foreigners	Morocco	903	Africa	912	Northern Africa	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	23	27	18	18	23	34	30	23	38	57	34	32	49	31	52	60
+Emigrants	Foreigners	Mozambique	903	Africa	910	Eastern Africa	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	1	2	3	2	1	0	2	3	3	4	2	2	3	10	7	7
+Emigrants	Foreigners	Myanmar	935	Asia	920	South-Eastern Asia	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	1	1	0	0	1	0	0	0	5	1	5	2	4	2	5	7
+Emigrants	Foreigners	Namibia	903	Africa	913	Southern Africa	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	0	..	..	..	0	0	1	2	0	3	2	2	4	1	2
+Emigrants	Foreigners	Nepal	935	Asia	5501	Southern Asia	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	3	0	2	0	0	0	2	0	8	9	5	6	15	34	51	46
+Emigrants	Foreigners	Netherlands	908	Europe	926	Western Europe	901	Developed regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	179	189	173	238	264	244	198	201	316	295	321	336	388	382	476	392
+Emigrants	Foreigners	New Zealand	909	Oceania	927	Australia and New Zealand	901	Developed regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	33	39	54	39	44	50	39	62	82	48	30	26	50	35	69	59
+Emigrants	Foreigners	Nicaragua	904	Latin America and the Caribbean	916	Central America	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	3	15	1	5	10	2	1	6	4	10	8	1	4	14	10	6
+Emigrants	Foreigners	Niger	903	Africa	914	Western Africa	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	0	0	0	0	0	0	0	0	0	0	1	..	..	0	0	0
+Emigrants	Foreigners	Nigeria	903	Africa	914	Western Africa	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	11	11	17	6	14	15	21	20	76	89	75	41	80	88	143	71
+Emigrants	Foreigners	Norway	908	Europe	924	Northern Europe	901	Developed regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	1779	1524	1577	1509	1629	1893	1927	1922	1821	1770	1749	1660	1629	1560	1578	1631
+Emigrants	Foreigners	Oman	935	Asia	922	Western Asia	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	0	2	0	1	0	0	0	0	4	2	..	..	3	10	4	1
+Emigrants	Foreigners	Pakistan	935	Asia	5501	Southern Asia	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	20	15	28	29	43	46	70	79	178	282	248	285	451	615	708	576
+Emigrants	Foreigners	Palau	909	Oceania	954	Micronesia	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	0	0	0	1	0	0	0	0	0	0	..	..	..	0	0	0
+Emigrants	Foreigners	Panama	904	Latin America and the Caribbean	916	Central America	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	2	4	2	2	2	1	3	1	2	4	2	3	2	3	6	4
+Emigrants	Foreigners	Papua New Guinea	909	Oceania	928	Melanesia	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	0	0	0	0	0	0	0	0	0	1	..	..	..	0	0	0
+Emigrants	Foreigners	Paraguay	904	Latin America and the Caribbean	931	South America	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	1	1	1	1	2	0	0	5	2	0	..	..	3	0	0	0
+Emigrants	Foreigners	Peru	904	Latin America and the Caribbean	931	South America	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	17	26	11	13	19	19	14	19	24	27	16	18	27	33	42	39
+Emigrants	Foreigners	Philippines	935	Asia	920	South-Eastern Asia	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	34	37	24	18	26	36	25	34	34	43	38	34	47	54	60	44
+Emigrants	Foreigners	Poland	908	Europe	923	Eastern Europe	901	Developed regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	180	164	126	140	146	172	213	241	362	636	937	1089	1253	1395	1537	1296
+Emigrants	Foreigners	Portugal	908	Europe	925	Southern Europe	901	Developed regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	57	58	35	27	50	38	35	43	81	61	49	57	89	97	104	99
+Emigrants	Foreigners	Qatar	935	Asia	922	Western Asia	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	0	0	0	0	0	0	0	7	1	5	..	1	11	1	3	1
+Emigrants	Foreigners	Republic of Korea	935	Asia	906	Eastern Asia	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	35	24	31	53	75	56	71	74	133	99	55	76	53	103	102	98
+Emigrants	Foreigners	Republic of Moldova	908	Europe	923	Eastern Europe	901	Developed regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	0	0	0	1	0	4	3	7	2	21	10	2	12	18	4	1
+Emigrants	Foreigners	Romania	908	Europe	923	Eastern Europe	901	Developed regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	50	38	39	47	38	40	44	42	77	143	269	529	443	541	530	468
+Emigrants	Foreigners	Russian Federation	908	Europe	923	Eastern Europe	901	Developed regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	87	87	103	138	133	137	145	136	234	262	139	126	132	213	250	156
+Emigrants	Foreigners	Rwanda	903	Africa	910	Eastern Africa	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	4	0	0	4	0	0	1	1	1	1	1	1	3	6	9	6
+Emigrants	Foreigners	Saint Lucia	904	Latin America and the Caribbean	915	Caribbean	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	0	0	0	0	2	0	0	1	0	0	..	..	..	0	0	0
+Emigrants	Foreigners	Saint Vincent and the Grenadines	904	Latin America and the Caribbean	915	Caribbean	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	0	0	0	0	0	0	0	0	0	0	..	..	1	0	0	0
+Emigrants	Foreigners	Samoa	909	Oceania	957	Polynesia	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	0	0	0	0	0	1	0	0	0	0	..	..	..	0	1	0
+Emigrants	Foreigners	San Marino	908	Europe	925	Southern Europe	901	Developed regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	0	0	0	0	0	0	0	0	0	0	..	..	..	0	1	0
+Emigrants	Foreigners	Sao Tome and Principe	903	Africa	911	Middle Africa	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	0	0	0	0	0	0	0	0	0	0	..	..	..	0	1	0
+Emigrants	Foreigners	Saudi Arabia	935	Asia	922	Western Asia	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	12	7	21	11	35	35	15	16	25	46	3	6	19	16	30	17
+Emigrants	Foreigners	Senegal	903	Africa	914	Western Africa	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	3	1	1	0	1	1	0	1	5	1	2	4	5	1	8	8
+Emigrants	Foreigners	Serbia	908	Europe	925	Southern Europe	901	Developed regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	0	10	39	54	83	94	84	105
+Emigrants	Foreigners	Seychelles	903	Africa	910	Eastern Africa	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	0	1	0	1	4	0	0	0	2	0	2	2	..	0	0	1
+Emigrants	Foreigners	Sierra Leone	903	Africa	914	Western Africa	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	1	2	0	3	3	2	0	5	5	6	7	4	9	7	4	5
+Emigrants	Foreigners	Singapore	935	Asia	920	South-Eastern Asia	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	32	32	71	84	35	130	20	18	33	36	23	22	40	70	122	11
+Emigrants	Foreigners	Slovakia	908	Europe	923	Eastern Europe	901	Developed regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	7	7	1	16	10	14	20	20	26	32	53	62	87	106	82	74
+Emigrants	Foreigners	Slovenia	908	Europe	925	Southern Europe	901	Developed regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	3	8	6	7	5	8	5	12	17	14	19	15	32	28	26	25
+Emigrants	Foreigners	Somalia	903	Africa	910	Eastern Africa	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	248	189	140	128	161	219	255	207	283	288	259	133	328	358	447	371
+Emigrants	Foreigners	South Africa	903	Africa	913	Southern Africa	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	10	14	14	13	42	60	53	53	109	65	47	39	37	31	48	24
+Emigrants	Foreigners	Spain	908	Europe	925	Southern Europe	901	Developed regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	169	207	191	154	212	209	224	209	351	350	238	249	390	323	366	347
+Emigrants	Foreigners	Sri Lanka	935	Asia	5501	Southern Asia	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	21	32	13	20	24	38	36	23	54	35	35	24	40	32	41	51
+Emigrants	Foreigners	State of Palestine	935	Asia	922	Western Asia	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	0	0	0	12	0	0	0	0	0	0	..	..	..	0	0	0
+Emigrants	Foreigners	Sudan	903	Africa	912	Northern Africa	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	9	6	7	15	15	7	14	23	27	57	18	17	15	31	40	8
+Emigrants	Foreigners	Suriname	904	Latin America and the Caribbean	931	South America	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	0	0	0	0	0	0	0	0	0	2	..	..	..	0	0	0
+Emigrants	Foreigners	Swaziland	903	Africa	913	Southern Africa	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	1	1	0	0	0	1	0	0	0	0	1	..	..	0	0	0
+Emigrants	Citizens	Sweden	908	Europe	924	Northern Europe	901	Developed regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	24381	22123	21515	19439	18813	19889	20565	22266	24875	24990	26052	20883	26792	27506	25116	26112
+Emigrants	Foreigners	Switzerland	908	Europe	926	Western Europe	901	Developed regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	67	72	96	60	61	63	68	56	71	65	67	55	80	89	115	73
+Emigrants	Foreigners	Syrian Arab Republic	935	Asia	922	Western Asia	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	15	16	12	11	22	21	27	20	29	35	23	8	22	40	50	47
+Emigrants	Foreigners	Tajikistan	935	Asia	5500	Central Asia	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	0	0	0	1	0	1	0	0	2	4	2	2	6	3	5	2
+Emigrants	Foreigners	Thailand	935	Asia	920	South-Eastern Asia	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	68	80	69	57	80	96	121	129	224	205	184	166	200	301	364	348
+Emigrants	Foreigners	The former Yugoslav Republic of Macedonia	908	Europe	925	Southern Europe	901	Developed regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	12	6	24	12	17	19	11	16	28	37	29	30	21	49	53	44
+Emigrants	Foreigners	Togo	903	Africa	914	Western Africa	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	2	2	1	1	2	1	1	1	1	3	4	..	..	0	2	4
+Emigrants	Foreigners	Tonga	909	Oceania	957	Polynesia	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	1	0	0	0	0	0	0	0	1	0	..	..	..	0	0	0
+Emigrants	Foreigners	Trinidad and Tobago	904	Latin America and the Caribbean	915	Caribbean	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	1	3	3	3	3	2	1	4	4	3	3	1	2	2	9	5
+Emigrants	Foreigners	Tunisia	903	Africa	912	Northern Africa	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	26	28	12	7	25	18	24	14	19	28	28	14	34	34	28	28
+Emigrants	Foreigners	Turkey	935	Asia	922	Western Asia	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	161	146	112	91	114	130	159	130	210	286	230	223	230	316	420	435
+Emigrants	Foreigners	Turkmenistan	935	Asia	5500	Central Asia	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	0	3	0	1	0	0	0	0	1	0	1	..	..	3	0	0
+Emigrants	Foreigners	Uganda	903	Africa	910	Eastern Africa	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	10	9	8	7	10	12	15	4	24	12	10	14	21	26	26	28
+Emigrants	Foreigners	Ukraine	908	Europe	923	Eastern Europe	901	Developed regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	9	13	8	14	20	34	39	33	61	59	34	30	60	85	77	79
+Emigrants	Foreigners	United Arab Emirates	935	Asia	922	Western Asia	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	5	19	0	9	2	4	21	1	15	11	1	2	10	3	14	4
+Emigrants	Foreigners	United Kingdom of Great Britain and Northern Ireland	908	Europe	924	Northern Europe	901	Developed regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	610	706	653	548	816	819	833	697	946	837	739	639	1010	813	918	940
+Emigrants	Foreigners	United Republic of Tanzania	903	Africa	910	Eastern Africa	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	8	12	13	1	15	22	19	16	28	25	22	11	17	22	30	20
+Emigrants	Foreigners	United States of America	905	Northern America	905	Northern America	901	Developed regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	812	822	700	747	786	717	757	593	1203	778	563	535	706	645	840	698
+Emigrants	Foreigners	Uruguay	904	Latin America and the Caribbean	931	South America	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	10	18	13	8	12	12	11	18	16	16	12	4	13	4	7	14
+Emigrants	Foreigners	Uzbekistan	935	Asia	5500	Central Asia	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	0	0	1	1	0	1	3	4	4	11	18	18	11	28	28	42
+Emigrants	Foreigners	Venezuela (Bolivarian Republic of)	904	Latin America and the Caribbean	931	South America	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	4	11	4	8	6	15	8	7	13	14	15	7	7	17	17	11
+Emigrants	Foreigners	Viet Nam	935	Asia	920	South-Eastern Asia	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	32	24	11	0	19	20	26	21	50	45	44	29	41	85	112	83
+Emigrants	Foreigners	Yemen	935	Asia	922	Western Asia	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	3	1	0	1	0	3	0	1	4	1	..	1	..	6	4	18
+Emigrants	Foreigners	Zambia	903	Africa	910	Eastern Africa	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	1	11	2	7	2	5	9	6	11	6	11	4	7	5	6	5
+Emigrants	Foreigners	Zimbabwe	903	Africa	910	Eastern Africa	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	3	7	8	4	3	6	11	4	7	9	1	7	6	3	7	3
+Emigrants	Foreigners	Stateless	999	World	999	World	999	World	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	102	72	54	35	49	42	42	54	54	60	81	48	44	69	111	82
+Emigrants	Foreigners	Unknown	999	World	999	World	999	World	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	544	619	538	473	257	243	258	178	274	254	163	81	137	146	133	126
+Emigrants	Both	Total	999	World	999	World	999	World	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	38518	35705	34091	32141	33009	35023	36586	38118	44908	45418	45294	39240	48853	51179	51747	50715
+Immigrants	Foreigners	Afghanistan	935	Asia	5501	Southern Asia	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	381	407	888	1030	979	964	964	656	1669	835	1033	1558	1920	3415	4673	4165
+Immigrants	Foreigners	Albania	908	Europe	925	Southern Europe	901	Developed regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	21	34	62	46	58	66	68	96	180	96	98	122	164	137	226	192
+Immigrants	Foreigners	Algeria	903	Africa	912	Northern Africa	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	82	69	67	74	77	72	85	111	163	119	127	145	122	100	136	98
+Immigrants	Foreigners	Andorra	908	Europe	925	Southern Europe	901	Developed regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	0	0	0	0	0	0	0	0	0	0	..	..	1	0	0	0
+Immigrants	Foreigners	Angola	903	Africa	911	Middle Africa	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	14	11	16	22	33	32	23	19	86	30	17	27	10	15	17	8
+Immigrants	Foreigners	Antigua and Barbuda	904	Latin America and the Caribbean	915	Caribbean	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	1	0	0	0	1	1	0	1	0	0	1	..	..	0	0	1
+Immigrants	Foreigners	Argentina	904	Latin America and the Caribbean	931	South America	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	40	30	42	61	77	84	52	65	62	64	84	75	67	74	63	72
+Immigrants	Foreigners	Armenia	935	Asia	922	Western Asia	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	51	107	92	86	103	80	88	117	300	140	97	177	174	217	246	190
+Immigrants	Foreigners	Australia	909	Oceania	927	Australia and New Zealand	901	Developed regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	276	230	309	300	285	267	266	235	306	290	310	286	319	304	294	289
+Immigrants	Foreigners	Austria	908	Europe	926	Western Europe	901	Developed regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	91	95	137	131	165	141	107	130	173	207	228	219	185	151	218	171
+Immigrants	Foreigners	Azerbaijan	935	Asia	922	Western Asia	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	14	27	15	33	33	81	133	213	892	155	114	176	228	250	247	196
+Immigrants	Foreigners	Bahamas	904	Latin America and the Caribbean	915	Caribbean	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	0	0	1	1	0	2	0	3	0	2	1	1	2	0	4	0
+Immigrants	Foreigners	Bahrain	935	Asia	922	Western Asia	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	1	4	9	4	0	2	2	0	0	3	3	1	1	6	3	11
+Immigrants	Foreigners	Bangladesh	935	Asia	5501	Southern Asia	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	137	109	138	150	172	241	270	399	378	426	500	712	957	417	430	374
+Immigrants	Foreigners	Barbados	904	Latin America and the Caribbean	915	Caribbean	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	12	6	8	8	5	0	2	2	4	4	3	3	..	3	1	0
+Immigrants	Foreigners	Belarus	908	Europe	923	Eastern Europe	901	Developed regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	61	52	111	134	140	158	146	137	301	188	166	247	215	240	239	156
+Immigrants	Foreigners	Belgium	908	Europe	926	Western Europe	901	Developed regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	93	92	90	144	97	63	89	100	148	162	170	163	145	176	187	198
+Immigrants	Foreigners	Belize	904	Latin America and the Caribbean	916	Central America	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	0	0	0	0	0	0	0	0	1	1	2	3	1	1	1	3
+Immigrants	Foreigners	Benin	903	Africa	914	Western Africa	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	0	2	0	0	1	0	2	3	11	7	8	7	13	3	7	3
+Immigrants	Foreigners	Bhutan	935	Asia	5501	Southern Asia	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	1	2	0	3	0	0	2	4	1	5	5	4	1	1	1	3
+Immigrants	Foreigners	Bolivia (Plurinational State of)	904	Latin America and the Caribbean	931	South America	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	47	38	82	61	94	92	94	78	215	186	205	282	320	284	205	123
+Immigrants	Foreigners	Bosnia and Herzegovina	908	Europe	925	Southern Europe	901	Developed regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	1272	970	1224	1042	1174	1401	872	641	1058	584	607	538	516	520	745	569
+Immigrants	Foreigners	Botswana	903	Africa	913	Southern Africa	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	2	2	0	5	4	1	0	5	4	5	4	2	5	7	1	3
+Immigrants	Foreigners	Brazil	904	Latin America and the Caribbean	931	South America	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	182	176	198	249	230	252	288	313	402	401	475	436	380	414	353	383
+Immigrants	Foreigners	Brunei Darussalam	935	Asia	920	South-Eastern Asia	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	0	0	0	0	1	0	0	0	0	0	1	..	..	3	0	0
+Immigrants	Foreigners	Bulgaria	908	Europe	923	Eastern Europe	901	Developed regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	136	103	113	119	149	152	123	100	123	1159	962	767	629	600	764	862
+Immigrants	Foreigners	Burkina Faso	903	Africa	914	Western Africa	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	0	0	1	1	3	6	8	1	5	6	3	4	8	4	12	9
+Immigrants	Foreigners	Burundi	903	Africa	910	Eastern Africa	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	23	16	8	17	152	195	327	543	574	358	202	159	107	86	98	62
+Immigrants	Foreigners	Cabo Verde	903	Africa	914	Western Africa	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	4	8	11	9	12	5	7	5	10	12	5	5	9	8	11	1
+Immigrants	Foreigners	Cambodia	935	Asia	920	South-Eastern Asia	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	3	3	13	12	11	8	13	21	20	15	25	35	30	26	19	38
+Immigrants	Foreigners	Cameroon	903	Africa	911	Middle Africa	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	9	20	18	37	40	76	197	175	151	269	282	263	117	92	91	105
+Immigrants	Foreigners	Canada	905	Northern America	905	Northern America	901	Developed regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	208	191	235	190	236	208	197	180	227	234	268	344	336	280	338	301
+Immigrants	Foreigners	Central African Republic	903	Africa	911	Middle Africa	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	0	0	0	0	13	0	6	20	11	2	9	4	1	11	2	14
+Immigrants	Foreigners	Chad	903	Africa	911	Middle Africa	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	2	2	0	1	0	10	1	1	2	3	4	6	2	2	6	0
+Immigrants	Foreigners	Chile	904	Latin America and the Caribbean	931	South America	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	340	331	382	425	394	404	403	343	442	402	372	390	379	278	311	214
+Immigrants	Foreigners	China	935	Asia	906	Eastern Asia	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	1209	1430	1519	1701	1985	2386	2677	3098	3186	2619	2453	2075
+Immigrants	Foreigners	Colombia	904	Latin America and the Caribbean	931	South America	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	190	226	237	250	188	176	259	444	506	327	297	246	269	224	304	396
+Immigrants	Foreigners	Comoros	903	Africa	910	Eastern Africa	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	0	0	0	0	0	0	0	0	0	0	..	..	1	0	0	4
+Immigrants	Foreigners	Congo	903	Africa	911	Middle Africa	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	11	21	34	25	45	41	30	34	62	54	67	62	54	68	50	42
+Immigrants	Foreigners	Costa Rica	904	Latin America and the Caribbean	916	Central America	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	9	9	15	14	7	14	11	26	26	19	26	16	20	19	26	23
+Immigrants	Foreigners	Côte d'Ivoire	903	Africa	914	Western Africa	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	26	25	35	21	19	27	27	28	53	50	41	65	50	62	55	50
+Immigrants	Foreigners	Croatia	908	Europe	925	Southern Europe	901	Developed regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	992	180	362	121	158	164	142	144	204	157	136	170	142	152	179	495
+Immigrants	Foreigners	Cuba	904	Latin America and the Caribbean	915	Caribbean	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	166	208	125	90	102	107	108	111	153	136	145	131	106	100	97	100
+Immigrants	Foreigners	Cyprus	935	Asia	922	Western Asia	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	6	9	1	3	4	8	10	10	34	47	41	22	20	23	24	51
+Immigrants	Foreigners	Czech Republic	908	Europe	923	Eastern Europe	901	Developed regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	65	55	77	80	99	83	88	113	170	207	325	198	164	189	200	209
+Immigrants	Foreigners	Democratic People's Republic of Korea	935	Asia	906	Eastern Asia	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	7	9	11	8	5	10	3	7	3	3	5	10	1	4	0	3
+Immigrants	Foreigners	Democratic Republic of the Congo	903	Africa	911	Middle Africa	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	0	0	0	0	81	97	99	78	245	161	201	198	186	196	197	289
+Immigrants	Foreigners	Denmark	908	Europe	924	Northern Europe	901	Developed regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	1117	1292	1990	2534	3203	3630	3753	4040	5137	5097	4129	3761	3437	3196	2633	2495
+Immigrants	Foreigners	Djibouti	903	Africa	910	Eastern Africa	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	4	4	12	2	1	7	3	1	3	5	7	8	8	8	28	22
+Immigrants	Foreigners	Dominica	904	Latin America and the Caribbean	915	Caribbean	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	1	1	0	2	0	0	0	1	1	0	2	..	..	0	0	0
+Immigrants	Foreigners	Dominican Republic	904	Latin America and the Caribbean	915	Caribbean	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	5	5	16	30	30	34	32	31	56	37	44	42	41	21	40	42
+Immigrants	Foreigners	Ecuador	904	Latin America and the Caribbean	931	South America	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	28	42	43	67	109	105	84	94	202	145	106	97	112	90	82	59
+Immigrants	Foreigners	Egypt	903	Africa	912	Northern Africa	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	68	89	66	104	120	97	122	117	242	212	230	314	406	673	648	501
+Immigrants	Foreigners	El Salvador	904	Latin America and the Caribbean	916	Central America	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	31	31	37	30	37	49	37	37	98	39	50	50	63	51	80	64
+Immigrants	Foreigners	Equatorial Guinea	903	Africa	911	Middle Africa	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	1	0	0	0	0	2	3	8	0	11	..	..	2	8	0	1
+Immigrants	Foreigners	Eritrea	903	Africa	910	Eastern Africa	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	99	110	127	107	154	221	281	610	755	816	1170	1398	1604	2128	2213	3338
+Immigrants	Foreigners	Estonia	908	Europe	924	Northern Europe	901	Developed regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	166	211	264	271	290	277	403	383	422	421	389	558	491	494	542	547
+Immigrants	Foreigners	Ethiopia	903	Africa	910	Eastern Africa	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	267	254	191	192	170	201	245	252	454	491	518	795	958	654	662	597
+Immigrants	Foreigners	Fiji	909	Oceania	928	Melanesia	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	0	0	1	1	3	2	3	2	3	1	2	5	2	1	0	1
+Immigrants	Foreigners	Finland	908	Europe	924	Northern Europe	901	Developed regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	2999	3380	3579	3445	3293	3181	2810	2895	2639	2561	2405	2398	2300	2331	2329	2306
+Immigrants	Foreigners	France	908	Europe	926	Western Europe	901	Developed regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	601	559	591	661	547	487	570	618	756	890	957	847	723	852	737	823
+Immigrants	Foreigners	Gabon	903	Africa	911	Middle Africa	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	0	0	0	1	0	0	0	0	0	2	3	..	1	4	2	2
+Immigrants	Foreigners	Gambia	903	Africa	914	Western Africa	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	150	144	158	115	109	141	121	141	180	209	247	281	290	218	260	254
+Immigrants	Foreigners	Georgia	935	Asia	922	Western Asia	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	10	21	15	26	21	49	42	44	166	50	56	92	123	118	118	102
+Immigrants	Foreigners	Germany	908	Europe	926	Western Europe	901	Developed regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	1141	1120	1461	1639	1676	1775	1832	2016	2883	3614	3405	2773	2202	2205	2150	2196
+Immigrants	Foreigners	Ghana	903	Africa	914	Western Africa	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	59	60	75	64	70	126	132	163	126	103	158	201	212	216	227	209
+Immigrants	Foreigners	Greece	908	Europe	925	Southern Europe	901	Developed regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	202	218	283	349	341	309	251	302	442	533	640	483	520	929	1348	1378
+Immigrants	Foreigners	Grenada	904	Latin America and the Caribbean	915	Caribbean	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	3	2	5	0	1	1	2	1	1	1	1	1	1	0	3	0
+Immigrants	Foreigners	Guatemala	904	Latin America and the Caribbean	916	Central America	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	17	12	11	9	5	11	9	8	12	9	20	20	16	7	22	8
+Immigrants	Foreigners	Guinea	903	Africa	914	Western Africa	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	6	12	5	8	4	16	18	11	32	30	31	47	38	41	52	43
+Immigrants	Foreigners	Guinea-Bissau	903	Africa	914	Western Africa	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	4	2	1	4	2	3	2	3	4	0	4	5	9	3	6	4
+Immigrants	Foreigners	Guyana	904	Latin America and the Caribbean	931	South America	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	1	3	0	2	2	4	4	1	3	2	2	1	..	2	0	3
+Immigrants	Foreigners	Haiti	904	Latin America and the Caribbean	915	Caribbean	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	2	4	3	2	7	1	0	4	4	2	3	3	7	2	3	8
+Immigrants	Foreigners	Honduras	904	Latin America and the Caribbean	916	Central America	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	13	4	8	8	4	15	31	9	17	17	6	20	14	29	13	12
+Immigrants	Foreigners	Hungary	908	Europe	923	Eastern Europe	901	Developed regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	168	166	146	167	222	159	228	269	462	776	1018	893	770	706	857	907
+Immigrants	Foreigners	Iceland	908	Europe	924	Northern Europe	901	Developed regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	298	328	382	373	432	442	376	404	403	411	454	671	661	732	715	541
+Immigrants	Foreigners	India	935	Asia	5501	Southern Asia	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	309	322	369	428	556	752	834	1077	1024	1146	1548	1795	2150	1691	2027	2376
+Immigrants	Foreigners	Indonesia	935	Asia	920	South-Eastern Asia	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	61	63	75	79	105	79	76	64	70	84	111	127	99	87	103	96
+Immigrants	Foreigners	Iran (Islamic Republic of)	935	Asia	5501	Southern Asia	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	1469	1022	1106	1301	1365	1016	1477	1063	2008	1427	1766	2416	2820	2168	2111	1988
+Immigrants	Foreigners	Iraq	935	Asia	922	Western Asia	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	5384	5526	6640	6511	7352	5376	2824	2942	10850	15200	12103	8539	4534	4469	3579	2302
+Immigrants	Foreigners	Ireland	908	Europe	924	Northern Europe	901	Developed regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	134	111	165	162	199	129	132	135	196	232	216	244	230	210	319	253
+Immigrants	Foreigners	Israel	935	Asia	922	Western Asia	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	72	46	55	78	86	77	68	65	88	62	87	77	48	49	73	65
+Immigrants	Foreigners	Italy	908	Europe	925	Southern Europe	901	Developed regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	295	276	335	451	328	265	307	270	490	541	732	677	692	696	866	1016
+Immigrants	Foreigners	Jamaica	904	Latin America and the Caribbean	915	Caribbean	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	13	15	7	13	10	5	7	5	12	13	13	19	15	22	29	15
+Immigrants	Foreigners	Japan	935	Asia	906	Eastern Asia	901	Developed regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	291	287	318	291	329	334	259	287	295	353	354	312	320	288	325	244
+Immigrants	Foreigners	Jordan	935	Asia	922	Western Asia	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	66	56	54	92	75	121	145	127	247	233	253	277	249	283	291	226
+Immigrants	Foreigners	Kazakhstan	935	Asia	5500	Central Asia	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	16	38	42	84	70	72	76	52	183	48	48	80	128	136	149	172
+Immigrants	Foreigners	Kenya	903	Africa	910	Eastern Africa	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	83	70	86	62	74	68	77	109	109	126	137	163	161	200	197	206
+Immigrants	Foreigners	Kiribati	909	Oceania	954	Micronesia	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	0	0	0	0	1	0	0	0	0	1	..	..	..	0	0	0
+Immigrants	Foreigners	Kuwait	935	Asia	922	Western Asia	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	4	8	1	7	2	1	0	6	2	4	1	2	..	4	7	9
+Immigrants	Foreigners	Kyrgyzstan	935	Asia	5500	Central Asia	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	8	10	7	10	12	39	55	89	127	52	41	47	50	97	127	129
+Immigrants	Foreigners	Lao People's Democratic Republic	935	Asia	920	South-Eastern Asia	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	10	9	12	20	3	9	16	12	17	19	18	9	17	14	12	10
+Immigrants	Foreigners	Latvia	908	Europe	924	Northern Europe	901	Developed regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	119	134	150	157	161	152	206	232	359	333	404	928	767	795	698	599
+Immigrants	Foreigners	Lebanon	935	Asia	922	Western Asia	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	277	248	234	259	256	334	303	344	858	367	387	411	421	348	380	423
+Immigrants	Foreigners	Lesotho	903	Africa	913	Southern Africa	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	1	0	1	0	0	0	1	0	0	0	..	3	1	3	5	3
+Immigrants	Foreigners	Liberia	903	Africa	914	Western Africa	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	9	4	4	35	26	72	67	15	72	16	29	23	41	28	29	24
+Immigrants	Foreigners	Libya	903	Africa	912	Northern Africa	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	4	16	14	12	29	31	33	114	132	147	117	145	126	215	124	91
+Immigrants	Foreigners	Liechtenstein	908	Europe	926	Western Europe	901	Developed regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	0	0	3	0	1	1	0	0	0	0	1	2	2	3	0	2
+Immigrants	Foreigners	Lithuania	908	Europe	924	Northern Europe	901	Developed regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	89	102	146	213	259	230	438	695	895	918	915	1214	1370	1349	1356	1155
+Immigrants	Foreigners	Luxembourg	908	Europe	926	Western Europe	901	Developed regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	1	2	2	1	2	3	6	5	8	2	6	9	4	10	9	5
+Immigrants	Foreigners	Madagascar	903	Africa	910	Eastern Africa	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	0	2	0	4	2	0	3	3	0	1	1	2	3	0	4	4
+Immigrants	Foreigners	Malawi	903	Africa	910	Eastern Africa	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	0	2	0	0	2	5	3	3	3	4	5	3	1	2	8	1
+Immigrants	Foreigners	Malaysia	935	Asia	920	South-Eastern Asia	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	35	48	47	60	50	51	52	63	61	72	78	67	46	60	56	68
+Immigrants	Foreigners	Maldives	935	Asia	5501	Southern Asia	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	1	0	2	0	2	0	0	1	2	1	1	..	1	0	3	3
+Immigrants	Foreigners	Mali	903	Africa	914	Western Africa	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	7	0	2	2	0	7	0	4	13	6	15	13	5	4	10	15
+Immigrants	Foreigners	Malta	908	Europe	925	Southern Europe	901	Developed regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	2	2	2	9	6	3	5	6	11	8	11	19	13	19	14	12
+Immigrants	Foreigners	Mauritania	903	Africa	914	Western Africa	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	1	2	0	3	2	0	2	2	3	6	..	4	3	6	3	9
+Immigrants	Foreigners	Mauritius	903	Africa	910	Eastern Africa	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	9	5	7	3	12	5	7	4	3	13	10	8	8	7	12	4
+Immigrants	Foreigners	Mexico	904	Latin America and the Caribbean	916	Central America	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	72	95	138	125	109	134	135	159	127	147	208	186	146	157	163	137
+Immigrants	Foreigners	Micronesia (Federated States of)	909	Oceania	954	Micronesia	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	0	0	0	0	0	0	0	0	1	0	..	..	..	0	0	0
+Immigrants	Foreigners	Monaco	908	Europe	926	Western Europe	901	Developed regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	0	0	1	0	0	0	0	0	0	0	..	..	1	1	0	1
+Immigrants	Foreigners	Mongolia	935	Asia	906	Eastern Asia	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	7	6	11	10	6	13	31	29	78	70	95	153	351	562	481	357
+Immigrants	Foreigners	Montenegro	908	Europe	925	Southern Europe	901	Developed regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	14	114	86	81	82	105	121	89
+Immigrants	Foreigners	Morocco	903	Africa	912	Northern Africa	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	192	197	193	272	218	263	239	234	345	376	459	400	421	416	475	521
+Immigrants	Foreigners	Mozambique	903	Africa	910	Eastern Africa	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	3	9	7	10	9	9	9	3	6	26	17	10	15	9	9	7
+Immigrants	Foreigners	Myanmar	935	Asia	920	South-Eastern Asia	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	2	2	53	3	7	7	35	317	388	368	249	196	91	41	54	23
+Immigrants	Foreigners	Namibia	903	Africa	913	Southern Africa	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	0	3	6	3	5	1	18	9	23	12	18
+Immigrants	Foreigners	Nepal	935	Asia	5501	Southern Asia	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	5	4	9	9	9	16	17	31	27	55	71	137	216	73	84	104
+Immigrants	Foreigners	Netherlands	908	Europe	926	Western Europe	901	Developed regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	347	384	427	505	478	452	561	692	1044	1071	1110	855	775	866	797	781
+Immigrants	Foreigners	New Zealand	909	Oceania	927	Australia and New Zealand	901	Developed regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	73	79	80	78	78	70	70	76	55	70	81	85	99	71	63	72
+Immigrants	Foreigners	Nicaragua	904	Latin America and the Caribbean	916	Central America	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	25	26	12	21	19	26	14	23	29	30	33	37	38	52	49	30
+Immigrants	Foreigners	Niger	903	Africa	914	Western Africa	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	0	0	0	0	0	1	1	6	3	1	2	3	2	0	3	2
+Immigrants	Foreigners	Nigeria	903	Africa	914	Western Africa	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	63	75	71	63	93	140	206	375	453	314	366	413	461	437	451	495
+Immigrants	Foreigners	Norway	908	Europe	924	Northern Europe	901	Developed regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	1638	2007	2889	3033	3459	3190	2625	2417	2492	2395	2263	1948	2070	2030	2034	2016
+Immigrants	Foreigners	Oman	935	Asia	922	Western Asia	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	0	2	1	1	3	1	6	1	5	2	8	..	1	9	8	7
+Immigrants	Foreigners	Pakistan	935	Asia	5501	Southern Asia	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	125	129	192	198	195	312	451	671	938	1229	1500	1756	1575	896	931	796
+Immigrants	Foreigners	Panama	904	Latin America and the Caribbean	916	Central America	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	2	4	8	7	5	6	9	6	15	10	4	14	11	12	11	10
+Immigrants	Foreigners	Papua New Guinea	909	Oceania	928	Melanesia	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	0	0	1	0	1	3	0	0	1	0	..	..	..	0	0	1
+Immigrants	Foreigners	Paraguay	904	Latin America and the Caribbean	931	South America	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	2	4	2	1	3	5	2	13	3	10	7	10	8	5	9	4
+Immigrants	Foreigners	Peru	904	Latin America and the Caribbean	931	South America	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	309	202	234	197	186	207	225	221	317	253	265	275	251	224	205	154
+Immigrants	Foreigners	Philippines	935	Asia	920	South-Eastern Asia	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	305	280	290	280	385	361	383	386	461	486	560	632	588	580	662	546
+Immigrants	Foreigners	Poland	908	Europe	923	Eastern Europe	901	Developed regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	613	673	649	809	1065	1017	2458	3420	6347	7525	6970	5167	4414	4403	4433	4611
+Immigrants	Foreigners	Portugal	908	Europe	925	Southern Europe	901	Developed regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	63	62	69	76	85	85	98	116	167	150	200	209	186	189	307	309
+Immigrants	Foreigners	Qatar	935	Asia	922	Western Asia	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	0	0	0	5	6	2	0	0	8	1	2	1	1	2	1	1
+Immigrants	Foreigners	Republic of Korea	935	Asia	906	Eastern Asia	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	167	205	225	211	186	189	207	189	181	189	205	241	235	233	186	237
+Immigrants	Foreigners	Republic of Moldova	908	Europe	923	Eastern Europe	901	Developed regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	7	4	20	28	38	37	30	23	37	36	40	54	39	25	54	45
+Immigrants	Foreigners	Romania	908	Europe	923	Eastern Europe	901	Developed regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	286	246	280	287	363	329	338	352	337	2587	2544	1829	1726	1928	1737	1863
+Immigrants	Foreigners	Russian Federation	908	Europe	923	Eastern Europe	901	Developed regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	821	979	1027	967	1010	967	1286	959	1393	943	914	1094	1221	1186	1266	1125
+Immigrants	Foreigners	Rwanda	903	Africa	910	Eastern Africa	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	35	13	25	16	28	28	36	47	37	19	25	44	46	47	56	42
+Immigrants	Foreigners	Saint Lucia	904	Latin America and the Caribbean	915	Caribbean	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	1	1	5	0	0	2	0	0	0	0	..	1	1	0	1	2
+Immigrants	Foreigners	Saint Vincent and the Grenadines	904	Latin America and the Caribbean	915	Caribbean	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	0	0	1	1	0	0	0	0	1	2	1	..	..	1	0	0
+Immigrants	Foreigners	Samoa	909	Oceania	957	Polynesia	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	2	0	1	1	0	1	0	2	0	1	..	2	..	0	1	0
+Immigrants	Foreigners	San Marino	908	Europe	925	Southern Europe	901	Developed regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	0	0	0	0	0	1	0	0	0	0	..	..	..	2	1	0
+Immigrants	Foreigners	Sao Tome and Principe	903	Africa	911	Middle Africa	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	0	0	0	0	0	0	0	0	1	0	..	..	1	1	1	0
+Immigrants	Foreigners	Saudi Arabia	935	Asia	922	Western Asia	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	8	4	21	9	38	11	18	14	25	9	22	108	30	87	52	102
+Immigrants	Foreigners	Senegal	903	Africa	914	Western Africa	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	18	14	14	10	22	21	26	16	33	44	39	51	51	58	72	61
+Immigrants	Foreigners	Serbia	908	Europe	925	Southern Europe	901	Developed regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	215	1895	1791	1021	864	1028	1264	961
+Immigrants	Foreigners	Seychelles	903	Africa	910	Eastern Africa	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	0	4	3	5	2	0	2	1	6	2	..	..	5	4	1	2
+Immigrants	Foreigners	Sierra Leone	903	Africa	914	Western Africa	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	9	42	40	92	69	87	65	29	53	43	47	33	44	39	47	46
+Immigrants	Foreigners	Singapore	935	Asia	920	South-Eastern Asia	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	110	48	74	49	82	39	22	18	67	98	107	66	59	21	29	44
+Immigrants	Foreigners	Slovakia	908	Europe	923	Eastern Europe	901	Developed regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	39	28	61	48	68	47	105	97	150	173	208	224	234	155	139	131
+Immigrants	Foreigners	Slovenia	908	Europe	925	Southern Europe	901	Developed regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	15	18	11	21	12	16	34	36	50	63	74	60	48	68	73	122
+Immigrants	Foreigners	Solomon Islands	909	Oceania	928	Melanesia	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	0	0	0	0	0	1	0	0	0	0	..	..	..	0	0	0
+Immigrants	Foreigners	Somalia	903	Africa	910	Eastern Africa	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	778	441	633	691	912	1349	1123	1314	2974	3781	4064	6902	6819	3082	4541	10966
+Immigrants	Foreigners	South Africa	903	Africa	913	Southern Africa	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	37	58	79	171	165	139	106	93	91	74	100	96	78	97	89	68
+Immigrants	Foreigners	Spain	908	Europe	925	Southern Europe	901	Developed regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	280	220	371	391	355	334	309	339	502	534	611	702	674	762	1052	1387
+Immigrants	Foreigners	Sri Lanka	935	Asia	5501	Southern Asia	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	104	106	111	139	114	120	98	111	189	170	165	154	138	122	159	105
+Immigrants	Foreigners	Sudan	903	Africa	912	Northern Africa	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	34	51	43	83	30	54	146	101	96	94	99	146	132	194	206	228
+Immigrants	Foreigners	Suriname	904	Latin America and the Caribbean	931	South America	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	0	0	0	0	0	1	2	0	0	0	..	..	..	0	1	0
+Immigrants	Foreigners	Swaziland	903	Africa	913	Southern Africa	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	0	0	0	1	0	0	1	0	1	1	..	..	4	1	2	1
+Immigrants	Citizens	Sweden	908	Europe	924	Northern Europe	901	Developed regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	13690	15266	16030	16678	16484	15807	14448	13932	15352	15949	17853	18517	19765	20615	20462	20484
+Immigrants	Foreigners	Switzerland	908	Europe	926	Western Europe	901	Developed regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	112	84	95	80	88	88	81	88	101	114	163	142	119	182	128	114
+Immigrants	Foreigners	Syrian Arab Republic	935	Asia	922	Western Asia	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	386	421	333	398	474	513	462	535	899	457	531	747	1047	1537	4730	11749
+Immigrants	Foreigners	Tajikistan	935	Asia	5500	Central Asia	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	3	8	6	14	12	9	11	6	25	21	20	19	6	11	23	43
+Immigrants	Foreigners	Thailand	935	Asia	920	South-Eastern Asia	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	535	680	786	882	1230	1964	2076	2056	2339	2548	3060	2994	2775	2533	2331	1771
+Immigrants	Foreigners	The former Yugoslav Republic of Macedonia	908	Europe	925	Southern Europe	901	Developed regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	111	145	152	153	138	173	188	193	305	184	304	255	252	305	346	267
+Immigrants	Foreigners	Togo	903	Africa	914	Western Africa	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	13	16	6	4	8	11	7	6	16	14	7	9	8	18	19	13
+Immigrants	Foreigners	Tonga	909	Oceania	957	Polynesia	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	2	0	0	1	1	0	0	1	1	0	..	1	..	0	0	0
+Immigrants	Foreigners	Trinidad and Tobago	904	Latin America and the Caribbean	915	Caribbean	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	9	10	6	7	13	10	7	5	6	7	8	5	19	9	8	5
+Immigrants	Foreigners	Tunisia	903	Africa	912	Northern Africa	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	96	74	78	81	90	140	126	163	182	196	183	209	250	228	288	208
+Immigrants	Foreigners	Turkey	935	Asia	922	Western Asia	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	794	779	696	734	839	1183	1133	1102	1562	1453	1458	1970	2232	1965	1793	1326
+Immigrants	Foreigners	Turkmenistan	935	Asia	5500	Central Asia	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	4	5	4	5	8	17	29	26	19	11	8	7	..	5	1	2
+Immigrants	Foreigners	Uganda	903	Africa	910	Eastern Africa	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	97	63	44	48	69	65	79	65	105	138	147	132	191	179	224	320
+Immigrants	Foreigners	Ukraine	908	Europe	923	Eastern Europe	901	Developed regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	150	202	233	270	318	280	320	299	424	347	376	466	550	601	622	549
+Immigrants	Foreigners	United Arab Emirates	935	Asia	922	Western Asia	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	1	0	10	10	9	17	3	5	5	3	5	6	4	0	2	3
+Immigrants	Foreigners	United Kingdom of Great Britain and Northern Ireland	908	Europe	924	Northern Europe	901	Developed regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	989	1025	1318	1420	1388	1172	1156	1050	1537	1541	1719	1638	1435	1804	1549	1554
+Immigrants	Foreigners	United Republic of Tanzania	903	Africa	910	Eastern Africa	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	52	40	43	60	52	58	52	48	60	90	93	95	104	116	108	76
+Immigrants	Foreigners	United States of America	905	Northern America	905	Northern America	901	Developed regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	955	993	1063	1060	1000	929	922	914	901	954	1129	1196	1329	1227	1426	1427
+Immigrants	Foreigners	Uruguay	904	Latin America and the Caribbean	931	South America	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	23	14	27	26	34	44	47	30	32	33	32	25	17	13	15	12
+Immigrants	Foreigners	Uzbekistan	935	Asia	5500	Central Asia	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	24	11	26	25	49	94	114	606	362	298	222	231	307	400	343	235
+Immigrants	Foreigners	Vanuatu	909	Oceania	928	Melanesia	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	0	0	0	0	0	0	0	0	0	0	..	1	..	0	0	0
+Immigrants	Foreigners	Venezuela (Bolivarian Republic of)	904	Latin America and the Caribbean	931	South America	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	24	28	24	26	38	42	28	43	52	49	62	45	52	62	77	47
+Immigrants	Foreigners	Viet Nam	935	Asia	920	South-Eastern Asia	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	363	399	396	329	309	296	307	365	545	470	442	539	659	725	649	536
+Immigrants	Foreigners	Yemen	935	Asia	922	Western Asia	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	6	4	3	10	10	17	18	13	69	35	25	106	92	213	194	208
+Immigrants	Foreigners	Zambia	903	Africa	910	Eastern Africa	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	2	12	10	17	15	10	13	18	30	22	28	21	12	22	29	24
+Immigrants	Foreigners	Zimbabwe	903	Africa	910	Eastern Africa	902	Developing regions	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	19	22	21	32	23	14	12	16	17	16	28	20	23	30	26	15
+Immigrants	Foreigners	Unknown	999	World	999	World	999	World	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	3127	2437	4344	3934	2589	2946	2853	3029	6037	1232	1838	2694	2393	2600	3043	5688
+Immigrants	Both	Total	999	World	999	World	999	World	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	..	49391	49839	58659	60795	64087	63795	62028	65229	95750	99485	101171	102280	98801	96467	103059	115845

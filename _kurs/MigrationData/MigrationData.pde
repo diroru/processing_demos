@@ -32,6 +32,27 @@ void setup() {
     for (TableRow sourceRow : countryDatum.rows()) {
       TableRow newRow = globalData.addRow(); //add empty row to global table
       copyRow(sourceRow, newRow);
+      String type = sourceRow.getString("Type");
+      String odCountry = "";
+      try {
+        odCountry = sourceRow.getString("OdName");
+      } catch(Exception e) {
+        println(countryName, "NO OdName");
+        printArray(countryDatum.getColumnTitles());
+        println("------");
+      }
+      
+      if (type.equalsIgnoreCase("Immigrants")) {
+        //odCountry is from, countryName is to
+        newRow.setString("from", odCountry);
+        newRow.setString("to", countryName);
+      } else if (type.equalsIgnoreCase("Emigrants")) {
+        //odCountry is to, countryName is from
+        newRow.setString("from", countryName);
+        newRow.setString("to", odCountry);
+      } else {
+        println("ERROR", type, "not recognized");
+      }
     }
   }
   saveTable(globalData, "test.csv");

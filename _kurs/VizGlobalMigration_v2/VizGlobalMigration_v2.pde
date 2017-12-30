@@ -10,12 +10,15 @@ int maxFlowPerYear = Integer.MIN_VALUE;
 int minFlowPerYear = Integer.MAX_VALUE;
 
 HashSet<String> uniqueFlows = new HashSet<String>();
+ArrayList<MigrationFlow> testFlows;
 
 int yearStart = 1980;
-int yearEnd = 2013; 
+int yearEnd = 2013;
+float scaleFactor;
 
 void setup() {
   size(1200, 400, JAVA2D);
+  strokeCap(MITER);
   data = loadTable("GlobalMigration.tsv", "header, tsv");
   //initializing empty countries
   for (TableRow tr : data.rows()) {
@@ -35,7 +38,7 @@ void setup() {
     for (int i = yearStart; i <= yearEnd; i++) {
       int flowVolume = tr.getInt(i+"");
       if (flowVolume > 0 && !checkExistence(from, to, i)) {
-      //if (flowVolume > 0) {
+        //if (flowVolume > 0) {
         maxFlowPerCountry = max(flowVolume, maxFlowPerCountry);
         minFlowPerCountry = min(flowVolume, minFlowPerCountry);
         MigrationCountry fromCountry = migrationCountries.get(from);
@@ -55,39 +58,40 @@ void setup() {
   println("COUNTRY MIN", minFlowPerCountry, "COUNTRY MAX", maxFlowPerCountry);
   println("YEAR MIN", minFlowPerYear, "YEAR MAX", maxFlowPerYear);
 
+  testFlows = flows.get(2013);
+  for (MigrationFlow mf : testFlows) {
+    mf.sortingMethod = MigrationFlow.SORT_BY_ORG_THEN_DST;
+  }
+  Collections.sort(testFlows);
+  int off = 0;
+  for (MigrationFlow mf : testFlows) {
+    mf.originOffset = off;
+    off += mf.volume;
+  }
+  for (MigrationFlow mf : testFlows) {
+    mf.sortingMethod = MigrationFlow.SORT_BY_DST_THEN_ORG;
+  }
+  Collections.sort(testFlows);
+  off = 0;
+  for (MigrationFlow mf : testFlows) {
+    mf.destinationOffset = off;
+    off += mf.volume;
+  }
+  scaleFactor = (width - 40f) / off;
+  //sortedCounties.sort(Comparator.comparing(MigrationCountry::getName));
+
   //printArray(migrationCountries.get("France").outFlows.get(2013).toArray());
   //printArray(migrationCountries.get("France").inFlows.get(2013).toArray());
   //printArray(sortedCountries.toArray());
 }
 
-boolean checkExistence(String a, String b, int year) {
-  //String idAB = a + "+" + b + "+" + year;
-  String idBA = b + "+" + a + "+" + year;
-  if (uniqueFlows.contains(idBA)) {
-    return true;
-  } else {
-    uniqueFlows.add(idBA);
-  }
-  return false;
-}
+void draw() { 
 
-void addTotal(HashMap<Integer, Integer> theTotal, int year, int vol) {
-  Integer total = theTotal.get(year);
-  if (total == null) {
-    total = 0;
+  background(0);
+  //stroke(255,16);
+  for (MigrationFlow mf : testFlows) {
+    noStroke();
+    fill(255, 127);
+    mf.display(scaleFactor, 20, norm(mouseY, 0, height));
   }
-  total = new Integer(total + vol);
-  theTotal.put(year, total);
-}
-
-void addFlow(MigrationFlow theFlow) {
-  ArrayList<MigrationFlow> flowsForYear = flows.get(theFlow.year);
-  if (flowsForYear == null) {
-    flowsForYear = new ArrayList<MigrationFlow>();
-    flows.put(theFlow.year, flowsForYear);
-  }
-  flowsForYear.add(theFlow);
-}
-
-void draw() {
 }

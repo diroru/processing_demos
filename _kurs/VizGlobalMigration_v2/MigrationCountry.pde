@@ -34,4 +34,7 @@ class MigrationCountry {
     addFlow(theFlow, totalOut, outFlows);
   }
 
+  String getName() {
+    return name;
+  }
 }

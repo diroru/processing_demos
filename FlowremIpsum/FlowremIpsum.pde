@@ -1,12 +1,21 @@
+import java.util.*;
+
 //map of country objects, labelled by their iso3 code
 HashMap<String, Country> countries = new HashMap<String, Country>();
 Table countryData, flowData;
 
-//CONSTANTS
+//GENERAL CONSTANTS
 final int GPI_YEAR_START = 2008;
 final int GPI_YEAR_END = 2016;
 final int GPI_MIN = 1;
 final int GPI_MAX = 5;
+
+//SORTING TYPE CONSTANTS
+final int SORT_BY_COUNTRY_NAME = 0;
+final int SORT_BY_CONTINENT = 1;
+final int SORT_BY_INDEX = 2; //needs an active year
+final int SORT_BY_CONTINENT_THEN_INDEX = 3;
+
 
 void setup() {
   size(1024, 512);
@@ -42,11 +51,6 @@ void setup() {
   println("-----");
   //showing the Iceland’s GPI for 2008
   println(countries.get("ISL").getGPI(2016));
-
-  //make layout
-  float margin = 10;
-  float gap = 2;
-  makeLayout(margin, margin, width - 2 * margin, height-2*margin, gap, new ArrayList<Country>(countries.values()), 2016);
 }
 
 void draw() {
@@ -54,7 +58,17 @@ void draw() {
   background(0);
   noStroke();
   fill(255);
-  for (Country theCountry : countries.values()) {
+
+  //applying default sorting by countryName
+  ArrayList<Country> countriesByRegionAndIndex = getSortedCountries(countries, SORT_BY_CONTINENT_THEN_INDEX, 2016);
+
+  //make layout
+  float margin = 10;
+  float gap = 2;
+  makeLayout(margin, margin, width - 2 * margin, height-2*margin, gap, countriesByRegionAndIndex, 2016);
+
+  for (Country theCountry : countriesByRegionAndIndex) {
+    //println(theCountry.name);
     theCountry.display();
   }
 }

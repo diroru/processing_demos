@@ -1,8 +1,12 @@
 //map of country objects, labelled by their iso3 code
 HashMap<String, Country> countries = new HashMap<String, Country>();
 Table countryData, flowData;
-int GPI_YEAR_START = 2008;
-int GPI_YEAR_END = 2016;
+
+//CONSTANTS
+final int GPI_YEAR_START = 2008;
+final int GPI_YEAR_END = 2016;
+final int GPI_MIN = 1;
+final int GPI_MAX = 5;
 
 void setup() {
   size(1024, 512);
@@ -16,15 +20,18 @@ void setup() {
     String name = row.getString("country");
     String region = row.getString("region");
     String subRegion = row.getString("sub-region");
+
     //make new country, only local
     Country theCountry = new Country(name, iso3, region, subRegion);
+
     //add to collection of countries
     countries.put(iso3, theCountry);
+
     //we add the gpi value for each year to country "theCountry"
     for (int year = GPI_YEAR_START; year <= GPI_YEAR_END; year++) {
-      String yearString = "score_" + year;
-      Float gpi = row.getFloat(yearString);
-      theCountry.setGPI(year, gpi);
+      String yearString = "score_" + year; //building the right column name
+      Float gpi = row.getFloat(yearString); //retrieving the value (a float number) for the given column (year)
+      theCountry.setGPI(year, gpi); //putting the value into the country
     }
   }
   //print all keys
@@ -33,7 +40,21 @@ void setup() {
   //print all countries
   println("VALUES:\n", countries.values());
   println("-----");
+  //showing the Iceland’s GPI for 2008
+  println(countries.get("ISL").getGPI(2016));
+
+  //make layout
+  float margin = 10;
+  float gap = 2;
+  makeLayout(margin, margin, width - 2 * margin, height-2*margin, gap, new ArrayList<Country>(countries.values()), 2016);
 }
 
 void draw() {
+  //draw countries
+  background(0);
+  noStroke();
+  fill(255);
+  for (Country theCountry : countries.values()) {
+    theCountry.display();
+  }
 }

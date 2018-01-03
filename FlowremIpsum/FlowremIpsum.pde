@@ -1,7 +1,7 @@
 import java.util.*;
 
 //map of country objects, labelled by their iso3 code
-HashMap<String, Country> countries = new HashMap<String, Country>();
+ArrayList<Country> countries = new ArrayList<Country>();
 Table countryData, flowData;
 
 //GENERAL CONSTANTS
@@ -9,12 +9,21 @@ final int GPI_YEAR_START = 2008;
 final int GPI_YEAR_END = 2016;
 final int GPI_MIN = 1;
 final int GPI_MAX = 5;
+final int SET_START_POS = 0;
+final int SET_END_POS = 1;
 
 //SORTING TYPE CONSTANTS
 final int SORT_BY_COUNTRY_NAME = 0;
 final int SORT_BY_CONTINENT = 1;
 final int SORT_BY_INDEX = 2; //needs an active year
 final int SORT_BY_CONTINENT_THEN_INDEX = 3;
+
+float TIME = 0;
+float TIME_INC = 0.001;
+
+//Layout globals
+float margin = 10;
+float gap = 2;
 
 
 void setup() {
@@ -34,7 +43,7 @@ void setup() {
     Country theCountry = new Country(name, iso3, region, subRegion);
 
     //add to collection of countries
-    countries.put(iso3, theCountry);
+    countries.add(theCountry);
 
     //we add the gpi value for each year to country "theCountry"
     for (int year = GPI_YEAR_START; year <= GPI_YEAR_END; year++) {
@@ -44,13 +53,23 @@ void setup() {
     }
   }
   //print all keys
-  println("KEYS:\n", countries.keySet());
-  println("-----");
+  //println("KEYS:\n", countries.keySet());
+  //println("-----");
   //print all countries
-  println("VALUES:\n", countries.values());
+  println("VALUES:\n", countries);
   println("-----");
   //showing the Iceland’s GPI for 2008
-  println(countries.get("ISL").getGPI(2016));
+  //println(countries.get("ISL").getGPI(2016));
+  
+  //Example of animating between two layouts
+  //first sort by one criterium, then set start layout
+  sortCountries(countries, SORT_BY_COUNTRY_NAME, 2016);
+  makeLayout(margin, margin, width - 2 * margin, height-2*margin, gap, countries, SET_START_POS, 2016);
+  
+  //sort by other criterium, then set end layout
+  sortCountries(countries, SORT_BY_CONTINENT_THEN_INDEX, 2016);
+  makeLayout(margin, margin, width - 2 * margin, height-2*margin, gap, countries, SET_END_POS, 2016);
+  
 }
 
 void draw() {
@@ -59,16 +78,12 @@ void draw() {
   noStroke();
   fill(255);
 
-  //applying default sorting by countryName
-  ArrayList<Country> countriesByRegionAndIndex = getSortedCountries(countries, SORT_BY_CONTINENT_THEN_INDEX, 2016);
-
-  //make layout
-  float margin = 10;
-  float gap = 2;
-  makeLayout(margin, margin, width - 2 * margin, height-2*margin, gap, countriesByRegionAndIndex, 2016);
-
-  for (Country theCountry : countriesByRegionAndIndex) {
+  for (Country theCountry : countries) {
     //println(theCountry.name);
+    theCountry.update(TIME);
     theCountry.display();
   }
+
+  TIME += TIME_INC;
+  TIME = min(TIME, 1);
 }

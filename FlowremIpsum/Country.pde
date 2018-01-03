@@ -2,7 +2,9 @@ class Country implements Comparable {
   //attribute / field
   String name, iso3, region, subRegion;
   HashMap<Integer, Float> gpi = new HashMap<Integer, Float>();
-  float x, y, w, h;
+  float startX, endX, currentX;
+  float startY, endY, currentY;
+  float w, h;
   color col;
   int activeYear = GPI_YEAR_END;
 
@@ -21,24 +23,54 @@ class Country implements Comparable {
   }
 
   Float getGPI(Integer year) {
-    return gpi.get(year);
+    Float result = gpi.get(year);
+    if (result == null) {
+      result = -1f;
+    }
+    return result;
   }
 
   @Override
     String toString() {
-    return name + " | "  + iso3 + " | " + region + " | " + subRegion + "\n";
+    return "\n" + name + " | "  + iso3 + " | " + region + " | " + subRegion;
   }
 
   //TODO:
   //void setX(), getX() etc.
+  void setStartX(float x) {
+    startX = x;
+  }
+  void setStartY(float y) {
+    startY = y;
+  }
+  void setEndX(float x) {
+    endX = x;
+  }
+  void setEndY(float y) {
+    endY = y;
+  }
+  
+  void setCurrentX(float x) {
+    currentX = x;
+  }
+
+  void setCurrentY(float y) {
+    currentY = y;
+  }
 
   void setColor(color theColor) {
     col = theColor;
   }
+  
+  //time goes from 0 to 1
+  void update(float time) {
+    currentX = map(time, 0, 1, startX, endX);
+    currentY = map(time, 0, 1, startY, endY);
+  }
 
   void display() {
     fill(col);
-    rect(this.x, this.y, this.w, this.h);
+    rect(this.currentX, this.currentY, this.w, this.h);
   }
 
   //COMPARISON

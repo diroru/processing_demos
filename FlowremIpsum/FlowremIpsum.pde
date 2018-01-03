@@ -1,6 +1,8 @@
 //map of country objects, labelled by their iso3 code
 HashMap<String, Country> countries = new HashMap<String, Country>();
 Table countryData, flowData;
+int GPI_YEAR_START = 2008;
+int GPI_YEAR_END = 2016;
 
 void setup() {
   size(1024, 512);
@@ -15,9 +17,15 @@ void setup() {
     String region = row.getString("region");
     String subRegion = row.getString("sub-region");
     //make new country, only local
-    Country c = new Country(name, iso3, region, subRegion);
+    Country theCountry = new Country(name, iso3, region, subRegion);
     //add to collection of countries
-    countries.put(iso3, c);
+    countries.put(iso3, theCountry);
+    //we add the gpi value for each year to country "theCountry"
+    for (int year = GPI_YEAR_START; year <= GPI_YEAR_END; year++) {
+      String yearString = "score_" + year;
+      Float gpi = row.getFloat(yearString);
+      theCountry.setGPI(year, gpi);
+    }
   }
   //print all keys
   println("KEYS:\n", countries.keySet());

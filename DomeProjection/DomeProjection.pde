@@ -1,8 +1,22 @@
 import codeanticode.planetarium.*;
+import controlP5.*;
 
 DomeCamera dc;
+ControlP5 cp5;
+
 int gridMode = Dome.NORMAL;
-Cone myCone;
+ProjectionMesh mesh;
+ArrayList<String> images;
+
+float xAngle = 0f;
+float yAngle = 0f;
+float zAngle = 0f;
+float deltaX = 0f;
+float deltaY = 0f;
+float deltaZ = 0f;
+int currentImage = 0;
+
+boolean saveFrame = false;
 
 void setup() {
   // For the time being, only use square windows  
@@ -16,7 +30,10 @@ void setup() {
   dc.setFaceDraw(DomeCamera.NEGATIVE_Z, true);
   //This method unfortunately doesn't work yet. 
   //dc.setCubemapSize(2048);
-  myCone = new Cone("2017-52-06-16_52_28output.png");
+  //mesh = new ProjectionMesh("2017-52-06-16_52_28output.png");
+  images = getImagePaths();
+  mesh = new ProjectionMesh(images.get(currentImage));
+  initGUI();
 }
 
 // Called one time per frame.
@@ -27,16 +44,32 @@ void pre() {
 
 // Called five times per frame.
 void draw() {
-  background(255, 255, 0, 0);
+  //background(255, 255, 0, 0);
+  background(0);
   pushMatrix();
-  translate(width/2, height/2, 0);
-  myCone.display();
+
+  translate(width/2, height/2, 0f);
+  rotateX(radians(xAngle));
+  rotateY(radians(yAngle));
+  rotateZ(radians(zAngle));
+  translate(deltaX, deltaY, deltaZ);
+  mesh.display();
   popMatrix();
+  if (saveFrame) {
+    g.save("test.png");
+  }
+}
+
+void post() {
+  drawGUI();
 }
 
 void mouseDragged() {
   //exaggerating dome aperture. 1f <=> 180°
-  dc.setDomeAperture(map(mouseY, 0, height, 0.1f, 2f));
+  //dc.setDomeAperture(map(mouseY, 0, height, 0.1f, 2f));
+  //xAngle += (pmouseY - mouseY) * 0.01;
+  //deltaZ += (pmouseX - mouseX) * 5f;
+  //println("x angle", degrees(xAngle), "dz", deltaZ);
 }
 
 void keyPressed() {
@@ -54,11 +87,19 @@ void keyPressed() {
     break;
   case 'r':
     //fulldome-conform rendering
-    dc.enable();
+    //dc.enable();
+    mesh.addWidth(32);
     break;
   case 'f':
     //rendering only into a single, conventional camera
-    dc.disable();
+    //dc.disable();
+    mesh.addWidth(-32);
+    break;
+  case 'z':
+    mesh.addScale(0.1);
+    break;
+  case 'h':
+    mesh.addScale(-0.1);
     break;
   case '0':
     //toggles rendering into the X+ side of the cubemap
@@ -85,26 +126,48 @@ void keyPressed() {
     dc.toggleFaceDraw(5);
     break;
   case 'q':
-    myCone.addRadius1(32);
+    mesh.addRadius1(32);
     break;
   case 'a':
-    myCone.addRadius1(-32);
+    mesh.addRadius1(-32);
     break;
   case 'w':
-    myCone.addRadius0(32);
+    mesh.addRadius0(32);
     break;
   case 's':
-    myCone.addRadius0(-32);
+    mesh.addRadius0(-32);
     break;
   case 'e':
-    myCone.addHeight(32);
+    mesh.addHeight(32);
     break;
   case 'd':
-    myCone.addHeight(-32);
+    mesh.addHeight(-32);
     break;
-
   case 'g':
-    myCone.toggleGrid();
+    //mesh.toggleGrid();
+    drawGUI = !drawGUI;
+    break;
+  case 'm':
+    mesh.toggleShape();
+    break;
+  case 'b':
+    currentImage = (currentImage + 1) % images.size();
+    try {
+      mesh.setTexture(loadImage(images.get(currentImage)));
+    } 
+    catch (Exception e) {
+    }
+    break;
+  case 'n':
+    currentImage = (currentImage + images.size() - 1) % images.size();
+    try {
+      mesh.setTexture(loadImage(images.get(currentImage)));
+    } 
+    catch (Exception e) {
+    }    
+    break;
+  case 'p':
+    //saveFrame = true;
     break;
   }
 }

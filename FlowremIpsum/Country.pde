@@ -1,7 +1,10 @@
 class Country implements Comparable {
   //attribute / field
   String name, iso3, region, subRegion;
+  //gpi indices by year
   HashMap<Integer, Float> gpi = new HashMap<Integer, Float>();
+  //population by year
+  HashMap<Integer, Long> pop = new HashMap<Integer, Long>();
   float startX, endX, currentX;
   float startY, endY, currentY;
   float w, h;
@@ -24,15 +27,27 @@ class Country implements Comparable {
 
   Float getGPI(Integer year) {
     Float result = gpi.get(year);
+    /*
     if (result == null) {
       result = -1f;
     }
+    */
     return result;
   }
 
+  void setPOP(Integer year, Long value) {
+    pop.put(year, value);
+  }
+
+  Long getPOP(Integer year) {
+    Long result = pop.get(year);
+    return result;
+  }
+
+
   @Override
     String toString() {
-    return "\n" + name + " | "  + iso3 + " | " + region + " | " + subRegion;
+    return "\n" + name + " | "  + iso3 + " | " + region + " | " + subRegion + " | " + this.getPOP(2016);
   }
 
   //TODO:
@@ -68,9 +83,9 @@ class Country implements Comparable {
     currentY = map(time, 0, 1, startY, endY);
   }
 
-  void display() {
-    fill(col);
-    rect(this.currentX, this.currentY, this.w, this.h);
+  void display(PGraphics g) {
+    g.fill(col);
+    g.rect(this.currentX, this.currentY, this.w, this.h);
   }
 
   //COMPARISON

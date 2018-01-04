@@ -26,6 +26,8 @@ float margin = 10;
 float gap = 2;
 Long POPULATION_MIN = Long.MAX_VALUE;
 Long POPULATION_MAX = Long.MIN_VALUE;
+Long MIGRATION_FLOW_MAX = Long.MIN_VALUE;
+Long MIGRATION_FLOW_MIN = Long.MAX_VALUE;
 
 ArrayList<Hoverable> hoverables = new ArrayList<Hoverable>();
 ArrayList<Country> countries = new ArrayList<Country>();
@@ -41,7 +43,10 @@ ArrayList<String> missingCountries = new ArrayList<String>();
 int currentYear = 2013;
 
 void setup() {
-  size(1024, 512);
+  size(1024, 512, P3D);
+  pixelDensity(2);
+  ellipseMode(CORNER);
+  textSize(20);
   //load tables
   countryData = loadTable("gpi_2008-2016_geocodes+continents_v4.csv", "header");
   flowData = loadTable("GlobalMigration.tsv", "header, tsv");
@@ -152,7 +157,7 @@ void setup() {
         //println("ORIGIN NOT FOUND", originName);
       } else if (destination == null) {
         //println("DESTINATION NOT FOUND", destinationName);
-      } else {
+      } else if (!originName.equalsIgnoreCase(destinationName)) {
         Long flow = tr.getLong(year + "");
         if (flow != null) {
           ArrayList<MigrationFlow> flows = migrationFlows.get(year);
@@ -161,6 +166,8 @@ void setup() {
             migrationFlows.put(year, flows);
           }
           flows.add(new MigrationFlow(origin, destination, year, flow));
+          MIGRATION_FLOW_MIN = Math.min(flow, MIGRATION_FLOW_MIN);
+          MIGRATION_FLOW_MAX = Math.max(flow, MIGRATION_FLOW_MAX);
         }
       }
     }
@@ -177,11 +184,11 @@ void setup() {
   //Example of animating between two layouts
   //first sort by one criterium, then set start layout
   sortCountries(countries, SORT_BY_COUNTRY_NAME, currentYear);
-  makeLayout(margin, margin, width - 2 * margin, height-2*margin, gap, countries, SET_START_POS, currentYear);
+  makeLayout(margin, margin  + height/2, width - 2 * margin, height/2-2*margin, gap, countries, SET_START_POS, currentYear);
 
   //sort by other criterium, then set end layout
   sortCountries(countries, SORT_BY_CONTINENT_THEN_INDEX, 2016);
-  makeLayout(margin, margin, width - 2 * margin, height-2*margin, gap, countries, SET_END_POS, currentYear);
+  makeLayout(margin, margin  + height/2, width - 2 * margin, height/2-2*margin, gap, countries, SET_END_POS, currentYear);
   println("Population MIN", POPULATION_MIN);
   println("Population MAX", POPULATION_MAX);
   println(countries);
@@ -192,7 +199,7 @@ void draw() {
   background(0);
   noStroke();
   fill(255);
-  textSize(20);
+  noStroke();
   for (Country theCountry : countries) {
     //println(theCountry.name);
     theCountry.update(TIME);
@@ -206,6 +213,15 @@ void draw() {
   TIME += TIME_INC;
   TIME = min(TIME, 1);
   //println(TIME);
+  noFill();
+  stroke(255,31);
+  strokeWeight(2);
+  for (MigrationFlow mf : migrationFlows.get(currentYear)) {
+    if (mf.flow > 100) {
+      mf.display_v4(g, height/2, margin);
+    }
+    
+  }
 }
 
 void checkHover() {

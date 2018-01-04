@@ -77,6 +77,15 @@ class Country implements Comparable, Hoverable { //<>// //<>//
     }
   }
 
+  //used by migration flow
+  float cx() {
+    return currentX + w * 0.5;
+  }
+  
+  float cy() {
+    return currentY - 10;
+  }
+  
   @Override
     String toString() {
     return "\n" + name + " | "  + iso3 + " | " + region + " | " + subRegion + " | " + this.getPOP(2016);

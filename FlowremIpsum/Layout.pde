@@ -8,10 +8,15 @@ void makeLayout(float x0, float y0, float layoutWidth, float layoutHeight, float
   for (Country theCountry : theCountries) {
     
     Float gpi = theCountry.getGPI(theYear);
+    Long pop = theCountry.getPOP(theYear);
+    if (pop == null) {
+      pop = 0L;
+    }
     //float gpi = 2f;
-    float countryHeight = map(gpi, GPI_MIN, GPI_MAX, 0, layoutHeight);
+    float countryHeight = map(pop, POPULATION_MIN, POPULATION_MAX, 0, layoutHeight - 5) + 5;
     float gray = map(gpi, GPI_MIN, GPI_MAX, 255, 0);
-    color theColor = color(gray);
+    color theColor = color(gray, 0, 255);
+    float y = layoutHeight - countryHeight + y0;
 
     //it is cleaner to say, but it needs to be implemented!
     //theCountry.setX(x);
@@ -19,10 +24,10 @@ void makeLayout(float x0, float y0, float layoutWidth, float layoutHeight, float
     //setting start position
     if (thePosType == SET_START_POS) {
       theCountry.setStartX(x);
-      theCountry.setStartY(y0);
+      theCountry.setStartY(y);
     } else {
       theCountry.setEndX(x);
-      theCountry.setEndY(y0);
+      theCountry.setEndY(y);
     }
     theCountry.w = countryWidth;
     theCountry.h = countryHeight;

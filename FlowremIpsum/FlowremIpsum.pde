@@ -68,8 +68,25 @@ void setup() {
   countryLookupTable.put("The former Yugoslav Republic of Macedonia", "Macedonia");
   countryLookupTable.put("United Republic of Tanzania", "Tanzania");
   countryLookupTable.put("China (including Hong Kong Special Administrative Region)", "China");
-  
-  
+  countryLookupTable.put("TfYR of Macedonia", "Macedonia");
+  countryLookupTable.put("Republic of Moldova", "Moldova");
+  countryLookupTable.put("China, Hong Kong Special Administrative Region", "China");
+  countryLookupTable.put("State of Palestine", "Palestine");
+
+ 
+  missingCountries.add("Wallis and Futuna Islands");
+  missingCountries.add("United States Virgin Islands");
+  missingCountries.add("Tuvalu");
+  missingCountries.add("Turks and Caicos Islands");
+  missingCountries.add("Saint Pierre and Miquelon");
+  missingCountries.add("Saint Helena");
+  missingCountries.add("Réunion");
+  missingCountries.add("Puerto Rico");
+  missingCountries.add("Palau");
+  missingCountries.add("Tuvalu");
+  missingCountries.add("New Caledonia");
+  missingCountries.add("Niue");
+  missingCountries.add("Northern Mariana Islands");
   missingCountries.add("Comoros");
   missingCountries.add("China, Macao Special Administrative Region");
   missingCountries.add("Cook Islands");
@@ -89,6 +106,37 @@ void setup() {
   missingCountries.add("Bermuda");
   missingCountries.add("Seychelles");
   missingCountries.add("United Kingdom of Great Britain and Northern Ireland");
+  missingCountries.add("Luxembourg");
+  missingCountries.add("Maldives");
+  missingCountries.add("Malta");
+  missingCountries.add("Saint Kitts and Nevis");
+  missingCountries.add("Saint Lucia");
+  missingCountries.add("Saint Vincent and the Grenadines");
+  missingCountries.add("Samoa");
+  missingCountries.add("San Marino");
+  missingCountries.add("Sao Tome and Principe");
+  missingCountries.add("Solomon Islands");
+  missingCountries.add("Suriname");
+  missingCountries.add("Tonga");
+  missingCountries.add("Vanuatu");
+  missingCountries.add("Western Sahara");
+  missingCountries.add("Andorra");
+  missingCountries.add("Brunei Darussalam");
+  missingCountries.add("Cabo Verde");
+  missingCountries.add("Fiji");
+  missingCountries.add("Holy See");
+  missingCountries.add("Kiribati");
+  missingCountries.add("British Virgin Islands");
+  missingCountries.add("Cayman Islands");
+  missingCountries.add("Dominica");
+  missingCountries.add("Grenada");
+  missingCountries.add("American Samoa");
+  missingCountries.add("Falkland Islands (Malvinas)");
+  missingCountries.add("French Guiana");
+  missingCountries.add("French Polynesia");
+  missingCountries.add("Gibraltar");
+  missingCountries.add("Greenland");
+  missingCountries.add("Guadeloupe");
   missingCountries.add("Unknown");
 
 
@@ -191,7 +239,7 @@ void setup() {
   makeLayout(margin, margin  + height/2, width - 2 * margin, height/2-2*margin, gap, countries, SET_END_POS, currentYear);
   println("Population MIN", POPULATION_MIN);
   println("Population MAX", POPULATION_MAX);
-  println(countries);
+  //println(countries);
 }
 
 void draw() {

@@ -9,7 +9,7 @@ class MigrationFlow {
     year = theYear;
     flow = theFlow;
     origin.addEmigrationFlow(this);
-    //destination.addImigrationFlow(this);
+    destination.addImmigrationFlow(this);
   }
     
   void display() {

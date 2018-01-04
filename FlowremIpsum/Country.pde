@@ -1,4 +1,4 @@
-class Country implements Comparable, Hoverable { //<>// //<>// //<>// //<>// //<>// //<>//
+class Country implements Comparable, Hoverable { //<>// //<>//
   //attribute / field
   String name, iso3, region, subRegion;
   //gpi indices by year
@@ -53,27 +53,27 @@ class Country implements Comparable, Hoverable { //<>// //<>// //<>// //<>// //<
 
   void addImmigrationFlow(MigrationFlow flow) {
     int y = flow.year;
-    String dstCountry = flow.destination.iso3;
+    String orgISO3 = flow.origin.iso3;
     if (immigrationFlows.get(y) == null) {
       immigrationFlows.put(y, new HashMap<String, Long>());
     }
-    if (immigrationFlows.get(y).get(iso3) == null) {
-      immigrationFlows.get(y).put(iso3, flow.flow);
+    if (immigrationFlows.get(y).get(orgISO3) == null) {
+      immigrationFlows.get(y).put(orgISO3, flow.flow);
     } else {
-      println("IMMIGRATION FLOW already exists!", flow.origin.name, " -> ", flow.destination.name);
+      //println("IMMIGRATION FLOW already exists!", flow.origin.name, " -> ", flow.destination.name);
     }
   }
 
   void addEmigrationFlow(MigrationFlow flow) {
     int y = flow.year;
-    String orgCountry = flow.origin.iso3;
+    String dstISO3 = flow.destination.iso3;
     if (emigrationFlows.get(y) == null) {
       emigrationFlows.put(y, new HashMap<String, Long>());
     }
-    if (emigrationFlows.get(y).get(iso3) == null) {
-      emigrationFlows.get(y).put(iso3, flow.flow);
+    if (emigrationFlows.get(y).get(dstISO3) == null) {
+      emigrationFlows.get(y).put(dstISO3, flow.flow);
     } else {
-      println("EMIGRATION FLOW already exists!", flow.origin.name, " -> ", flow.destination.name);
+      //println("EMIGRATION FLOW already exists!", flow.origin.name, " -> ", flow.destination.name);
     }
   }
 

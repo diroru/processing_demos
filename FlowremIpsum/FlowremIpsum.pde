@@ -34,6 +34,10 @@ HashMap<String, Country> countriesByName = new HashMap<String, Country>();
 
 HashMap<Integer, ArrayList<MigrationFlow>> migrationFlows = new HashMap<Integer, ArrayList<MigrationFlow>>(); 
 
+//lookup table for mismatched country names
+HashMap<String, String> countryLookupTable = new HashMap<String, String>(); 
+ArrayList<String> missingCountries = new ArrayList<String>();
+
 int currentYear = 2013;
 
 void setup() {
@@ -42,6 +46,47 @@ void setup() {
   countryData = loadTable("gpi_2008-2016_geocodes+continents_v4.csv", "header");
   flowData = loadTable("GlobalMigration.tsv", "header, tsv");
   populationData = loadTable("API_SP.POP.TOTL_DS2_en_csv_v2.csv", "header");
+
+  countryLookupTable.put("United States of America", "United States");
+  countryLookupTable.put("Viet Nam", "Vietnam");
+  countryLookupTable.put("Republic of Korea", "South Korea");
+  countryLookupTable.put("Iran (Islamic Republic of)", "Iran");
+  countryLookupTable.put("Côte d'Ivoire", "Ivory Coast");
+  countryLookupTable.put("Congo", "Republic of the Congo");
+  countryLookupTable.put("Venezuela (Bolivarian Republic of)", "Venezuela");
+  countryLookupTable.put("Russian Federation", "Russia");
+  countryLookupTable.put("China, Taiwan Province of China", "Taiwan");
+  countryLookupTable.put("Democratic People's Republic of Korea", "North Korea");
+  countryLookupTable.put("Lao People's Democratic Republic", "Laos");
+  countryLookupTable.put("Bolivia (Plurinational State of)", "Bolivia");
+  countryLookupTable.put("Syrian Arab Republic", "Syria");
+  countryLookupTable.put("The former Yugoslav Republic of Macedonia", "Macedonia");
+  countryLookupTable.put("United Republic of Tanzania", "Tanzania");
+  countryLookupTable.put("China (including Hong Kong Special Administrative Region)", "China");
+  
+  
+  missingCountries.add("Comoros");
+  missingCountries.add("China, Macao Special Administrative Region");
+  missingCountries.add("Cook Islands");
+  missingCountries.add("Liechtenstein");
+  missingCountries.add("Martinique");
+  missingCountries.add("Marshall Islands");
+  missingCountries.add("Micronesia (Federated States of)");
+  missingCountries.add("Monaco");
+  missingCountries.add("Montserrat");
+  missingCountries.add("Nauru");
+  missingCountries.add("Anguilla");
+  missingCountries.add("Antigua and Barbuda");
+  missingCountries.add("Aruba");
+  missingCountries.add("Bahamas");
+  missingCountries.add("Barbados");
+  missingCountries.add("Belize");
+  missingCountries.add("Bermuda");
+  missingCountries.add("Seychelles");
+  missingCountries.add("United Kingdom of Great Britain and Northern Ireland");
+  missingCountries.add("Unknown");
+
+
   //instantiate countries
   for (int i = 0; i < countryData.getRowCount(); i++) {
     TableRow row = countryData.getRow(i);
@@ -85,9 +130,28 @@ void setup() {
       Country origin = countriesByName.get(originName);
       Country destination = countriesByName.get(destinationName);
       if (origin == null) {
-        println("ORIGIN NOT FOUND", originName);
+        String originTemp = originName + "";
+        //println("ORIGIN NOT FOUND (1ST ATTEMPT)", originName, "->", destinationName);
+        originName = countryLookupTable.get(originName);
+        origin = countriesByName.get(originName);
+        if (origin == null) {
+           if (!missingCountries.contains(originTemp)) println("ORIGIN STILL NOT FOUND: ", originTemp, "->", destinationName);
+        }
+      }
+      if (destination == null) {
+        String destinationTemp = originName + "";
+        //println("DESTINATION NOT FOUND (1ST ATTEMPT)", originName, "->", destinationName);
+        destinationName = countryLookupTable.get(destinationName);
+        destination = countriesByName.get(destinationName);
+        if (destination == null) {
+          if (!missingCountries.contains(destinationTemp)) println("DESTINATION STILL NOT FOUND: ", originName, "->", destinationTemp);
+        }
+      }
+
+      if (origin == null) {
+        //println("ORIGIN NOT FOUND", originName);
       } else if (destination == null) {
-        println("DESTINATION NOT FOUND", destinationName);
+        //println("DESTINATION NOT FOUND", destinationName);
       } else {
         Long flow = tr.getLong(year + "");
         if (flow != null) {
@@ -120,6 +184,7 @@ void setup() {
   makeLayout(margin, margin, width - 2 * margin, height-2*margin, gap, countries, SET_END_POS, currentYear);
   println("Population MIN", POPULATION_MIN);
   println("Population MAX", POPULATION_MAX);
+  println(countries);
 }
 
 void draw() {

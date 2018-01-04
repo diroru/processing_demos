@@ -1,8 +1,14 @@
-class Country implements Comparable, Hoverable { //<>// //<>//
+class Country implements Comparable, Hoverable { //<>// //<>// //<>// //<>// //<>// //<>//
   //attribute / field
   String name, iso3, region, subRegion;
   //gpi indices by year
   HashMap<Integer, Float> gpi = new HashMap<Integer, Float>();
+  //migration flows by year and by country iso3
+  HashMap<Integer, HashMap<String, Long>> immigrationFlows = new HashMap<Integer, HashMap<String, Long>>();
+  HashMap<Integer, HashMap<String, Long>> emigrationFlows = new HashMap<Integer, HashMap<String, Long>>();
+  //totals by year
+  HashMap<Integer, Long> totalImmigraionFlow = new HashMap<Integer, Long>();
+  HashMap<Integer, Long> totalEmigraionFlow = new HashMap<Integer, Long>();
   //population by year
   HashMap<Integer, Long> pop = new HashMap<Integer, Long>();
   float startX, endX, currentX;
@@ -45,6 +51,31 @@ class Country implements Comparable, Hoverable { //<>// //<>//
     return result;
   }
 
+  void addImmigrationFlow(MigrationFlow flow) {
+    int y = flow.year;
+    String dstCountry = flow.destination.iso3;
+    if (immigrationFlows.get(y) == null) {
+      immigrationFlows.put(y, new HashMap<String, Long>());
+    }
+    if (immigrationFlows.get(y).get(iso3) == null) {
+      immigrationFlows.get(y).put(iso3, flow.flow);
+    } else {
+      println("IMMIGRATION FLOW already exists!", flow.origin.name, " -> ", flow.destination.name);
+    }
+  }
+
+  void addEmigrationFlow(MigrationFlow flow) {
+    int y = flow.year;
+    String orgCountry = flow.origin.iso3;
+    if (emigrationFlows.get(y) == null) {
+      emigrationFlows.put(y, new HashMap<String, Long>());
+    }
+    if (emigrationFlows.get(y).get(iso3) == null) {
+      emigrationFlows.get(y).put(iso3, flow.flow);
+    } else {
+      println("EMIGRATION FLOW already exists!", flow.origin.name, " -> ", flow.destination.name);
+    }
+  }
 
   @Override
     String toString() {
@@ -92,7 +123,6 @@ class Country implements Comparable, Hoverable { //<>// //<>//
       g.fill(255);
       g.text(this.name, mouseX + 10, mouseY - 10);
     }
-
   }
 
   //COMPARISON

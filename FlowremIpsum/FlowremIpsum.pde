@@ -19,7 +19,7 @@ final int SORT_BY_INDEX = 2; //needs an active year
 final int SORT_BY_CONTINENT_THEN_INDEX = 3;
 
 float TIME = 0;
-float TIME_INC = 0.005;
+float TIME_INC = 0.01;
 
 //Layout globals
 float margin = 10;
@@ -27,6 +27,7 @@ float gap = 2;
 Long POPULATION_MIN = Long.MAX_VALUE;
 Long POPULATION_MAX = Long.MIN_VALUE;
 
+ArrayList<Hoverable> hoverables = new ArrayList<Hoverable>();
 
 void setup() {
   size(1024, 512);
@@ -47,6 +48,7 @@ void setup() {
 
     //add to collection of countries
     countries.add(theCountry);
+    hoverables.add(theCountry);
 
     //we add the gpi and population value for each year to country "theCountry"
     for (int year = GPI_YEAR_START; year <= GPI_YEAR_END; year++) {
@@ -70,8 +72,8 @@ void setup() {
   //println("KEYS:\n", countries.keySet());
   //println("-----");
   //print all countries
-  println("VALUES:\n", countries);
-  println("-----");
+  //println("VALUES:\n", countries);
+  //println("-----");
   //showing the Iceland’s GPI for 2008
   //println(countries.get("ISL").getGPI(2016));
 
@@ -92,13 +94,32 @@ void draw() {
   background(0);
   noStroke();
   fill(255);
-
+  textSize(20);
   for (Country theCountry : countries) {
     //println(theCountry.name);
     theCountry.update(TIME);
     theCountry.display(g);
   }
-
+  
+  if (TIME < 1) {
+    checkHover();
+  }
+  
   TIME += TIME_INC;
   TIME = min(TIME, 1);
+  //println(TIME);
+}
+
+void checkHover() {
+  for (Hoverable h : hoverables) {
+    if (h.isHover(mouseX,mouseY)) {
+      h.hoverOn();
+    } else {
+      h.hoverOff();
+    }
+  }
+}
+
+void mouseMoved() {
+  checkHover();
 }

@@ -1,4 +1,4 @@
-class Country implements Comparable {
+class Country implements Comparable, Hoverable { //<>// //<>//
   //attribute / field
   String name, iso3, region, subRegion;
   //gpi indices by year
@@ -10,6 +10,7 @@ class Country implements Comparable {
   float w, h;
   color col;
   int activeYear = GPI_YEAR_END;
+  boolean hover = false;
 
   int sortingMethod = SORT_BY_CONTINENT_THEN_INDEX;
 
@@ -29,9 +30,9 @@ class Country implements Comparable {
     Float result = gpi.get(year);
     /*
     if (result == null) {
-      result = -1f;
-    }
-    */
+     result = -1f;
+     }
+     */
     return result;
   }
 
@@ -48,6 +49,7 @@ class Country implements Comparable {
   @Override
     String toString() {
     return "\n" + name + " | "  + iso3 + " | " + region + " | " + subRegion + " | " + this.getPOP(2016);
+    //return "*";
   }
 
   //TODO:
@@ -64,7 +66,7 @@ class Country implements Comparable {
   void setEndY(float y) {
     endY = y;
   }
-  
+
   void setCurrentX(float x) {
     currentX = x;
   }
@@ -76,7 +78,7 @@ class Country implements Comparable {
   void setColor(color theColor) {
     col = theColor;
   }
-  
+
   //time goes from 0 to 1
   void update(float time) {
     currentX = map(time, 0, 1, startX, endX);
@@ -86,6 +88,11 @@ class Country implements Comparable {
   void display(PGraphics g) {
     g.fill(col);
     g.rect(this.currentX, this.currentY, this.w, this.h);
+    if (hover) {
+      g.fill(255);
+      g.text(this.name, mouseX + 10, mouseY - 10);
+    }
+
   }
 
   //COMPARISON
@@ -113,13 +120,26 @@ class Country implements Comparable {
       regionComparison = this.region.compareTo(otherCountry.region);
       //if the region (continent) is the same, compare indices
       if (regionComparison == 0) {
-         //return comparison result
-         return myIndex.compareTo(otherIndex);
+        //return comparison result
+        return myIndex.compareTo(otherIndex);
       }
       //if region (continent) is not the same, make this the comparison basis 
       return regionComparison;
     }
 
     return 0;
+  }
+
+  @Override
+    public boolean isHover(float x, float y) {
+    return x >= currentX && x <= currentX + w && y >= currentY && y <= currentY + h;
+  }
+  @Override
+    void hoverOn() {
+    hover = true;
+  }
+  @Override
+    void hoverOff() {
+    hover = false;
   }
 }

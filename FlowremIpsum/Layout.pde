@@ -25,9 +25,13 @@ void makeLayout(float x0, float y0, float layoutWidth, float layoutHeight, float
     if (thePosType == SET_START_POS) {
       theCountry.setStartX(x);
       theCountry.setStartY(y);
+      //theCountry.setCurrentX(x);
+      //theCountry.setCurrentY(y);
     } else {
       theCountry.setEndX(x);
       theCountry.setEndY(y);
+      //Ani.to(this, 1.5, "theCountry.currentX", theCountry.endX, Ani.BOUNCE_OUT);
+      //Ani.to(this, 1.5, "theCountry.currentY", theCountry.endY, Ani.BOUNCE_OUT);
     }
     theCountry.w = countryWidth;
     theCountry.h = countryHeight;

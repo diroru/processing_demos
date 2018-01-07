@@ -1,4 +1,4 @@
-class Country implements Comparable, Hoverable { //<>// //<>//
+public class Country implements Comparable { //<>// //<>//
   //attribute / field
   String name, iso3, region, subRegion;
   //gpi indices by year
@@ -18,14 +18,15 @@ class Country implements Comparable, Hoverable { //<>// //<>//
   int activeYear = GPI_YEAR_END;
   boolean hover = false;
 
-  int sortingMethod = SORT_BY_CONTINENT_THEN_INDEX;
-
+  int sortingMethod = SORT_BY_CONTINENT_THEN_INDEX; 
+  
   //constructor method
-  Country(String theName, String theIso3, String theRegion, String theSubRegion) {
+  Country(String theName, String theIso3, String theRegion, String theSubRegion, PApplet parent) {
     name = theName;
     iso3 = theIso3;
     region = theRegion;
     subRegion = theSubRegion;
+    parent.registerMethod("mouseEvent", this);
   }
 
   void setGPI(Integer year, Float value) {
@@ -81,11 +82,11 @@ class Country implements Comparable, Hoverable { //<>// //<>//
   float cx() {
     return currentX + w * 0.5;
   }
-  
+
   float cy() {
     return currentY - 10;
   }
-  
+
   @Override
     String toString() {
     return "\n" + name + " | "  + iso3 + " | " + region + " | " + subRegion + " | " + this.getPOP(2016);
@@ -125,6 +126,7 @@ class Country implements Comparable, Hoverable { //<>// //<>//
     currentY = map(time, 0, 1, startY, endY);
   }
 
+
   void display(PGraphics g) {
     g.fill(col);
     g.rect(this.currentX, this.currentY, this.w, this.h);
@@ -137,6 +139,9 @@ class Country implements Comparable, Hoverable { //<>// //<>//
   //COMPARISON
   @Override
     public boolean equals(Object obj) {
+    if (!(obj instanceof Country)) {
+      return false;
+    }
     Country c = ((Country) obj); 
     return c.iso3.equals(this.iso3);
   }
@@ -169,16 +174,21 @@ class Country implements Comparable, Hoverable { //<>// //<>//
     return 0;
   }
 
-  @Override
-    public boolean isHover(float x, float y) {
+  public boolean isHover(int x, int y) {
     return x >= currentX && x <= currentX + w && y >= currentY && y <= currentY + h;
   }
-  @Override
-    void hoverOn() {
-    hover = true;
-  }
-  @Override
-    void hoverOff() {
-    hover = false;
+
+  void mouseEvent(MouseEvent e) {
+    //println("mouseEvent: " + e);
+    int x = e.getX();
+    int y = e.getY();
+    switch(e.getAction()) {
+    case MouseEvent.MOVE:
+      hover = isHover(mouseX, mouseY);
+      break;
+    case MouseEvent.CLICK:
+      println("CLICK", e);
+      break;
+    }
   }
 }

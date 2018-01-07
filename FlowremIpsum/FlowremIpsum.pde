@@ -1,4 +1,8 @@
-import java.util.*;
+import java.util.Collections;
+//import java.awt.event.*;
+//import javax.swing.event.*;
+//import java.awt.event.*;
+
 
 Table countryData, flowData, populationData;
 
@@ -28,8 +32,8 @@ Long POPULATION_MIN = Long.MAX_VALUE;
 Long POPULATION_MAX = Long.MIN_VALUE;
 Long MIGRATION_FLOW_MAX = Long.MIN_VALUE;
 Long MIGRATION_FLOW_MIN = Long.MAX_VALUE;
+//Long MIGRATION_FL
 
-ArrayList<Hoverable> hoverables = new ArrayList<Hoverable>();
 ArrayList<Country> countries = new ArrayList<Country>();
 //Map of countries, labelled by names
 HashMap<String, Country> countriesByName = new HashMap<String, Country>();
@@ -42,6 +46,8 @@ ArrayList<String> missingCountries = new ArrayList<String>();
 
 int currentYear = 2013;
 
+Country hoverCountry = null;
+
 void setup() {
   size(1024, 512, P3D);
   pixelDensity(2);
@@ -52,93 +58,7 @@ void setup() {
   flowData = loadTable("GlobalMigration.tsv", "header, tsv");
   populationData = loadTable("API_SP.POP.TOTL_DS2_en_csv_v2.csv", "header");
 
-  countryLookupTable.put("United States of America", "United States");
-  countryLookupTable.put("Viet Nam", "Vietnam");
-  countryLookupTable.put("Republic of Korea", "South Korea");
-  countryLookupTable.put("Iran (Islamic Republic of)", "Iran");
-  countryLookupTable.put("Côte d'Ivoire", "Ivory Coast");
-  countryLookupTable.put("Congo", "Republic of the Congo");
-  countryLookupTable.put("Venezuela (Bolivarian Republic of)", "Venezuela");
-  countryLookupTable.put("Russian Federation", "Russia");
-  countryLookupTable.put("China, Taiwan Province of China", "Taiwan");
-  countryLookupTable.put("Democratic People's Republic of Korea", "North Korea");
-  countryLookupTable.put("Lao People's Democratic Republic", "Laos");
-  countryLookupTable.put("Bolivia (Plurinational State of)", "Bolivia");
-  countryLookupTable.put("Syrian Arab Republic", "Syria");
-  countryLookupTable.put("The former Yugoslav Republic of Macedonia", "Macedonia");
-  countryLookupTable.put("United Republic of Tanzania", "Tanzania");
-  countryLookupTable.put("China (including Hong Kong Special Administrative Region)", "China");
-  countryLookupTable.put("TfYR of Macedonia", "Macedonia");
-  countryLookupTable.put("Republic of Moldova", "Moldova");
-  countryLookupTable.put("China, Hong Kong Special Administrative Region", "China");
-  countryLookupTable.put("State of Palestine", "Palestine");
-
- 
-  missingCountries.add("Wallis and Futuna Islands");
-  missingCountries.add("United States Virgin Islands");
-  missingCountries.add("Tuvalu");
-  missingCountries.add("Turks and Caicos Islands");
-  missingCountries.add("Saint Pierre and Miquelon");
-  missingCountries.add("Saint Helena");
-  missingCountries.add("Réunion");
-  missingCountries.add("Puerto Rico");
-  missingCountries.add("Palau");
-  missingCountries.add("Tuvalu");
-  missingCountries.add("New Caledonia");
-  missingCountries.add("Niue");
-  missingCountries.add("Northern Mariana Islands");
-  missingCountries.add("Comoros");
-  missingCountries.add("China, Macao Special Administrative Region");
-  missingCountries.add("Cook Islands");
-  missingCountries.add("Liechtenstein");
-  missingCountries.add("Martinique");
-  missingCountries.add("Marshall Islands");
-  missingCountries.add("Micronesia (Federated States of)");
-  missingCountries.add("Monaco");
-  missingCountries.add("Montserrat");
-  missingCountries.add("Nauru");
-  missingCountries.add("Anguilla");
-  missingCountries.add("Antigua and Barbuda");
-  missingCountries.add("Aruba");
-  missingCountries.add("Bahamas");
-  missingCountries.add("Barbados");
-  missingCountries.add("Belize");
-  missingCountries.add("Bermuda");
-  missingCountries.add("Seychelles");
-  missingCountries.add("United Kingdom of Great Britain and Northern Ireland");
-  missingCountries.add("Luxembourg");
-  missingCountries.add("Maldives");
-  missingCountries.add("Malta");
-  missingCountries.add("Saint Kitts and Nevis");
-  missingCountries.add("Saint Lucia");
-  missingCountries.add("Saint Vincent and the Grenadines");
-  missingCountries.add("Samoa");
-  missingCountries.add("San Marino");
-  missingCountries.add("Sao Tome and Principe");
-  missingCountries.add("Solomon Islands");
-  missingCountries.add("Suriname");
-  missingCountries.add("Tonga");
-  missingCountries.add("Vanuatu");
-  missingCountries.add("Western Sahara");
-  missingCountries.add("Andorra");
-  missingCountries.add("Brunei Darussalam");
-  missingCountries.add("Cabo Verde");
-  missingCountries.add("Fiji");
-  missingCountries.add("Holy See");
-  missingCountries.add("Kiribati");
-  missingCountries.add("British Virgin Islands");
-  missingCountries.add("Cayman Islands");
-  missingCountries.add("Dominica");
-  missingCountries.add("Grenada");
-  missingCountries.add("American Samoa");
-  missingCountries.add("Falkland Islands (Malvinas)");
-  missingCountries.add("French Guiana");
-  missingCountries.add("French Polynesia");
-  missingCountries.add("Gibraltar");
-  missingCountries.add("Greenland");
-  missingCountries.add("Guadeloupe");
-  missingCountries.add("Unknown");
-
+  treatTableExceptions();
 
   //instantiate countries
   for (int i = 0; i < countryData.getRowCount(); i++) {
@@ -149,11 +69,10 @@ void setup() {
     String subRegion = row.getString("sub-region");
 
     //make new country, only local
-    Country theCountry = new Country(name, iso3, region, subRegion);
+    Country theCountry = new Country(name, iso3, region, subRegion, this);
 
     //add to collection of countries
     countries.add(theCountry);
-    hoverables.add(theCountry);
     countriesByName.put(name, theCountry);
 
     //we add the gpi and population value for each year to country "theCountry"
@@ -254,10 +173,6 @@ void draw() {
     theCountry.display(g);
   }
 
-  if (TIME < 1) {
-    checkHover();
-  }
-
   TIME += TIME_INC;
   TIME = min(TIME, 1);
   //println(TIME);
@@ -265,23 +180,13 @@ void draw() {
   stroke(255,31);
   strokeWeight(2);
   for (MigrationFlow mf : migrationFlows.get(currentYear)) {
+    if (hoverCountry == null) {
+    } else {
+    
+    }
     if (mf.flow > 100) {
-      mf.display_v4(g, height/2, margin);
+      mf.display(g, height/2, margin);
     }
     
   }
-}
-
-void checkHover() {
-  for (Hoverable h : hoverables) {
-    if (h.isHover(mouseX, mouseY)) {
-      h.hoverOn();
-    } else {
-      h.hoverOff();
-    }
-  }
-}
-
-void mouseMoved() {
-  checkHover();
 }

@@ -185,6 +185,11 @@ public class Country implements Comparable { //<>// //<>//
     switch(e.getAction()) {
     case MouseEvent.MOVE:
       hover = isHover(mouseX, mouseY);
+      if (hover) {
+        hoverCountries.add(this);
+      } else {
+        hoverCountries.remove(this);
+      }
       break;
     case MouseEvent.CLICK:
       println("CLICK", e);

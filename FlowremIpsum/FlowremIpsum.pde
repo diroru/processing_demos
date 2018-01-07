@@ -1,4 +1,4 @@
-import java.util.Collections;
+import java.util.*;
 //import java.awt.event.*;
 //import javax.swing.event.*;
 //import java.awt.event.*;
@@ -32,7 +32,7 @@ Long POPULATION_MIN = Long.MAX_VALUE;
 Long POPULATION_MAX = Long.MIN_VALUE;
 Long MIGRATION_FLOW_MAX = Long.MIN_VALUE;
 Long MIGRATION_FLOW_MIN = Long.MAX_VALUE;
-//Long MIGRATION_FL
+Long MIGRATION_FLOW_LOWER_LIMIT = 100L;
 
 ArrayList<Country> countries = new ArrayList<Country>();
 //Map of countries, labelled by names
@@ -46,99 +46,27 @@ ArrayList<String> missingCountries = new ArrayList<String>();
 
 int currentYear = 2013;
 
-Country hoverCountry = null;
+HashSet<Country> hoverCountries = new HashSet<Country>();
+
+int MARGIN = 20;
+LayoutInfo panelLayout, graphLayout, flowLayout, yearsLayout; 
 
 void setup() {
-  size(1024, 512, P3D);
+  size(1200, 600, P2D);
+   
+  float panelWidth = 200;
+  float yearBarHeight = 30f;
+  float graphHeight = (height - MARGIN * 3 - yearBarHeight) * 0.5;
+  float graphWidth = width - MARGIN * 3 - panelWidth;
+  panelLayout = new LayoutInfo(MARGIN, MARGIN, panelWidth, height - 2*MARGIN);
+  graphLayout = new LayoutInfo(panelWidth + 2 * MARGIN, MARGIN + graphHeight, graphWidth, graphHeight);
+  flowLayout = new LayoutInfo(panelWidth + 2 * MARGIN, MARGIN, graphWidth, graphHeight);
+  graphLayout.gap = gap;
+  
   pixelDensity(2);
   ellipseMode(CORNER);
   textSize(20);
-  //load tables
-  countryData = loadTable("gpi_2008-2016_geocodes+continents_v4.csv", "header");
-  flowData = loadTable("GlobalMigration.tsv", "header, tsv");
-  populationData = loadTable("API_SP.POP.TOTL_DS2_en_csv_v2.csv", "header");
-
-  treatTableExceptions();
-
-  //instantiate countries
-  for (int i = 0; i < countryData.getRowCount(); i++) {
-    TableRow row = countryData.getRow(i);
-    String iso3 = row.getString("alpha-3");
-    String name = row.getString("country");
-    String region = row.getString("region");
-    String subRegion = row.getString("sub-region");
-
-    //make new country, only local
-    Country theCountry = new Country(name, iso3, region, subRegion, this);
-
-    //add to collection of countries
-    countries.add(theCountry);
-    countriesByName.put(name, theCountry);
-
-    //we add the gpi and population value for each year to country "theCountry"
-    for (int year = GPI_YEAR_START; year <= GPI_YEAR_END; year++) {
-      String yearString = "score_" + year; //building the right column name
-      Float gpi = row.getFloat(yearString); //retrieving the value (a float number) for the given column (year)
-      theCountry.setGPI(year, gpi); //putting the value into the country
-
-      //find country row by iso-3 code
-      TableRow countryRow = populationData.findRow(theCountry.iso3, 1);
-      if (countryRow == null) {
-        println(theCountry.name, "not FOUND!!!");
-      } else {
-        Long pop = countryRow.getLong(year + "");
-        theCountry.setPOP(year, pop);
-        POPULATION_MIN = Math.min(pop, POPULATION_MIN);
-        POPULATION_MAX = Math.max(pop, POPULATION_MAX);
-      }
-    }
-  }
-  for (TableRow tr : flowData.rows()) {
-    int from = max(GPI_YEAR_START, MIGRATION_YEAR_START);
-    int to = min(GPI_YEAR_END, MIGRATION_YEAR_END);
-    for (int year = from; year <= to; year++) {
-      String originName = tr.getString("from");
-      String destinationName = tr.getString("to");
-      Country origin = countriesByName.get(originName);
-      Country destination = countriesByName.get(destinationName);
-      if (origin == null) {
-        String originTemp = originName + "";
-        //println("ORIGIN NOT FOUND (1ST ATTEMPT)", originName, "->", destinationName);
-        originName = countryLookupTable.get(originName);
-        origin = countriesByName.get(originName);
-        if (origin == null) {
-           if (!missingCountries.contains(originTemp)) println("ORIGIN STILL NOT FOUND: ", originTemp, "->", destinationName);
-        }
-      }
-      if (destination == null) {
-        String destinationTemp = originName + "";
-        //println("DESTINATION NOT FOUND (1ST ATTEMPT)", originName, "->", destinationName);
-        destinationName = countryLookupTable.get(destinationName);
-        destination = countriesByName.get(destinationName);
-        if (destination == null) {
-          if (!missingCountries.contains(destinationTemp)) println("DESTINATION STILL NOT FOUND: ", originName, "->", destinationTemp);
-        }
-      }
-
-      if (origin == null) {
-        //println("ORIGIN NOT FOUND", originName);
-      } else if (destination == null) {
-        //println("DESTINATION NOT FOUND", destinationName);
-      } else if (!originName.equalsIgnoreCase(destinationName)) {
-        Long flow = tr.getLong(year + "");
-        if (flow != null) {
-          ArrayList<MigrationFlow> flows = migrationFlows.get(year);
-          if (flows == null) {
-            flows = new ArrayList<MigrationFlow>();
-            migrationFlows.put(year, flows);
-          }
-          flows.add(new MigrationFlow(origin, destination, year, flow));
-          MIGRATION_FLOW_MIN = Math.min(flow, MIGRATION_FLOW_MIN);
-          MIGRATION_FLOW_MAX = Math.max(flow, MIGRATION_FLOW_MAX);
-        }
-      }
-    }
-  }
+  loadData(false);
   //print all keys
   //println("KEYS:\n", countries.keySet());
   //println("-----");
@@ -151,11 +79,11 @@ void setup() {
   //Example of animating between two layouts
   //first sort by one criterium, then set start layout
   sortCountries(countries, SORT_BY_COUNTRY_NAME, currentYear);
-  makeLayout(margin, margin  + height/2, width - 2 * margin, height/2-2*margin, gap, countries, SET_START_POS, currentYear);
+  makeLayout(graphLayout, countries, SET_START_POS, currentYear);
 
   //sort by other criterium, then set end layout
   sortCountries(countries, SORT_BY_CONTINENT_THEN_INDEX, 2016);
-  makeLayout(margin, margin  + height/2, width - 2 * margin, height/2-2*margin, gap, countries, SET_END_POS, currentYear);
+  makeLayout(graphLayout, countries, SET_END_POS, currentYear);
   println("Population MIN", POPULATION_MIN);
   println("Population MAX", POPULATION_MAX);
   //println(countries);
@@ -176,17 +104,38 @@ void draw() {
   TIME += TIME_INC;
   TIME = min(TIME, 1);
   //println(TIME);
+
+  displayFlows();
+}
+
+void displayFlows() {
   noFill();
-  stroke(255,31);
-  strokeWeight(2);
+  String hoverCountry = null;
+
+  if (hoverCountries.size() > 0) {
+    Country hc = (Country)(hoverCountries.iterator().next());
+    hoverCountry = hc.name;
+  }
+
   for (MigrationFlow mf : migrationFlows.get(currentYear)) {
     if (hoverCountry == null) {
+      stroke(255, 31);
+      strokeWeight(2);
+      if (mf.flow > MIGRATION_FLOW_LOWER_LIMIT) {
+        mf.display(g, height/2, margin);
+      }
     } else {
-    
+      if (mf.origin.name.equals(hoverCountry)) {
+        stroke(255, 0, 0, 63);
+      } else if (mf.destination.name.equals(hoverCountry)) {
+        stroke(0, 0, 255, 63);
+      } else {
+        //stroke(255, 1);
+        noStroke();
+      }
+      if (mf.flow > MIGRATION_FLOW_LOWER_LIMIT) {
+        mf.display(g, height/2, margin);
+      }
     }
-    if (mf.flow > 100) {
-      mf.display(g, height/2, margin);
-    }
-    
   }
 }

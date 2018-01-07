@@ -41,3 +41,7 @@ void makeLayout(float x0, float y0, float layoutWidth, float layoutHeight, float
     x = x + countryWidth + gap;
   }
 }
+
+void makeLayout(LayoutInfo theInfo, ArrayList<Country> theCountries, int thePosType, int theYear) {
+  makeLayout(theInfo.x, theInfo.y, theInfo.w, theInfo.h, theInfo.gap, theCountries, thePosType, theYear);
+}

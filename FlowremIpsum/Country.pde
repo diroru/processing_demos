@@ -132,7 +132,7 @@ public class Country implements Comparable { //<>// //<>//
     g.rect(this.currentX, this.currentY, this.w, this.h);
     if (hover) {
       g.fill(255);
-      g.text(this.name, mouseX + 10, mouseY - 10);
+      g.text(this.name, mappedMouse.x + 10, mappedMouse.y - 10);
     }
   }
 
@@ -174,17 +174,15 @@ public class Country implements Comparable { //<>// //<>//
     return 0;
   }
 
-  public boolean isHover(int x, int y) {
+  public boolean isHover(float x, float y) {
     return x >= currentX && x <= currentX + w && y >= currentY && y <= currentY + h;
   }
 
   void mouseEvent(MouseEvent e) {
     //println("mouseEvent: " + e);
-    int x = e.getX();
-    int y = e.getY();
     switch(e.getAction()) {
     case MouseEvent.MOVE:
-      hover = isHover(mouseX, mouseY);
+      hover = isHover(mappedMouse.x, mappedMouse.y);
       if (hover) {
         hoverCountries.add(this);
       } else {

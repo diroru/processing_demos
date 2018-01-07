@@ -2,7 +2,8 @@ import java.util.*;
 //import java.awt.event.*;
 //import javax.swing.event.*;
 //import java.awt.event.*;
-
+import codeanticode.planetarium.*;
+import controlP5.*;
 
 Table countryData, flowData, populationData;
 
@@ -51,19 +52,43 @@ HashSet<Country> hoverCountries = new HashSet<Country>();
 int MARGIN = 20;
 LayoutInfo panelLayout, graphLayout, flowLayout, yearsLayout; 
 
+DomeCamera dc;
+ControlP5 cp5;
+
+int gridMode = Dome.NORMAL;
+ProjectionMesh mesh;
+PGraphics canvas;
+
+float xAngle = 0f;
+float yAngle = 0f;
+float zAngle = 0f;
+float deltaX = 0f;
+float deltaY = 0f;
+float deltaZ = 0f;
+int currentImage = 0;
+
+PVector mappedMouse = new PVector();
+
 void setup() {
-  size(1200, 600, P2D);
-   
+  size(1024, 1024, Dome.RENDERER);
+  //initial default camera, i.e. interface to interact with the renderer.
+  dc = new DomeCamera(this);
+  dc.setDomeAperture(1f);
+  //we enable the sixth side, sothat we see what is happenning
+  dc.setFaceDraw(DomeCamera.NEGATIVE_Z, true);
+  canvas = createGraphics(2048, 1024, P3D);
+  mesh = new ProjectionMesh(canvas);
+  //mesh.toggleGrid();
   float panelWidth = 200;
   float yearBarHeight = 30f;
-  float graphHeight = (height - MARGIN * 3 - yearBarHeight) * 0.5;
-  float graphWidth = width - MARGIN * 3 - panelWidth;
-  panelLayout = new LayoutInfo(MARGIN, MARGIN, panelWidth, height - 2*MARGIN);
+  float graphHeight = (canvas.height - MARGIN * 3 - yearBarHeight) * 0.5;
+  float graphWidth = canvas.width - MARGIN * 3 - panelWidth;
+  panelLayout = new LayoutInfo(MARGIN, MARGIN, panelWidth, canvas.height - 2*MARGIN);
   graphLayout = new LayoutInfo(panelWidth + 2 * MARGIN, MARGIN + graphHeight, graphWidth, graphHeight);
   flowLayout = new LayoutInfo(panelWidth + 2 * MARGIN, MARGIN, graphWidth, graphHeight);
   graphLayout.gap = gap;
-  
-  pixelDensity(2);
+
+  //pixelDensity(2);
   ellipseMode(CORNER);
   textSize(20);
   loadData(false);
@@ -89,27 +114,52 @@ void setup() {
   //println(countries);
 }
 
+void pre() {
+  mappedMouse = mapMouse(canvas, mouseX, mouseY);
+}
+
 void draw() {
-  //draw countries
   background(0);
-  noStroke();
-  fill(255);
-  noStroke();
+  pushMatrix();
+
+  translate(width/2, height/2, 0f);
+  rotateX(radians(xAngle));
+  rotateY(radians(yAngle));
+  rotateZ(radians(zAngle));
+  translate(deltaX, deltaY, deltaZ);
+  mesh.display();
+  popMatrix();
+}
+
+void post() {
+    // The dome projection is centered at (0, 0), so the mouse coordinates
+  // need to be offset by (width/2, height/2)
+  canvas.beginDraw();
+  //draw countries
+  canvas.background(0);
+  
+  canvas.noStroke();
+  canvas.fill(255);
+  canvas.noStroke();
   for (Country theCountry : countries) {
     //println(theCountry.name);
     theCountry.update(TIME);
-    theCountry.display(g);
+    theCountry.display(canvas);
   }
 
   TIME += TIME_INC;
-  TIME = min(TIME, 1);
+  TIME = min(TIME, 1); 
   //println(TIME);
 
-  displayFlows();
+  displayFlows(canvas);
+  
+  canvas.fill(255,255,0,127);
+  canvas.ellipse(mappedMouse.x, mappedMouse.y, 10, 10);
+  canvas.endDraw();
 }
 
-void displayFlows() {
-  noFill();
+void displayFlows(PGraphics pg) {
+  pg.noFill();
   String hoverCountry = null;
 
   if (hoverCountries.size() > 0) {
@@ -119,22 +169,22 @@ void displayFlows() {
 
   for (MigrationFlow mf : migrationFlows.get(currentYear)) {
     if (hoverCountry == null) {
-      stroke(255, 31);
-      strokeWeight(2);
+      pg.stroke(255, 31);
+      pg.strokeWeight(2);
       if (mf.flow > MIGRATION_FLOW_LOWER_LIMIT) {
-        mf.display(g, height/2, margin);
+        mf.display(pg, height/2, margin);
       }
     } else {
       if (mf.origin.name.equals(hoverCountry)) {
-        stroke(255, 0, 0, 63);
+        pg.stroke(255, 0, 0, 63);
       } else if (mf.destination.name.equals(hoverCountry)) {
-        stroke(0, 0, 255, 63);
+        pg.stroke(0, 0, 255, 63);
       } else {
         //stroke(255, 1);
-        noStroke();
+        pg.noStroke();
       }
       if (mf.flow > MIGRATION_FLOW_LOWER_LIMIT) {
-        mf.display(g, height/2, margin);
+        mf.display(pg, height/2, margin);
       }
     }
   }

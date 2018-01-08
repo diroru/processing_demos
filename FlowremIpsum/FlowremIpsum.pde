@@ -12,6 +12,8 @@ final int GPI_YEAR_START = 2008;
 final int GPI_YEAR_END = 2016;
 final int MIGRATION_YEAR_START = 1980;
 final int MIGRATION_YEAR_END = 2013;
+final int YEAR_START = 2008;
+final int YEAR_END = 2013;
 final int GPI_MIN = 1;
 final int GPI_MAX = 5;
 final int SET_START_POS = 0;
@@ -22,12 +24,13 @@ final int SORT_BY_COUNTRY_NAME = 0;
 final int SORT_BY_CONTINENT = 1;
 final int SORT_BY_INDEX = 2; //needs an active year
 final int SORT_BY_CONTINENT_THEN_INDEX = 3;
+int currentSortingMethod = SORT_BY_CONTINENT_THEN_INDEX;
 
 float TIME = 0;
-float TIME_INC = 0.01;
+float TIME_INC = 0.05;
 
 //Layout globals
-float margin = 10;
+//float margin = 10;
 float gap = 2;
 Long POPULATION_MIN = Long.MAX_VALUE;
 Long POPULATION_MAX = Long.MIN_VALUE;
@@ -48,6 +51,7 @@ ArrayList<String> missingCountries = new ArrayList<String>();
 int currentYear = 2013;
 
 HashSet<Country> hoverCountries = new HashSet<Country>();
+ArrayList<YearSelector> yearSelectors = new ArrayList<YearSelector>();
 
 int MARGIN = 20;
 LayoutInfo panelLayout, graphLayout, flowLayout, yearsLayout; 
@@ -92,26 +96,28 @@ void setup() {
   ellipseMode(CORNER);
   textSize(20);
   loadData(false);
-  //print all keys
-  //println("KEYS:\n", countries.keySet());
-  //println("-----");
-  //print all countries
-  //println("VALUES:\n", countries);
-  //println("-----");
-  //showing the Iceland’s GPI for 2008
-  //println(countries.get("ISL").getGPI(2016));
 
   //Example of animating between two layouts
   //first sort by one criterium, then set start layout
-  sortCountries(countries, SORT_BY_COUNTRY_NAME, currentYear);
-  makeLayout(graphLayout, countries, SET_START_POS, currentYear);
+  makeLayout(graphLayout, countries, currentSortingMethod, SET_START_POS, currentYear);
+  makeLayout(graphLayout, countries, currentSortingMethod, SET_END_POS, currentYear);
 
   //sort by other criterium, then set end layout
-  sortCountries(countries, SORT_BY_CONTINENT_THEN_INDEX, 2016);
-  makeLayout(graphLayout, countries, SET_END_POS, currentYear);
   println("Population MIN", POPULATION_MIN);
   println("Population MAX", POPULATION_MAX);
   //println(countries);
+  
+  int repeat = 3;
+  int count = YEAR_END - YEAR_START + 1;
+  for (int i = 0; i <= repeat * count; i++) {
+     int year = i % count + YEAR_START;
+     float dw = (canvas.width - panelWidth - 2*MARGIN) / (repeat * float(count));
+     float y = canvas.height - MARGIN;
+     float w = 50;
+     float h  = 20;
+     LayoutInfo yearLayout = new LayoutInfo(panelWidth + 2*MARGIN + dw * i, y, w, h);
+     yearSelectors.add(new YearSelector(year, yearLayout, this));
+  }
 }
 
 void pre() {
@@ -152,6 +158,9 @@ void post() {
   //println(TIME);
 
   displayFlows(canvas);
+  for (YearSelector ys : yearSelectors) {
+    ys.display(canvas);
+  }
   
   canvas.fill(255,255,0,127);
   canvas.ellipse(mappedMouse.x, mappedMouse.y, 10, 10);
@@ -172,7 +181,7 @@ void displayFlows(PGraphics pg) {
       pg.stroke(255, 31);
       pg.strokeWeight(2);
       if (mf.flow > MIGRATION_FLOW_LOWER_LIMIT) {
-        mf.display(pg, height/2, margin);
+        mf.display(pg, height/2, MARGIN);
       }
     } else {
       if (mf.origin.name.equals(hoverCountry)) {
@@ -184,8 +193,9 @@ void displayFlows(PGraphics pg) {
         pg.noStroke();
       }
       if (mf.flow > MIGRATION_FLOW_LOWER_LIMIT) {
-        mf.display(pg, height/2, margin);
+        mf.display(pg, height/2, MARGIN);
       }
     }
   }
+  
 }

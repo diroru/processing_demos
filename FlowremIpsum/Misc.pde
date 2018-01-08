@@ -1,14 +1,3 @@
-void sortCountries(ArrayList<Country> theCountries, int theSortingMethod, int theActiveYear) {
-  //get only countries as a list
-  //set the proper sorting method for each country
-  for (Country theCountry : theCountries) {
-    theCountry.sortingMethod = theSortingMethod;
-    theCountry.activeYear = theActiveYear;
-  }
-  //do the sorting
-  Collections.sort(theCountries);
-}
-
 void drawArcLine(PGraphics g, float x0, float y0, float x1, float y1, float x2, float y2, float x3, float y3) {
   float w = x2 - x1;
   float h = min(y0, y3) - y1;

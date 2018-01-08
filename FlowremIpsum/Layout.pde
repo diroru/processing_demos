@@ -1,4 +1,5 @@
-void makeLayout(float x0, float y0, float layoutWidth, float layoutHeight, float gap, ArrayList<Country> theCountries, int thePosType, int theYear) {
+void makeLayout(float x0, float y0, float layoutWidth, float layoutHeight, float gap, ArrayList<Country> theCountries, int theSortingMethod, int thePosType, int theYear) {
+  sortCountries(theCountries, theSortingMethod, theYear);
   int countryCount = theCountries.size();
   float countryWidth = (layoutWidth - gap * (countryCount - 1)) / float(countryCount);
   float x = x0;  
@@ -42,6 +43,33 @@ void makeLayout(float x0, float y0, float layoutWidth, float layoutHeight, float
   }
 }
 
-void makeLayout(LayoutInfo theInfo, ArrayList<Country> theCountries, int thePosType, int theYear) {
-  makeLayout(theInfo.x, theInfo.y, theInfo.w, theInfo.h, theInfo.gap, theCountries, thePosType, theYear);
+void makeLayout(LayoutInfo theInfo, ArrayList<Country> theCountries, int theSortingMethod, int thePosType, int theYear) {
+  makeLayout(theInfo.x, theInfo.y, theInfo.w, theInfo.h, theInfo.gap, theCountries, theSortingMethod, thePosType, theYear);
+}
+
+void makeStartLayout(int theSortingMethod, int theYear) {
+  makeLayout(graphLayout, countries, theSortingMethod, SET_START_POS, theYear);
+}
+
+void makeEndLayout(int theSortingMethod, int theYear) {
+  makeLayout(graphLayout, countries, theSortingMethod, SET_END_POS, theYear);
+}
+
+void makeStartLayout(int theYear) {
+  makeStartLayout(currentSortingMethod, theYear);
+}
+
+void makeEndLayout(int theYear) {
+  makeEndLayout(currentSortingMethod, theYear);
+}
+
+void sortCountries(ArrayList<Country> theCountries, int theSortingMethod, int theActiveYear) {
+  //get only countries as a list
+  //set the proper sorting method for each country
+  for (Country theCountry : theCountries) {
+    theCountry.sortingMethod = theSortingMethod;
+    theCountry.activeYear = theActiveYear;
+  }
+  //do the sorting
+  Collections.sort(theCountries);
 }

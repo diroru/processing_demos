@@ -14,7 +14,8 @@ void makeLayout(float x0, float y0, float layoutWidth, float layoutHeight, float
       pop = 0L;
     }
     //float gpi = 2f;
-    float countryHeight = map(pop, POPULATION_MIN, POPULATION_MAX, 0, layoutHeight - 5) + 5;
+    //float countryHeight = map(pop, POPULATION_MIN, POPULATION_MAX, 0, layoutHeight - 5) + 5;
+    float countryHeight = constrainedLogScale(pop, layoutHeight);
     float gray = map(gpi, GPI_MIN, GPI_MAX, 255, 0);
     color theColor = color(gray, 0, 255);
     float y = layoutHeight - countryHeight + y0;

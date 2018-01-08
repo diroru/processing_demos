@@ -26,3 +26,22 @@ PVector mapMouse(PGraphics target, int mx, int my) {
   float y = map(r, 0, 1, 0, target.height);
   return new PVector(x, y);
 }
+
+float logScale(float val, float base, float scale) {
+  return log(val) / log(base) * scale;
+}
+
+float logScale(float val, float scale) {
+  return logScale(val, POPULATION_MAX, scale);
+}
+
+float constrainedLogScale(float val, float minVal, float base, float scale) {
+  float lVal = log(val) / log(base);
+  float lValMin = log(minVal) / log(base);
+  float scaleCorrection = 1 - lValMin;
+  return max(lVal - lValMin, 0) * scale / scaleCorrection;
+}
+
+float constrainedLogScale(float val, float scale) {
+  return constrainedLogScale(val, POPULATION_CUTOFF, POPULATION_MAX, scale);
+}

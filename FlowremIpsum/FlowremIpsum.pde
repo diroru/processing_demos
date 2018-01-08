@@ -34,6 +34,7 @@ float TIME_INC = 0.05;
 float gap = 2;
 Long POPULATION_MIN = Long.MAX_VALUE;
 Long POPULATION_MAX = Long.MIN_VALUE;
+Long POPULATION_CUTOFF = 50000L;
 Long MIGRATION_FLOW_MAX = Long.MIN_VALUE;
 Long MIGRATION_FLOW_MIN = Long.MAX_VALUE;
 Long MIGRATION_FLOW_LOWER_LIMIT = 100L;
@@ -82,6 +83,7 @@ void setup() {
   dc.setFaceDraw(DomeCamera.NEGATIVE_Z, true);
   canvas = createGraphics(2048, 1024, P3D);
   mesh = new ProjectionMesh(canvas);
+  //mesh.toggleShape();
   //mesh.toggleGrid();
   float panelWidth = 200;
   float yearBarHeight = 30f;
@@ -106,17 +108,17 @@ void setup() {
   println("Population MIN", POPULATION_MIN);
   println("Population MAX", POPULATION_MAX);
   //println(countries);
-  
+
   int repeat = 3;
   int count = YEAR_END - YEAR_START + 1;
   for (int i = 0; i <= repeat * count; i++) {
-     int year = i % count + YEAR_START;
-     float dw = (canvas.width - panelWidth - 2*MARGIN) / (repeat * float(count));
-     float y = canvas.height - MARGIN;
-     float w = 50;
-     float h  = 20;
-     LayoutInfo yearLayout = new LayoutInfo(panelWidth + 2*MARGIN + dw * i, y, w, h);
-     yearSelectors.add(new YearSelector(year, yearLayout, this));
+    int year = i % count + YEAR_START;
+    float dw = (canvas.width - panelWidth - 2*MARGIN) / (repeat * float(count));
+    float y = canvas.height - MARGIN;
+    float w = 50;
+    float h  = 20;
+    LayoutInfo yearLayout = new LayoutInfo(panelWidth + 2*MARGIN + dw * i, y, w, h);
+    yearSelectors.add(new YearSelector(year, yearLayout, this));
   }
 }
 
@@ -138,12 +140,12 @@ void draw() {
 }
 
 void post() {
-    // The dome projection is centered at (0, 0), so the mouse coordinates
+  // The dome projection is centered at (0, 0), so the mouse coordinates
   // need to be offset by (width/2, height/2)
   canvas.beginDraw();
   //draw countries
   canvas.background(0);
-  
+
   canvas.noStroke();
   canvas.fill(255);
   canvas.noStroke();
@@ -161,9 +163,17 @@ void post() {
   for (YearSelector ys : yearSelectors) {
     ys.display(canvas);
   }
-  
-  canvas.fill(255,255,0,127);
+
+  canvas.fill(255, 255, 0, 127);
   canvas.ellipse(mappedMouse.x, mappedMouse.y, 10, 10);
+
+  canvas.stroke(0, 255, 0);
+  canvas.strokeWeight(2);
+  for (int i = 0; i < 10; i++) {
+    float y = graphLayout.y + graphLayout.h - constrainedLogScale(pow(10, i), graphLayout.h);
+    canvas.line(0,y,canvas.width,y);
+  }
+
   canvas.endDraw();
 }
 
@@ -197,5 +207,8 @@ void displayFlows(PGraphics pg) {
       }
     }
   }
-  
+}
+
+void keyPressed() {
+  canvas.save("test.png");
 }

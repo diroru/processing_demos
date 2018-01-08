@@ -176,6 +176,7 @@ public class Country implements Comparable { //<>// //<>//
 
   public boolean isHover(float x, float y) {
     return x >= currentX && x <= currentX + w && y >= currentY && y <= currentY + h;
+    //return x >= currentX && x <= currentX + w;
   }
 
   void mouseEvent(MouseEvent e) {

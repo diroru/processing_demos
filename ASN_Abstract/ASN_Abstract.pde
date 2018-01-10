@@ -11,7 +11,9 @@ int YEAR_END = Integer.MIN_VALUE;
 int MAX_FATALITIES_PER_YEAR = Integer.MIN_VALUE;
 
 HashMap<Integer, FatalitiesByYear> byYear = new HashMap<Integer, FatalitiesByYear>();
-TreeMap<Integer, Integer> totalDistribution, yearlyDistribution;
+TreeMap<Integer, Integer> totalDistribution, yearlyDistribution, relativeDistribution;
+
+float margin = 20;
 
 void setup() {
   size(1680, 1050, P2D);
@@ -27,24 +29,43 @@ void setup() {
   }
   countries = new ArrayList<String>(countrySet);
   Collections.sort(countries);
-  println(countries);
+  println(countries, countries.size() );
 
   for (int i = YEAR_START; i <= YEAR_END; i++) {
     byYear.put(i, new FatalitiesByYear(i));
   }
   for (Datum d : data) {
-    byYear.get(d.year).addFatalities(d.country, d.total);
+    byYear.get(d.year).addFatalities(d.country, d.total_fatalities);
   }
 
   for (FatalitiesByYear fat : byYear.values()) {
-    MAX_FATALITIES_PER_YEAR = max(MAX_FATALITIES_PER_YEAR, fat.total);
+    MAX_FATALITIES_PER_YEAR = max(MAX_FATALITIES_PER_YEAR, fat.total_fatalities);
   }
 
   println("MAX PER YEAR", MAX_FATALITIES_PER_YEAR);
 
   //DRAW "MATRIX"
-  
+
+
+  totalDistribution = getTotalDistribution(dataTable);
+  relativeDistribution = getRelativeDistribution(dataTable);
+  yearlyDistribution = getYearlyDistribution(new ArrayList<FatalitiesByYear>(byYear.values()));
+}
+
+void draw() {
   background(0);
+
+  /*
+   drawDistribution(totalDistribution, color(255,0,0), 20);
+   drawDistribution(yearlyDistribution, color(0,255,0), 20);
+   */
+  drawDistribution(relativeDistribution, color(255, 255, 0), margin);
+  stroke(255);
+  strokeWeight(1);
+  line(margin, height-margin, width-margin, height-margin);
+}
+
+void drawMatrix() {
   float m = 20;
   float p = 2;
   float w = (width - m*2 - (countries.size()-1) * p) / float(countries.size());
@@ -66,21 +87,10 @@ void setup() {
         fill(255, f, f);
       }
       noStroke();
-      rect(x,y,w,h);
+      rect(x, y, w, h);
       x += w + p;
     }
     x = x0;
     y += h + p;
   }
-  
-  totalDistribution = getTotalDistribution(dataTable);
-  yearlyDistribution = getYearlyDistribution(new ArrayList<FatalitiesByYear>(byYear.values()));
-}
-
-void draw() {
-  /*
-  background(0);
-  drawDistribution(totalDistribution, color(255,0,0), 20);
-  drawDistribution(yearlyDistribution, color(0,255,0), 20);
-*/
 }

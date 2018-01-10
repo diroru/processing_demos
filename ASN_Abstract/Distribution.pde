@@ -18,6 +18,28 @@ TreeMap<Integer, Integer> getTotalDistribution(Table data) {
   return result;
 };
 
+//returns rounded percents as integers
+TreeMap<Integer, Integer> getRelativeDistribution(Table data) {
+  TreeMap<Integer, Integer> result = new TreeMap<Integer, Integer>();
+  for (TableRow row : data.rows()) {
+    Integer fat = row.getInt("total_fatalities");
+    Integer occ = row.getInt("total_occupants");
+    Integer percent = 0;
+    if (occ > 0) {
+      percent = round(100f * fat / float(occ));
+    }
+    percent = floor(quantize(percent, 0, 100, 100));
+    Integer existing = result.get(percent);
+    if (existing == null) {
+      existing = 0;
+    }
+    existing = existing+1;
+    result.put(percent, existing);
+  }
+  println(result.keySet());
+  return result;
+};
+
 TreeMap<Integer, Integer> getYearlyDistribution(ArrayList<FatalitiesByYear> byYear) {
   TreeMap<Integer, Integer> result = new TreeMap<Integer, Integer>();
   for (FatalitiesByYear fatalities : byYear) {
@@ -48,9 +70,9 @@ void drawDistribution(TreeMap<Integer, Integer> dist, color c, float margin, flo
     freqMin =  min(freqMin, dist.get(count));
     freqMax =  max(freqMax, dist.get(count));
   }
-  println(countMin, countMax, freqMin, freqMax);
+  //println(countMin, countMax, freqMin, freqMax);
   stroke(c);
-  strokeWeight(2);
+  strokeWeight(4);
   for (Integer count : dist.keySet()) {
     int freq = dist.get(count);
     float x = map(count, countMin, countMax, margin, width-margin*2);

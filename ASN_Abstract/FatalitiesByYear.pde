@@ -1,10 +1,10 @@
 class FatalitiesByYear {
-  int year, total;
+  int year, total_fatalities;
   HashMap<String, Integer> byCountry = new HashMap<String, Integer>();
  
   FatalitiesByYear(int theYear) {
     year = theYear;
-    total = 0;
+    total_fatalities = 0;
   }
   
   void addFatalities(String country, int count) {
@@ -15,7 +15,7 @@ class FatalitiesByYear {
       existing = 0;
     }
     byCountry.put(country, existing + count);
-    total += count;
+    total_fatalities += count;
   }
   
   Integer getFatalities(String country) {

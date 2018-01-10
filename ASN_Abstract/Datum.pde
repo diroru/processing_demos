@@ -1,6 +1,6 @@
 class Datum {
   int year, month, day, total_fatalities, total_occupants;
-  String country;
+  String country, phase;
   
   Datum(TableRow row) {
     year = row.getInt("year");
@@ -9,8 +9,14 @@ class Datum {
     total_fatalities = row.getInt("total_fatalities");
     country = row.getString("accident_country");
     total_occupants = row.getInt("total_occupants");
+    phase = row.getString("phase"); 
     if (country.equalsIgnoreCase("Unknown")) {
       country = "Unknown country";
     }
+  }
+  
+  @Override
+  String toString() {
+    return country + " | " + year + "/" + month + "/" + day + " : " + total_fatalities;
   }
 }

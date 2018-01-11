@@ -1,4 +1,4 @@
-void makeLayout(float x0, float y0, float layoutWidth, float layoutHeight, float gap, ArrayList<Country> theCountries, int theSortingMethod, int thePosType, int theYear) {
+void makeLayout(float x0, float y0, float layoutWidth, float layoutHeight, float gap, ArrayList<Country> theCountries, int theSortingMethod, int theDuration, int theYear) {
   sortCountries(theCountries, theSortingMethod, theYear);
   int countryCount = theCountries.size();
   float countryWidth = (layoutWidth - gap * (countryCount - 1)) / float(countryCount);
@@ -18,23 +18,13 @@ void makeLayout(float x0, float y0, float layoutWidth, float layoutHeight, float
     float countryHeight = constrainedLogScale(pop, layoutHeight);
     float gray = map(gpi, GPI_MIN, GPI_MAX, 255, 0);
     color theColor = color(gray, 0, 255);
-    float y = layoutHeight - countryHeight + y0;
-
+    //float y = layoutHeight - countryHeight + y0;
+    float y = y0;
     //it is cleaner to say, but it needs to be implemented!
     //theCountry.setX(x);
     //we set the layout values for each country
     //setting start position
-    if (thePosType == SET_START_POS) {
-      theCountry.setStartX(x);
-      theCountry.setStartY(y);
-      //theCountry.setCurrentX(x);
-      //theCountry.setCurrentY(y);
-    } else {
-      theCountry.setEndX(x);
-      theCountry.setEndY(y);
-      //Ani.to(this, 1.5, "theCountry.currentX", theCountry.endX, Ani.BOUNCE_OUT);
-      //Ani.to(this, 1.5, "theCountry.currentY", theCountry.endY, Ani.BOUNCE_OUT);
-    }
+    theCountry.setEndPos(x, y, theDuration);
     theCountry.w = countryWidth;
     theCountry.h = countryHeight;
     theCountry.setColor(theColor);
@@ -44,24 +34,21 @@ void makeLayout(float x0, float y0, float layoutWidth, float layoutHeight, float
   }
 }
 
-void makeLayout(LayoutInfo theInfo, ArrayList<Country> theCountries, int theSortingMethod, int thePosType, int theYear) {
-  makeLayout(theInfo.x, theInfo.y, theInfo.w, theInfo.h, theInfo.gap, theCountries, theSortingMethod, thePosType, theYear);
+void makeLayout(LayoutInfo theInfo, ArrayList<Country> theCountries, int theSortingMethod, int theDuration, int theYear) {
+  makeLayout(theInfo.x, theInfo.y, theInfo.w, theInfo.h, theInfo.gap, theCountries, theSortingMethod, theDuration, theYear);
 }
 
-void makeStartLayout(int theSortingMethod, int theYear) {
-  makeLayout(graphLayout, countries, theSortingMethod, SET_START_POS, theYear);
+void makeLayout(int theSortingMethod, int theYear) {
+  makeLayout(graphLayout, countries, theSortingMethod, DEFAULT_DURATION, theYear);
 }
 
-void makeEndLayout(int theSortingMethod, int theYear) {
-  makeLayout(graphLayout, countries, theSortingMethod, SET_END_POS, theYear);
+
+void makeLayout(int theYear) {
+  makeLayout(graphLayout, countries, currentSortingMethod, DEFAULT_DURATION, theYear);
 }
 
-void makeStartLayout(int theYear) {
-  makeStartLayout(currentSortingMethod, theYear);
-}
-
-void makeEndLayout(int theYear) {
-  makeEndLayout(currentSortingMethod, theYear);
+void makeLayout() {
+  makeLayout(graphLayout, countries, currentSortingMethod, DEFAULT_DURATION, currentYear);
 }
 
 void sortCountries(ArrayList<Country> theCountries, int theSortingMethod, int theActiveYear) {

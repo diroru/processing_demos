@@ -4,6 +4,7 @@ import java.util.*;
 //import java.awt.event.*;
 import codeanticode.planetarium.*;
 import controlP5.*;
+import java.lang.reflect.*;
 
 Table countryData, flowData, populationData;
 
@@ -13,21 +14,25 @@ final int GPI_YEAR_END = 2016;
 final int MIGRATION_YEAR_START = 1980;
 final int MIGRATION_YEAR_END = 2013;
 final int YEAR_START = 2008;
-final int YEAR_END = 2013;
+final int YEAR_END = 2016;
 final int GPI_MIN = 1;
 final int GPI_MAX = 5;
 final int SET_START_POS = 0;
 final int SET_END_POS = 1;
 
 //SORTING TYPE CONSTANTS
-final int SORT_BY_COUNTRY_NAME = 0;
-final int SORT_BY_CONTINENT = 1;
-final int SORT_BY_INDEX = 2; //needs an active year
-final int SORT_BY_CONTINENT_THEN_INDEX = 3;
-int currentSortingMethod = SORT_BY_CONTINENT_THEN_INDEX;
+final int SORT_BY_NAME = 0;
+final int SORT_BY_CONTINENT_THEN_NAME = 1;
+final int SORT_BY_GPI = 2; //needs active year!
+final int SORT_BY_CONTINENT_THEN_GPI = 3; //needs active year!
+final int SORT_BY_POPULATION = 4;
+final int SORT_BY_CONTINENT_THEN_POPULATION = 5;
+int currentSortingMethod = SORT_BY_GPI;
 
-float TIME = 0;
-float TIME_INC = 0.05;
+//float TIME = 0;
+//float TIME_INC = 0.05;
+int DEFAULT_DURATION = 500; //in millis;
+long lastTime;
 
 //Layout globals
 //float margin = 10;
@@ -73,6 +78,7 @@ float deltaZ = 0f;
 int currentImage = 0;
 
 PVector mappedMouse = new PVector();
+ArrayList<RadioButtonGroup> radio = new ArrayList<RadioButtonGroup>();
 
 void setup() {
   size(1024, 1024, Dome.RENDERER);
@@ -80,9 +86,12 @@ void setup() {
   dc = new DomeCamera(this);
   dc.setDomeAperture(1f);
   //we enable the sixth side, sothat we see what is happenning
-  dc.setFaceDraw(DomeCamera.NEGATIVE_Z, true);
+  dc.setFaceDraw(DomeCamera.NEGATIVE_Z, false);
   canvas = createGraphics(2048, 1024, P3D);
   mesh = new ProjectionMesh(canvas);
+  mesh.setHeight(238);
+  mesh.setRadius1(66);
+  mesh.setRadius0(186);
   //mesh.toggleShape();
   //mesh.toggleGrid();
   float panelWidth = 200;
@@ -90,7 +99,7 @@ void setup() {
   float graphHeight = (canvas.height - MARGIN * 3 - yearBarHeight) * 0.5;
   float graphWidth = canvas.width - MARGIN * 3 - panelWidth;
   panelLayout = new LayoutInfo(MARGIN, MARGIN, panelWidth, canvas.height - 2*MARGIN);
-  graphLayout = new LayoutInfo(panelWidth + 2 * MARGIN, MARGIN + graphHeight, graphWidth, graphHeight);
+  graphLayout = new LayoutInfo(panelWidth + 2 * MARGIN, height - (MARGIN + graphHeight), graphWidth, graphHeight);
   flowLayout = new LayoutInfo(panelWidth + 2 * MARGIN, MARGIN, graphWidth, graphHeight);
   graphLayout.gap = gap;
 
@@ -98,11 +107,10 @@ void setup() {
   ellipseMode(CORNER);
   textSize(20);
   loadData(false);
-
+  initRadio();
   //Example of animating between two layouts
   //first sort by one criterium, then set start layout
-  makeLayout(graphLayout, countries, currentSortingMethod, SET_START_POS, currentYear);
-  makeLayout(graphLayout, countries, currentSortingMethod, SET_END_POS, currentYear);
+  makeLayout(graphLayout, countries, currentSortingMethod, 0, currentYear);
 
   //sort by other criterium, then set end layout
   println("Population MIN", POPULATION_MIN);
@@ -120,6 +128,7 @@ void setup() {
     LayoutInfo yearLayout = new LayoutInfo(panelWidth + 2*MARGIN + dw * i, y, w, h);
     yearSelectors.add(new YearSelector(year, yearLayout, this));
   }
+  lastTime = millis();
 }
 
 void pre() {
@@ -149,16 +158,15 @@ void post() {
   canvas.noStroke();
   canvas.fill(255);
   canvas.noStroke();
+  
+  long delta = millis() - lastTime;
   for (Country theCountry : countries) {
     //println(theCountry.name);
-    theCountry.update(TIME);
+    theCountry.update(delta);
     theCountry.display(canvas);
   }
-
-  TIME += TIME_INC;
-  TIME = min(TIME, 1); 
-  //println(TIME);
-
+  lastTime = millis();
+  
   displayFlows(canvas);
   for (YearSelector ys : yearSelectors) {
     ys.display(canvas);
@@ -170,10 +178,13 @@ void post() {
   canvas.stroke(0, 255, 0);
   canvas.strokeWeight(2);
   for (int i = 0; i < 10; i++) {
-    float y = graphLayout.y + graphLayout.h - constrainedLogScale(pow(10, i), graphLayout.h);
+    float y = graphLayout.y + constrainedLogScale(pow(10, i), graphLayout.h);
     canvas.line(0,y,canvas.width,y);
   }
-
+  
+  for (RadioButtonGroup rbg : radio) {
+    rbg.display(canvas);
+  }
   canvas.endDraw();
 }
 
@@ -185,7 +196,8 @@ void displayFlows(PGraphics pg) {
     Country hc = (Country)(hoverCountries.iterator().next());
     hoverCountry = hc.name;
   }
-
+  
+  //ArrayList<MigrationFlow> yearlyMigrationFlows = migrationFlows.get(currentYear); 
   for (MigrationFlow mf : migrationFlows.get(currentYear)) {
     if (hoverCountry == null) {
       pg.stroke(255, 31);

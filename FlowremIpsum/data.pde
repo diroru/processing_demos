@@ -40,8 +40,13 @@ void loadData(boolean verbose) {
     }
   }
   for (TableRow tr : flowData.rows()) {
-    int from = max(GPI_YEAR_START, MIGRATION_YEAR_START);
-    int to = min(GPI_YEAR_END, MIGRATION_YEAR_END);
+    //int from = max(GPI_YEAR_START, MIGRATION_YEAR_START);
+    //int to = min(GPI_YEAR_END, MIGRATION_YEAR_END);
+    int from  = YEAR_START;
+    int to = YEAR_END;
+    for (int year = from; year <= to; year++) {
+      migrationFlows.put(year, new ArrayList<MigrationFlow>());
+    }
     for (int year = from; year <= to; year++) {
       String originName = tr.getString("from");
       String destinationName = tr.getString("to");
@@ -75,16 +80,23 @@ void loadData(boolean verbose) {
       } else if (destination == null) {
         //println("DESTINATION NOT FOUND", destinationName);
       } else if (!originName.equalsIgnoreCase(destinationName)) {
-        Long flow = tr.getLong(year + "");
-        if (flow != null) {
-          ArrayList<MigrationFlow> flows = migrationFlows.get(year);
-          if (flows == null) {
-            flows = new ArrayList<MigrationFlow>();
-            migrationFlows.put(year, flows);
+        try {
+
+          Long flow = tr.getLong(year + "");
+          if (flow != null) {
+            ArrayList<MigrationFlow> flows = migrationFlows.get(year);
+            /*
+            if (flows == null) {
+             flows = new ArrayList<MigrationFlow>();
+             migrationFlows.put(year, flows);
+             }
+             */
+            flows.add(new MigrationFlow(origin, destination, year, flow));
+            MIGRATION_FLOW_MIN = Math.min(flow, MIGRATION_FLOW_MIN);
+            MIGRATION_FLOW_MAX = Math.max(flow, MIGRATION_FLOW_MAX);
           }
-          flows.add(new MigrationFlow(origin, destination, year, flow));
-          MIGRATION_FLOW_MIN = Math.min(flow, MIGRATION_FLOW_MIN);
-          MIGRATION_FLOW_MAX = Math.max(flow, MIGRATION_FLOW_MAX);
+        } 
+        catch (Exception e) {
         }
       }
     }
@@ -92,7 +104,7 @@ void loadData(boolean verbose) {
 }
 
 void treatTableExceptions() {
-    countryLookupTable.put("United States of America", "United States");
+  countryLookupTable.put("United States of America", "United States");
   countryLookupTable.put("Viet Nam", "Vietnam");
   countryLookupTable.put("Republic of Korea", "South Korea");
   countryLookupTable.put("Iran (Islamic Republic of)", "Iran");
@@ -113,7 +125,7 @@ void treatTableExceptions() {
   countryLookupTable.put("China, Hong Kong Special Administrative Region", "China");
   countryLookupTable.put("State of Palestine", "Palestine");
 
- 
+
   missingCountries.add("Wallis and Futuna Islands");
   missingCountries.add("United States Virgin Islands");
   missingCountries.add("Tuvalu");

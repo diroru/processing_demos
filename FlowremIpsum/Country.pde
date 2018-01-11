@@ -1,4 +1,4 @@
-public class Country implements Comparable { //<>// //<>//
+public class Country implements Comparable { //<>// //<>// //<>// //<>//
   //attribute / field
   String name, iso3, region, subRegion;
   //gpi indices by year
@@ -11,15 +11,16 @@ public class Country implements Comparable { //<>// //<>//
   HashMap<Integer, Long> totalEmigraionFlow = new HashMap<Integer, Long>();
   //population by year
   HashMap<Integer, Long> pop = new HashMap<Integer, Long>();
-  float startX, endX, currentX;
-  float startY, endY, currentY;
+  float startX = 0f, endX = 0f, currentX = 0f;
+  float startY = 0f, endY = 0f, currentY = 0f;
   float w, h;
   color col;
   int activeYear = GPI_YEAR_END;
   boolean hover = false;
 
-  int sortingMethod = SORT_BY_CONTINENT_THEN_INDEX; 
-  
+  int sortingMethod = SORT_BY_CONTINENT_THEN_NAME;
+  long animationStart, animationEnd, lastTime;
+
   //constructor method
   Country(String theName, String theIso3, String theRegion, String theSubRegion, PApplet parent) {
     name = theName;
@@ -49,6 +50,9 @@ public class Country implements Comparable { //<>// //<>//
 
   Long getPOP(Integer year) {
     Long result = pop.get(year);
+    if (result == null) {
+      return 0L;
+    }
     return result;
   }
 
@@ -95,35 +99,59 @@ public class Country implements Comparable { //<>// //<>//
 
   //TODO:
   //void setX(), getX() etc.
+  /*
   void setStartX(float x) {
-    startX = x;
-  }
-  void setStartY(float y) {
-    startY = y;
-  }
-  void setEndX(float x) {
-    endX = x;
-  }
-  void setEndY(float y) {
+   startX = x;
+   }
+   void setStartY(float y) {
+   startY = y;
+   }
+   */
+  void setEndPos(float x, float y, int duration) {
     endY = y;
+    endX = x;
+    startX = currentX;
+    startY = currentY;
+    animationStart = millis();
+    animationEnd = animationStart + duration;
+    lastTime = animationStart;
   }
-
+  /*
+  void setEndY(float y, int duration) {
+   endY = y;
+   }
+   */
+  /*
   void setCurrentX(float x) {
-    currentX = x;
-  }
-
-  void setCurrentY(float y) {
-    currentY = y;
-  }
-
+   currentX = x;
+   }
+   
+   void setCurrentY(float y) {
+   currentY = y;
+   }
+   */
   void setColor(color theColor) {
     col = theColor;
   }
 
   //time goes from 0 to 1
-  void update(float time) {
-    currentX = map(time, 0, 1, startX, endX);
-    currentY = map(time, 0, 1, startY, endY);
+  void update(long delta) {
+    long now = lastTime + delta;
+    now = Math.min(animationEnd, now);
+    if (now == animationEnd || animationStart == animationEnd) {
+      currentX = endX;
+      currentY = endY;
+    } else {
+      currentX = map(now, animationStart, animationEnd, startX, endX);
+      currentY = map(now, animationStart, animationEnd, startY, endY);
+    }
+    /*
+    if (time == 1) {
+     startX = endX;
+     startY = endY;
+     }
+     */
+     lastTime = now;
   }
 
 
@@ -149,28 +177,36 @@ public class Country implements Comparable { //<>// //<>//
   @Override
     public int compareTo(Object o) {
     Country otherCountry = (Country) o;
-    Float myIndex = this.getGPI(activeYear);
-    Float otherIndex = otherCountry.getGPI(activeYear);
-    int indexComparison, regionComparison;
+
+    int gpiComparison = this.getGPI(activeYear).compareTo(otherCountry.getGPI(activeYear));
+    //TODO!!!
+    int regionComparison = this.region.compareTo(otherCountry.region);
+    int nameComparison = this.name.compareTo(otherCountry.name);
+    int populationComparison = this.getPOP(activeYear).compareTo(otherCountry.getPOP(activeYear)); 
+
     switch(sortingMethod) {
-    case SORT_BY_COUNTRY_NAME:
-      return this.name.compareTo(otherCountry.name);
-    case SORT_BY_CONTINENT:
-      return this.region.compareTo(otherCountry.region);
-    case SORT_BY_INDEX:
-      return myIndex.compareTo(otherIndex);
-    case SORT_BY_CONTINENT_THEN_INDEX:
-      //first, compare regions
-      regionComparison = this.region.compareTo(otherCountry.region);
-      //if the region (continent) is the same, compare indices
+    case SORT_BY_NAME:
+      return nameComparison;
+    case SORT_BY_CONTINENT_THEN_NAME:
       if (regionComparison == 0) {
-        //return comparison result
-        return myIndex.compareTo(otherIndex);
+        return nameComparison;
       }
-      //if region (continent) is not the same, make this the comparison basis 
+      return regionComparison;
+    case SORT_BY_GPI:
+      return gpiComparison;
+    case SORT_BY_CONTINENT_THEN_GPI:
+      if (regionComparison == 0) {
+        return gpiComparison;
+      }
+      return regionComparison;
+    case SORT_BY_POPULATION:
+      return populationComparison;
+    case SORT_BY_CONTINENT_THEN_POPULATION:
+      if (regionComparison == 0) {
+        return populationComparison;
+      }
       return regionComparison;
     }
-
     return 0;
   }
 
@@ -191,7 +227,7 @@ public class Country implements Comparable { //<>// //<>//
       }
       break;
     case MouseEvent.CLICK:
-      println("CLICK", e);
+      //println("CLICK", e);
       break;
     }
   }

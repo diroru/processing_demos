@@ -19,9 +19,12 @@ class ProjectionMesh {
     tex = theTex;
     r0 = width*0.5;
     r1 = width*0.5;
+    //r1 = 66;
+    //r0 = 186;
     //h = tex.height;
     //w = tex.width * r0 * 2f * PI / tex.height; // w / width = perimiter / width;
     h = r0 * TWO_PI * tex.height / tex.width;
+    //h = 238;
     w = r0 * TWO_PI; // w / width = perimiter / width;
     updateShape();
   }

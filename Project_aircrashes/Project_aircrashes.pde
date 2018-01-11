@@ -23,5 +23,6 @@ void draw() {
   background(0);
   image(background, 0,0, width, height);
   textFont(testFont);
-  text("Hello", 0, 48);
+  drawTangentialText("Hello", mouseX, mouseY);
+  //text("Hello", 0, 48);
 } 

@@ -109,17 +109,14 @@ void setByName() {
     currentSortingMethod = SORT_BY_NAME;
     makeLayout();
     break;
-
   case SORT_BY_CONTINENT_THEN_GPI:
     currentSortingMethod = SORT_BY_CONTINENT_THEN_NAME;
     makeLayout();
     break;
-
   case SORT_BY_POPULATION:
     currentSortingMethod = SORT_BY_NAME;
     makeLayout();
     break;
-
   case SORT_BY_CONTINENT_THEN_POPULATION:
     currentSortingMethod = SORT_BY_CONTINENT_THEN_NAME;
     makeLayout();

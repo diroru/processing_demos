@@ -39,14 +39,15 @@ void loadData(boolean verbose) {
       }
     }
   }
+  int from  = YEAR_START;
+  int to = YEAR_END;
+
+  for (int year = from; year <= to; year++) {
+    migrationFlows.put(year, new ArrayList<MigrationFlow>());
+  }
   for (TableRow tr : flowData.rows()) {
     //int from = max(GPI_YEAR_START, MIGRATION_YEAR_START);
     //int to = min(GPI_YEAR_END, MIGRATION_YEAR_END);
-    int from  = YEAR_START;
-    int to = YEAR_END;
-    for (int year = from; year <= to; year++) {
-      migrationFlows.put(year, new ArrayList<MigrationFlow>());
-    }
     for (int year = from; year <= to; year++) {
       String originName = tr.getString("from");
       String destinationName = tr.getString("to");
@@ -81,9 +82,8 @@ void loadData(boolean verbose) {
         //println("DESTINATION NOT FOUND", destinationName);
       } else if (!originName.equalsIgnoreCase(destinationName)) {
         try {
-
-          Long flow = tr.getLong(year + "");
-          if (flow != null) {
+          Long flowVolume = tr.getLong(year + "");
+          if (flowVolume != null) {
             ArrayList<MigrationFlow> flows = migrationFlows.get(year);
             /*
             if (flows == null) {
@@ -91,15 +91,19 @@ void loadData(boolean verbose) {
              migrationFlows.put(year, flows);
              }
              */
-            flows.add(new MigrationFlow(origin, destination, year, flow));
-            MIGRATION_FLOW_MIN = Math.min(flow, MIGRATION_FLOW_MIN);
-            MIGRATION_FLOW_MAX = Math.max(flow, MIGRATION_FLOW_MAX);
+            flows.add(new MigrationFlow(origin, destination, year, flowVolume));
+            MIGRATION_FLOW_MIN = Math.min(flowVolume, MIGRATION_FLOW_MIN);
+            MIGRATION_FLOW_MAX = Math.max(flowVolume, MIGRATION_FLOW_MAX);
           }
         } 
         catch (Exception e) {
+          //e.printStackTrace();
         }
       }
     }
+  }
+  for (Integer y : migrationFlows.keySet()) {
+    println(y, migrationFlows.get(y).size());
   }
 }
 

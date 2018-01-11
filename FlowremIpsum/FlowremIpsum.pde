@@ -197,8 +197,8 @@ void displayFlows(PGraphics pg) {
     hoverCountry = hc.name;
   }
   
-  //ArrayList<MigrationFlow> yearlyMigrationFlows = migrationFlows.get(currentYear); 
-  for (MigrationFlow mf : migrationFlows.get(currentYear)) {
+  ArrayList<MigrationFlow> yearlyMigrationFlows = migrationFlows.get(currentYear); 
+  for (MigrationFlow mf : yearlyMigrationFlows) { //<>//
     if (hoverCountry == null) {
       pg.stroke(255, 31);
       pg.strokeWeight(2);

@@ -16,13 +16,17 @@ void setup() {
   testFont = loadFont("Roboto-Light-48.vlw");
   worstData = loadTable("180111_toProcess_worst.tsv","header");
   unusualData = loadTable("180111_toProcess_unusual.tsv","header");
-  
+  //textSize(24);
 }
 
 void draw() {
   background(0);
   image(background, 0,0, width, height);
   textFont(testFont);
-  drawTangentialText("Hello", mouseX, mouseY);
+  String s = "Hello World!!!&#*";
+  fill(255,0,0,127);
+  drawTangentialText(s, mouseX, mouseY);
+  fill(0,255,0,127);
+  drawArcText(s, mouseX, mouseY);
   //text("Hello", 0, 48);
 } 

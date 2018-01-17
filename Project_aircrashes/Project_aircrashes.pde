@@ -34,13 +34,13 @@ void draw() {
   background(0);
   image(background, 0,0, width, height);
   textFont(testFont);
-  /*
+  
   String s = "Hello World!!!&#*";
   fill(255,0,0,127);
   drawTangentialText(s, mouseX, mouseY);
   fill(0,255,0,127);
-  drawArcText(s, mouseX, mouseY);
-  */
+  drawArcTextCentered(s, mouseX, mouseY);
+  
   //text("Hello", 0, 48);
   timeline.display();
   /*

@@ -53,7 +53,7 @@ class Timeline {
       for (int year = startYear; year <= endYear; year+=yearInc) {
         PVector pos = new PVector(0, myRadius);
         pos.rotate(phi);
-        drawArcText(year + "", pos.x + width*0.5, pos.y+height*0.5);
+        drawArcTextCentered(year + "", pos.x + width*0.5, pos.y+height*0.5);
         phi -= getPhiFromSides(yearContainerWidth, myRadius);
       }
     }

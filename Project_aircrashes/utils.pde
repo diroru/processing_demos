@@ -1,5 +1,16 @@
 //TODO: font settings
 
+void drawArcTextCentered(String theText, float x0, float y0) {
+  float theW = textWidth(theText);
+  float rad = PVector.dist(new PVector(x0,y0),center());
+  float phi = getPhiFromSides(theW, rad);
+  PVector v = new PVector(x0,y0);
+  v.sub(center());
+  v.rotate(phi*0.5);
+  v.add(center());
+  drawArcText(theText, v.x, v.y);
+}
+
 void drawArcText(String theText, float x0, float y0) {
   float dx = x0 - width*0.5;
   float dy = y0 - height*0.5;
@@ -46,6 +57,10 @@ PVector incrementRadially(PVector src, float delta) {
   result.setMag(mag + delta);
   result.add(new PVector(width * 0.5, height * 0.5));
   return result;
+}
+
+PVector center() {
+  return new PVector(width*0.5, height*0.5);
 }
 
 float getPhiFromSides(float base, float radius) {

@@ -1,7 +1,7 @@
 public class CrashDot { //<>// //<>// //<>// //<>// //<>//
   Datum myDatum;
   Timeline myTimeline;
-  float myRadius = 3.5;
+  float myRadius = 2.5;
   PVector myPos;
   float margin = 1;
   boolean mouseOver = false;
@@ -17,7 +17,7 @@ public class CrashDot { //<>// //<>// //<>// //<>// //<>//
     myPos = theTimeline.getCrashDotPosition(theDatum, 10);
     if (previousOnes.size() > 0) {
       while (this.overlaps(previousOnes)) {
-        myPos = incrementRadially(myPos, 2 * myRadius + margin);
+        myPos = incrementRadially(myPos, myRadius + margin);
       }
     }
   }

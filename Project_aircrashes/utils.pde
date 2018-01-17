@@ -38,3 +38,7 @@ void drawTangentialText(String theText, float x, float y) {
   text(theText, 0, 0);
   popMatrix();
 }
+
+float getPhiFromSides(float base, float radius) {
+  return asin(base * 0.5 / radius) * 2;
+}

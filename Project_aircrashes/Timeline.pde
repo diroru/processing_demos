@@ -62,7 +62,7 @@ class Timeline {
 
   void drawDate(Datum d, float rad, float deltaRadius) {
     //float moment = d.getNormMoment(startYear,endYear);
-    float moment = getNormalizedMoment(d, this);
+    float moment = getNormalizedMomentNoDayNoMonth(d, this);
     pushMatrix();
     translate(width*0.5, height*0.5);
     for (int i = 0; i < repeatCount; i++) {
@@ -99,5 +99,37 @@ class Timeline {
       ellipse(pos.x, pos.y, rad, rad);
     }
     popMatrix();
+  }
+  
+  PVector getCrashDotPosition(Datum d, float deltaRadius) {
+    //float moment = d.getNormMoment(startYear,endYear);
+    float moment = getNormalizedMomentNoDayNoMonth(d, this);
+    //pushMatrix();
+    //translate(width*0.5, height*0.5);
+    //for (int i = 0; i < repeatCount; i++) {
+      //float phi0 = startAngle + i * TWO_PI / repeatCount;
+      float phi0 = startAngle;
+      textFont(myFont);
+      textSize(myFontSize);
+
+      float nextWidth = myHeight + 20;
+      float phi = phi0-getPhiFromSides(nextWidth, myRadius);
+      float startPhi = phi;
+      for (int year = startYear; year < endYear; year+=yearInc) {
+        phi -= getPhiFromSides(yearContainerWidth, myRadius);
+      }
+      //phi -= getPhiFromSides(textWidth(endYear + ""), myRadius);
+      float endPhi = phi;
+
+      noStroke();
+
+      float theta = map(moment, 0, 1, startPhi, endPhi);
+      PVector pos = new PVector(0, myRadius + deltaRadius);
+      pos.rotate(theta);
+      pos.add(new PVector(width *0.5, height*0.5));
+
+    //}
+    //popMatrix();
+    return pos;
   }
 }

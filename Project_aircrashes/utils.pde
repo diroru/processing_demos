@@ -39,6 +39,15 @@ void drawTangentialText(String theText, float x, float y) {
   popMatrix();
 }
 
+PVector incrementRadially(PVector src, float delta) {
+  PVector result = src.copy();
+  result.sub(new PVector(width * 0.5, height * 0.5));
+  float mag = result.mag();
+  result.setMag(mag + delta);
+  result.add(new PVector(width * 0.5, height * 0.5));
+  return result;
+}
+
 float getPhiFromSides(float base, float radius) {
   return asin(base * 0.5 / radius) * 2;
 }

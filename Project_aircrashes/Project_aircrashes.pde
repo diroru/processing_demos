@@ -1,3 +1,5 @@
+import java.util.*;
+
 //.rotate([-25, -12])
 boolean inDome = false;
 PImage background;
@@ -8,6 +10,7 @@ Table unusualData;
 
 Timeline timeline;
 ArrayList<Datum> data = new ArrayList<Datum>();
+ArrayList<CrashDot> myDots = new ArrayList<CrashDot>();
 
 void setup() {
   //size(1920, 1920, P3D);
@@ -21,7 +24,9 @@ void setup() {
   initData();
   
   //textSize(24);
-  timeline = new Timeline((1920 - 150)/2 * scaleFactor, 40 * scaleFactor, HALF_PI, 300* scaleFactor, 1930, 2015, 1, loadFont("SourceSansPro-SemiBold-40.vlw"), 40* scaleFactor);
+  timeline = new Timeline((1920 - 150)/2 * scaleFactor, 40 * scaleFactor, HALF_PI, 130* scaleFactor, 1930, 2015, 2, loadFont("SourceSansPro-SemiBold-40.vlw"), 40* scaleFactor);
+  
+  initDots();
   hint(DISABLE_DEPTH_TEST);
 }
 
@@ -29,14 +34,21 @@ void draw() {
   background(0);
   image(background, 0,0, width, height);
   textFont(testFont);
+  /*
   String s = "Hello World!!!&#*";
   fill(255,0,0,127);
   drawTangentialText(s, mouseX, mouseY);
   fill(0,255,0,127);
   drawArcText(s, mouseX, mouseY);
+  */
   //text("Hello", 0, 48);
   timeline.display();
+  /*
   for (Datum d : data) {
     timeline.drawDate(d, 5 * scaleFactor, 40 * scaleFactor);
+  }
+  */
+  for (CrashDot cd : myDots) {
+    cd.display();
   }
 } 

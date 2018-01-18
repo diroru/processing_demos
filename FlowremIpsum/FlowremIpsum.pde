@@ -1,4 +1,4 @@
-import java.util.*;
+import java.util.*; //<>//
 //import java.awt.event.*;
 //import javax.swing.event.*;
 //import java.awt.event.*;
@@ -80,8 +80,17 @@ int currentImage = 0;
 PVector mappedMouse = new PVector();
 ArrayList<RadioButtonGroup> radio = new ArrayList<RadioButtonGroup>();
 
+boolean domeDisplay = true;
+int DOME_SIZE = 1024;
+int PREVIEW_WIDTH = 1200;
+int PREVIEW_HEIGHT = 600;
+
+void settings() {
+  size(DOME_SIZE, DOME_SIZE, Dome.RENDERER);
+}
+
 void setup() {
-  size(1024, 1024, Dome.RENDERER);
+  //size(1024, 1024, Dome.RENDERER);
   //initial default camera, i.e. interface to interact with the renderer.
   dc = new DomeCamera(this);
   dc.setDomeAperture(1f);
@@ -136,16 +145,22 @@ void pre() {
 }
 
 void draw() {
-  background(0);
-  pushMatrix();
+  if (domeDisplay) {
 
-  translate(width/2, height/2, 0f);
-  rotateX(radians(xAngle));
-  rotateY(radians(yAngle));
-  rotateZ(radians(zAngle));
-  translate(deltaX, deltaY, deltaZ);
-  mesh.display();
-  popMatrix();
+    background(0);
+    pushMatrix();
+
+    translate(width/2, height/2, 0f);
+    rotateX(radians(xAngle));
+    rotateY(radians(yAngle));
+    rotateZ(radians(zAngle));
+    translate(deltaX, deltaY, deltaZ);
+    mesh.display();
+    popMatrix();
+  } else {
+    background(255, 255, 0);
+    fitImage(canvas);
+  }
 }
 
 void post() {
@@ -158,7 +173,7 @@ void post() {
   canvas.noStroke();
   canvas.fill(255);
   canvas.noStroke();
-  
+
   long delta = millis() - lastTime;
   for (Country theCountry : countries) {
     //println(theCountry.name);
@@ -166,7 +181,7 @@ void post() {
     theCountry.display(canvas);
   }
   lastTime = millis();
-  
+
   displayFlows(canvas);
   for (YearSelector ys : yearSelectors) {
     ys.display(canvas);
@@ -179,9 +194,9 @@ void post() {
   canvas.strokeWeight(2);
   for (int i = 0; i < 10; i++) {
     float y = graphLayout.y + constrainedLogScale(pow(10, i), graphLayout.h);
-    canvas.line(0,y,canvas.width,y);
+    canvas.line(0, y, canvas.width, y);
   }
-  
+
   for (RadioButtonGroup rbg : radio) {
     rbg.display(canvas);
   }
@@ -196,9 +211,9 @@ void displayFlows(PGraphics pg) {
     Country hc = (Country)(hoverCountries.iterator().next());
     hoverCountry = hc.name;
   }
-  
+
   ArrayList<MigrationFlow> yearlyMigrationFlows = migrationFlows.get(currentYear); 
-  for (MigrationFlow mf : yearlyMigrationFlows) { //<>//
+  for (MigrationFlow mf : yearlyMigrationFlows) {
     if (hoverCountry == null) {
       pg.stroke(255, 31);
       pg.strokeWeight(2);
@@ -222,5 +237,21 @@ void displayFlows(PGraphics pg) {
 }
 
 void keyPressed() {
-  canvas.save("test.png");
-}
+ switch(key) {
+  case 'g':
+    mesh.toggleGrid();
+    break;
+  case ' ':
+    canvas.save("output/test.png");
+    break;
+  case 'd':
+    domeDisplay = !domeDisplay;
+    if (domeDisplay) {
+      dc.enable();
+      surface.setSize(DOME_SIZE, DOME_SIZE);
+    } else {
+      dc.disable();
+      surface.setSize(PREVIEW_WIDTH, PREVIEW_HEIGHT);
+    }
+    break;
+  }}

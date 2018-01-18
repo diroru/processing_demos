@@ -1,4 +1,4 @@
-public class Country implements Comparable { //<>// //<>// //<>// //<>//
+public class Country implements Comparable { //<>//
   //attribute / field
   String name, iso3, region, subRegion;
   //gpi indices by year
@@ -184,7 +184,7 @@ public class Country implements Comparable { //<>// //<>// //<>// //<>//
     g.fill(currentColor);
     g.rect(this.currentX, this.currentY, this.currentW, this.currentH);
     if (hover) {
-      g.textSize(60);
+      //g.textSize(60);
       g.fill(255);
       g.text(this.name, mappedMouse.x + 10, mappedMouse.y - 10);
     }

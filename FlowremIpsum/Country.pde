@@ -184,6 +184,7 @@ public class Country implements Comparable { //<>// //<>// //<>// //<>//
     g.fill(currentColor);
     g.rect(this.currentX, this.currentY, this.currentW, this.currentH);
     if (hover) {
+      g.textSize(60);
       g.fill(255);
       g.text(this.name, mappedMouse.x + 10, mappedMouse.y - 10);
     }
@@ -235,9 +236,10 @@ public class Country implements Comparable { //<>// //<>// //<>// //<>//
     return 0;
   }
 
-  public boolean isHover(float x, float y) {
-    return x >= currentX && x <= currentX + currentW && y >= currentY && y <= currentY + currentH;
-    //return x >= currentX && x <= currentX + w;
+    //shows countrynames hovering on a bar / without a bar
+  public boolean isHover(float x, float y) { 
+    //return x >= currentX && x <= currentX + currentW && y >= currentY && y <= currentY + currentH;
+    return x >= currentX && x <= currentX + currentW;
   }
 
   void mouseEvent(MouseEvent e) {

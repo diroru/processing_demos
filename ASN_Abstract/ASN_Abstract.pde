@@ -16,12 +16,14 @@ ArrayList<Country> countries = new ArrayList<Country>();
 ArrayList<Country> displayableCountries = new ArrayList<Country>();
 //a crude database listing all countries, first by name, then by year
 TreeMap<String, TreeMap<Integer, Country>> dataBase = new TreeMap<String, TreeMap<Integer, Country>>(); 
+HashSet<String> countryNameSet;
 
 int YEAR_START = Integer.MAX_VALUE;
 int YEAR_END = Integer.MIN_VALUE;
 int MAX_FATALITIES_PER_YEAR = Integer.MIN_VALUE;
 float MARGIN = 20;
-float GAP = 1;
+float GAP = 2;
+float CELL_SIZE = 6;
 
 float margin = 20;
 
@@ -33,14 +35,17 @@ ProjectionMesh mesh;
 PGraphics canvas;
 
 boolean domeDisplay = true;
-int DOME_SIZE = 1024;
-int PREVIEW_WIDTH = 1200;
-int PREVIEW_HEIGHT = 600;
+int DOME_SIZE = 800;
+int PREVIEW_WIDTH = 1536;
+int PREVIEW_HEIGHT = 768;
+int CANVAS_WIDTH = 2048;
+int CANVAS_HEIGHT = 1024;
 
 long lastTime;
 
 void settings() {
   size(DOME_SIZE, DOME_SIZE, Dome.RENDERER);
+  pixelDensity(displayDensity());
 }
 
 void setup() {
@@ -51,15 +56,18 @@ void setup() {
   dc.setDomeAperture(1f);
   //we enable the sixth side, sothat we see what is happenning
   dc.setFaceDraw(DomeCamera.NEGATIVE_Z, false);
-  canvas = createGraphics(2048, 1024, P3D);
+  canvas = createGraphics(CANVAS_WIDTH, CANVAS_HEIGHT, P3D);
   mesh = new ProjectionMesh(canvas);
   mesh.setHeight(238);
   mesh.setRadius1(66);
   mesh.setRadius0(186);
   initData(); //see data.pde
   //ArrayList<Integer> decades = new ArrayList<Integer>(Arrays.asList(1900, 1910, 1920, 1930, 1940, 1950, 1960, 1970, 1980, 1990, 2000, 2010));
-  float matrixH = canvas.height / 2f; 
-  matrixLayout = new LayoutInfo(MARGIN, canvas.height - matrixH - MARGIN, canvas.width - 2 * MARGIN, matrixH, GAP, GAP);
+  //float matrixH = canvas.height / 2f; 
+  //matrixLayout = new LayoutInfo(MARGIN, canvas.height - matrixH - MARGIN, canvas.width - 2 * MARGIN, matrixH, GAP, GAP);
+  matrixLayout = layoutFromCellSizeRightAlign(canvas.width - MARGIN, canvas.height - MARGIN, CELL_SIZE, CELL_SIZE, GAP, GAP, getColumnCount(), getRowCount());
+  println(getColumnCount());
+  println(getRowCount());
   displayableCountries = makeLayout(matrixLayout);
   lastTime = millis();
 }

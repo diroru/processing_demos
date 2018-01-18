@@ -10,9 +10,10 @@ public class Country implements Comparable {
   String name;
   String iso3;
   boolean highlight = false;
+  int c0 = NO_CRASHES, c1 = NO_CRASHES;
 
   ArrayList<Datum> data = new ArrayList<Datum>();
-  
+
   long animationStart, animationEnd, lastTime;
 
   Country(String theName, int theYear, PApplet parent) {
@@ -32,10 +33,33 @@ public class Country implements Comparable {
 
   void addDatum(Country c) {
     data.addAll(c.data);
+    updateColors();
   }
 
   void addDatum(Datum theDatum) {
     data.add(theDatum);
+    updateColors();
+  }
+
+  void updateColors() {
+    if (data.size() == 0) {
+      c0 = NO_CRASHES;
+      c1 = NO_CRASHES;
+    } else {
+      int minPercentage = 100;
+      int maxPercentage = 0;
+      for (Datum d : data) {
+        int percentage = 0;
+        if (d.total_fatalities > 0) {
+          percentage = (d.total_fatalities * 100) / d.total_occupants;
+        }
+        minPercentage = min(minPercentage, percentage);
+        maxPercentage = max(maxPercentage, percentage);
+      }
+      //see colors.pde
+      c0 = getColor(minPercentage);
+      c1 = getColor(maxPercentage);
+    }
   }
 
   int getAccidentCount() {
@@ -49,7 +73,7 @@ public class Country implements Comparable {
     }
     return result;
   }
-  
+
   void update(long delta) {
     long now = lastTime + delta;
     now = Math.min(animationEnd, now);
@@ -66,7 +90,7 @@ public class Country implements Comparable {
      startY = endY;
      }
      */
-     lastTime = now;
+    lastTime = now;
   }
 
   void display(PGraphics g) {
@@ -76,7 +100,26 @@ public class Country implements Comparable {
       g.fill(255);
       g.rect(this.currentX-GAP, this.currentY-GAP, this.currentW+GAP*2, this.currentH+GAP*2);
     }
+  
+    g.noStroke();
+    g.fill(c1);
+    g.beginShape();
+    g.vertex(this.currentX, this.currentY);
+    g.vertex(this.currentX + this.currentW, this.currentY);
+    g.vertex(this.currentX, this.currentY + this.currentH);
+    g.endShape(CLOSE);
+    
+    
+    g.fill(c0);
+    g.beginShape();
+    g.vertex(this.currentX + this.currentW, this.currentY);
+    g.vertex(this.currentX + this.currentW, this.currentY + this.currentH);
+    g.vertex(this.currentX, this.currentY + this.currentH);
+    g.endShape(CLOSE);
 
+  
+    /*
+  
     int accidentCount = getAccidentCount();
     float casualtyPercentage = getCasualtyPercentage();
     if (accidentCount == 0) {
@@ -90,7 +133,8 @@ public class Country implements Comparable {
         g.fill(255, 0, 0);
       }
     }
-    g.rect(this.currentX, this.currentY, this.currentW, this.currentH);
+    */
+    //g.rect(this.currentX, this.currentY, this.currentW, this.currentH);
     if (hover) {
 
       //g.text(this.name, mappedMouse.x + 10, mappedMouse.y - 10);
@@ -195,7 +239,7 @@ public class Country implements Comparable {
       hover = isHover(mappedMouse.x, mappedMouse.y);
       //println(mappedMouse.x, mappedMouse.y, currentX, currentY);
       if (hover) {
-        setHighlight(name, year);
+        //setHighlight(name, year);
       } else {
         //unsetHighlight();
       }

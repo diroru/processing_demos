@@ -35,7 +35,7 @@ class ProjectionMesh {
     sh.beginShape(QUADS);
     sh.noFill();
     if (showGrid) {
-      sh.stroke(255, 255, 0);
+      sh.stroke(1/6f, 1, 1, 1);
       sh.strokeWeight(4);
     } else {
       sh.noStroke();
@@ -65,7 +65,7 @@ class ProjectionMesh {
     sh.beginShape(QUADS);
     sh.noFill();
     if (showGrid) {
-      sh.stroke(255, 255, 0);
+      sh.stroke(1/6f, 1, 1, 1);
       sh.strokeWeight(2);
     } else {
       sh.noStroke();

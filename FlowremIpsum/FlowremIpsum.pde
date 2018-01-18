@@ -1,4 +1,4 @@
-import java.util.*; //<>//
+import java.util.*; //<>// //<>//
 //import java.awt.event.*;
 //import javax.swing.event.*;
 //import java.awt.event.*;
@@ -82,8 +82,8 @@ ArrayList<RadioButtonGroup> radio = new ArrayList<RadioButtonGroup>();
 
 boolean domeDisplay = true;
 int DOME_SIZE = 1024;
-int PREVIEW_WIDTH = 1200;
-int PREVIEW_HEIGHT = 600;
+int PREVIEW_WIDTH = 1920;
+int PREVIEW_HEIGHT = 960;
 
 void settings() {
   size(DOME_SIZE, DOME_SIZE, Dome.RENDERER);
@@ -93,11 +93,15 @@ void settings() {
 void setup() {
   //size(1024, 1024, Dome.RENDERER);
   //initial default camera, i.e. interface to interact with the renderer.
+  colorMode(HSB, 1, 1, 1, 1);
   dc = new DomeCamera(this);
   dc.setDomeAperture(1f);
   //we enable the sixth side, sothat we see what is happenning
   dc.setFaceDraw(DomeCamera.NEGATIVE_Z, false);
   canvas = createGraphics(2048, 1024, P3D);
+  canvas.beginDraw();
+  canvas.colorMode(HSB, 1, 1, 1, 1);
+  canvas.endDraw();
   mesh = new ProjectionMesh(canvas);
   mesh.setHeight(238);
   mesh.setRadius1(66);
@@ -172,7 +176,7 @@ void post() {
   canvas.background(0);
 
   canvas.noStroke();
-  canvas.fill(255);
+  canvas.fill(1);
   canvas.noStroke();
 
   long delta = millis() - lastTime;
@@ -188,10 +192,11 @@ void post() {
     ys.display(canvas);
   }
 
-  canvas.fill(255, 255, 0, 127);
+  canvas.fill(1/6f, 1, 1, 0.5);
   canvas.ellipse(mappedMouse.x, mappedMouse.y, 10, 10);
-
-  canvas.stroke(0, 255, 0);
+  
+  //DRAW POPULATION GUIDES
+  canvas.stroke(1/3f, 1, 1, 1);
   canvas.strokeWeight(2);
   for (int i = 0; i < 10; i++) {
     float y = graphLayout.y + constrainedLogScale(pow(10, i), graphLayout.h);
@@ -216,22 +221,24 @@ void displayFlows(PGraphics pg) {
   ArrayList<MigrationFlow> yearlyMigrationFlows = migrationFlows.get(currentYear); 
   for (MigrationFlow mf : yearlyMigrationFlows) {
     if (hoverCountry == null) {
-      pg.stroke(255, 31);
+      pg.stroke(1, 0.1);
       pg.strokeWeight(2);
       if (mf.flow > MIGRATION_FLOW_LOWER_LIMIT) {
-        mf.display(pg, height/2, MARGIN);
+        //mf.display(pg, height/2, MARGIN);
+        mf.displayRounded(pg, flowLayout.h, flowLayout.y);
       }
     } else {
       if (mf.origin.name.equals(hoverCountry)) {
-        pg.stroke(255, 0, 0, 63);
+        pg.stroke(0, 1, 1, 0.2);
       } else if (mf.destination.name.equals(hoverCountry)) {
-        pg.stroke(0, 0, 255, 63);
+        pg.stroke(0.5, 1, 1, 0.2);
       } else {
         //stroke(255, 1);
         pg.noStroke();
       }
       if (mf.flow > MIGRATION_FLOW_LOWER_LIMIT) {
-        mf.display(pg, height/2, MARGIN);
+        //mf.display(pg, height/2, MARGIN);
+        mf.displayRounded(pg, flowLayout.h, flowLayout.y);
       }
     }
   }

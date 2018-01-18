@@ -1,6 +1,6 @@
 void initData() {
   dataTable = loadTable("plane-crashes.iso8_v3.csv", "header");
-  HashSet<String> countryNameSet = new HashSet<String>();
+  countryNameSet = new HashSet<String>();
   for (int i = 0; i < dataTable.getRowCount(); i++) {
     TableRow row = dataTable.getRow(i);
     Datum d = new Datum(row);
@@ -107,6 +107,14 @@ ArrayList<Country> getCountries() {
   return result;
   */
   return countries;
+}
+
+int getColumnCount() {
+  return countryNameSet.size();
+}
+
+int getRowCount() {
+  return YEAR_END - YEAR_START;
 }
 
 Country getContryInYear(String countryName, int year) {

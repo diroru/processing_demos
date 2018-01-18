@@ -59,7 +59,6 @@ public class Country implements Comparable {
       //see colors.pde
       c0 = getColor(minPercentage);
       c1 = getColor(maxPercentage);
-      println(minPercentage, maxPercentage);
     }
   }
 
@@ -240,7 +239,7 @@ public class Country implements Comparable {
       hover = isHover(mappedMouse.x, mappedMouse.y);
       //println(mappedMouse.x, mappedMouse.y, currentX, currentY);
       if (hover) {
-        setHighlight(name, year);
+        //setHighlight(name, year);
       } else {
         //unsetHighlight();
       }

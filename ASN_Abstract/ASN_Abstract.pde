@@ -37,6 +37,8 @@ int DOME_SIZE = 1024;
 int PREVIEW_WIDTH = 1200;
 int PREVIEW_HEIGHT = 600;
 
+long lastTime;
+
 void settings() {
   size(DOME_SIZE, DOME_SIZE, Dome.RENDERER);
 }
@@ -59,6 +61,7 @@ void setup() {
   float matrixH = canvas.height / 2f; 
   matrixLayout = new LayoutInfo(MARGIN, canvas.height - matrixH - MARGIN, canvas.width - 2 * MARGIN, matrixH, GAP, GAP);
   displayableCountries = makeLayout(matrixLayout);
+  lastTime = millis();
 }
 
 void pre() {
@@ -85,6 +88,9 @@ void draw() {
 }
 
 void post() {
+  long now = millis();
+  long delta = now - lastTime;
+  lastTime = now;
   // The dome projection is centered at (0, 0), so the mouse coordinates
   // need to be offset by (width/2, height/2)
   canvas.beginDraw();
@@ -100,6 +106,7 @@ void post() {
   background(0);
   translate(20, 20);
   for (Country dc : displayableCountries) {
+    dc.update(delta);
     dc.display(canvas);
   }
   canvas.endDraw();

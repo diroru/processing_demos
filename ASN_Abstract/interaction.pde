@@ -1,4 +1,8 @@
-void setHighlight(String countryName, int year) { //<>// //<>// //<>// //<>//
+void setHighlight(String countryName, int year) { //<>//
+  if (year != currentYear) {
+    currentYear = year;
+    makeLayout(matrixLayout, SET_END_POS);
+  }
   for (Country c : getCountries()) {
     if (c.name.equalsIgnoreCase(countryName)) {
       c.highlight = true;

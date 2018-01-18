@@ -9,6 +9,7 @@ void initData() {
     YEAR_START = min(d.year, YEAR_START);
     YEAR_END = max(d.year, YEAR_END);
   }
+  currentYear = YEAR_END;
   countryNames = new ArrayList<String>(countryNameSet);
   Collections.sort(countryNames);
   println(countryNames, countryNames.size() );
@@ -106,4 +107,12 @@ ArrayList<Country> getCountries() {
   return result;
   */
   return countries;
+}
+
+Country getContryInYear(String countryName, int year) {
+  return dataBase.get(countryName).get(year);
+}
+
+int getFatalityComparison(String countryA, String countryB, int theYear) {
+  return getContryInYear(countryA, theYear).getTotalFatalities() - getContryInYear(countryB, theYear).getTotalFatalities();
 }

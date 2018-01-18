@@ -5,4 +5,5 @@ final int SORT_BY_FATALITY_COUNT = 2;
 //TODO: by continents?
 //TODO: treat Unknown country!!!
 
-int currentSorting = SORT_BY_NAME;
+int currentSorting = SORT_BY_FATALITY_COUNT;
+int currentYear;

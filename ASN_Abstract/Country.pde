@@ -12,6 +12,8 @@ public class Country implements Comparable {
   boolean highlight = false;
 
   ArrayList<Datum> data = new ArrayList<Datum>();
+  
+  long animationStart, animationEnd, lastTime;
 
   Country(String theName, int theYear, PApplet parent) {
     parent.registerMethod("mouseEvent", this);
@@ -37,11 +39,7 @@ public class Country implements Comparable {
   }
 
   int getAccidentCount() {
-    int result = 0;
-    for (Datum d : data) {
-      result++;
-    }
-    return result;
+    return data.size();
   }
 
   int getFatalityCount() {
@@ -50,6 +48,25 @@ public class Country implements Comparable {
       result += d.total_fatalities;
     }
     return result;
+  }
+  
+  void update(long delta) {
+    long now = lastTime + delta;
+    now = Math.min(animationEnd, now);
+    if (now == animationEnd || animationStart == animationEnd) {
+      currentX = endX;
+      currentY = endY;
+    } else {
+      currentX = map(now, animationStart, animationEnd, startX, endX);
+      currentY = map(now, animationStart, animationEnd, startY, endY);
+    }
+    /*
+    if (time == 1) {
+     startX = endX;
+     startY = endY;
+     }
+     */
+     lastTime = now;
   }
 
   void display(PGraphics g) {
@@ -80,18 +97,36 @@ public class Country implements Comparable {
     }
   }
 
-  float getCasualtyPercentage() {
-    float occupantSum = 0;
-    float fatalitySum = 0;
+  int getTotalFatalities() {
+    int fatalitySum = 0;
     for (Datum d : data) {
-      occupantSum += d.total_occupants;
       fatalitySum += d.total_fatalities;
     }
+    return fatalitySum;
+  }
+
+  float getCasualtyPercentage() {
+    float occupantSum = 0;
+    float fatalitySum = getTotalFatalities();
     if (fatalitySum == 0f) {
       return 0;
     }
+    for (Datum d : data) {
+      occupantSum += d.total_occupants;
+    }
     return fatalitySum/occupantSum;
   }
+
+  void setEndPos(float x, float y, int duration) {
+    endY = y;
+    endX = x;
+    startX = currentX;
+    startY = currentY;
+    animationStart = millis();
+    animationEnd = animationStart + duration;
+    lastTime = animationStart;
+  }
+
 
   void setStartLayout(float theX, float theY, float theW, float theH) {
     startX = theX;
@@ -129,6 +164,8 @@ public class Country implements Comparable {
     Country otherCountry = (Country) o;
     //always sort first by year!!!
     int yearComparison = this.year - otherCountry.year;
+    int nameComparison = this.name.compareTo(otherCountry.name);
+    int fatalityComparison = this.getTotalFatalities() - otherCountry.getTotalFatalities();
     if (yearComparison != 0) {
       return yearComparison;
     }
@@ -138,7 +175,8 @@ public class Country implements Comparable {
     case SORT_BY_ACCIDENT_COUNT:
       return this.getAccidentCount() - otherCountry.getAccidentCount();
     case SORT_BY_FATALITY_COUNT:
-      return this.getFatalityCount() - otherCountry.getFatalityCount();
+      //return this.getFatalityCount() - otherCountry.getFatalityCount();
+      return getFatalityComparison(this.name, otherCountry.name, currentYear);
     }
 
     return 0;

@@ -184,8 +184,8 @@ public class Country implements Comparable { //<>//
     g.fill(currentColor);
     g.rect(this.currentX, this.currentY, this.currentW, this.currentH);
     if (hover) {
-      //g.textSize(60);
-      g.fill(255);
+      //  g.textSize(60);
+      g.fill(1);
       g.text(this.name, mappedMouse.x + 10, mappedMouse.y - 10);
     }
   }

@@ -90,11 +90,11 @@ public class RadioButton {
 
   void display(PGraphics g) {
     if (hover) {
-      g.fill(255);
+      g.fill(1);
     } else if (selected) {
-      g.fill(255, 255, 0);
+      g.fill(1/6f, 1, 1, 1);
     } else {
-      g.fill(127);
+      g.fill(0.5);
     }
     g.text(label, x, y + h);
     //g.rect(x,y,w,h);

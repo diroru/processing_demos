@@ -13,9 +13,9 @@ public class YearSelector {
     g.fill(255);
     g.text(year, myLayout.x, myLayout.y + myLayout.h);
     if (hover) {
-      g.fill(0,255,0,63);
+      g.fill(1/3,1,1,0.2);
     } else {
-      g.fill(255,0,0,63);
+      g.fill(0,1,1,0.2);
     }
     g.rect(myLayout.x, myLayout.y, myLayout.w, myLayout.h);
   }

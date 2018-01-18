@@ -36,7 +36,7 @@ class MigrationFlow {
     float y2 = y1;
     float x3 = x2;
     float y3 = destination.cy();
-    g.stroke(255, map(flow, 0, MIGRATION_FLOW_MAX, 4, 255));
+    g.stroke(1, map(flow, 0, MIGRATION_FLOW_MAX, 0.1, 1));
     g.beginShape();
     g.vertex(x0, y0);
     g.bezierVertex(x1, y1, x1, y1, (x1+x2)*0.5, y1);

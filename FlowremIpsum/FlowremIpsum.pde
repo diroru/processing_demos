@@ -39,7 +39,7 @@ long lastTime;
 float gap = 2;
 Long POPULATION_MIN = Long.MAX_VALUE;
 Long POPULATION_MAX = Long.MIN_VALUE;
-Long POPULATION_CUTOFF = 50000L;
+Long POPULATION_CUTOFF = 100000L;
 Long MIGRATION_FLOW_MAX = Long.MIN_VALUE;
 Long MIGRATION_FLOW_MIN = Long.MAX_VALUE;
 Long MIGRATION_FLOW_LOWER_LIMIT = 100L;
@@ -87,7 +87,7 @@ int PREVIEW_HEIGHT = 960;
 
 void settings() {
   size(DOME_SIZE, DOME_SIZE, Dome.RENDERER);
-  //pixelDensity(displayDensity());
+  pixelDensity(displayDensity()); //uncomment for retina rendering
 }
 
 void setup() {

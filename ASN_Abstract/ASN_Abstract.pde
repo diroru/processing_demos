@@ -32,10 +32,19 @@ DomeCamera dc;
 ProjectionMesh mesh;
 PGraphics canvas;
 
+boolean domeDisplay = true;
+int DOME_SIZE = 1024;
+int PREVIEW_WIDTH = 1200;
+int PREVIEW_HEIGHT = 600;
+
+void settings() {
+  size(DOME_SIZE, DOME_SIZE, Dome.RENDERER);
+}
+
 void setup() {
   //size(1200, 600, P2D);
-  size(1024, 1024, Dome.RENDERER);
   //initial default camera, i.e. interface to interact with the renderer.
+  surface.setResizable(true);
   dc = new DomeCamera(this);
   dc.setDomeAperture(1f);
   //we enable the sixth side, sothat we see what is happenning
@@ -48,7 +57,7 @@ void setup() {
   initData(); //see data.pde
   //ArrayList<Integer> decades = new ArrayList<Integer>(Arrays.asList(1900, 1910, 1920, 1930, 1940, 1950, 1960, 1970, 1980, 1990, 2000, 2010));
   float matrixH = canvas.height / 2f; 
-  matrixLayout = new LayoutInfo(MARGIN, canvas.height - matrixH - MARGIN , canvas.width - 2 * MARGIN, matrixH, GAP, GAP);
+  matrixLayout = new LayoutInfo(MARGIN, canvas.height - matrixH - MARGIN, canvas.width - 2 * MARGIN, matrixH, GAP, GAP);
   displayableCountries = makeLayout(matrixLayout);
 }
 
@@ -57,18 +66,22 @@ void pre() {
 }
 
 void draw() {
-  background(0);
-  pushMatrix();
-
-  translate(width/2, height/2, 0f);
-  /*
+  if (domeDisplay) {
+    background(0);
+    pushMatrix();
+    translate(width/2, height/2, 0f);
+    /*
   rotateX(radians(xAngle));
-   rotateY(radians(yAngle));
-   rotateZ(radians(zAngle));
-   translate(deltaX, deltaY, deltaZ);
-   */
-  mesh.display();
-  popMatrix();
+     rotateY(radians(yAngle));
+     rotateZ(radians(zAngle));
+     translate(deltaX, deltaY, deltaZ);
+     */
+    mesh.display();
+    popMatrix();
+  } else {
+    background(255, 255, 0);
+    fitImage(canvas);
+  }
 }
 
 void post() {
@@ -89,7 +102,6 @@ void post() {
   for (Country dc : displayableCountries) {
     dc.display(canvas);
   }
-
   canvas.endDraw();
 }
 
@@ -100,6 +112,16 @@ void keyPressed() {
     break;
   case ' ':
     canvas.save("output/test.png");
+    break;
+  case 'd':
+    domeDisplay = !domeDisplay;
+    if (domeDisplay) {
+      dc.enable();
+      surface.setSize(DOME_SIZE, DOME_SIZE);
+    } else {
+      dc.disable();
+      surface.setSize(PREVIEW_WIDTH, PREVIEW_HEIGHT);
+    }
     break;
   }
 }

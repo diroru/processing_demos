@@ -32,15 +32,18 @@ DomeCamera dc;
 ProjectionMesh mesh;
 PGraphics canvas;
 
-boolean domeDisplay = true;
-int DOME_SIZE = 1024;
-int PREVIEW_WIDTH = 1200;
-int PREVIEW_HEIGHT = 600;
+boolean domeDisplay = false;
+int DOME_SIZE = 800;
+int PREVIEW_WIDTH = 1024;
+int PREVIEW_HEIGHT = 512;
+int CANVAS_WIDTH = 2048;
+int CANVAS_HEIGHT = 1024;
 
 long lastTime;
 
 void settings() {
   size(DOME_SIZE, DOME_SIZE, Dome.RENDERER);
+  pixelDensity(displayDensity());
 }
 
 void setup() {
@@ -51,7 +54,7 @@ void setup() {
   dc.setDomeAperture(1f);
   //we enable the sixth side, sothat we see what is happenning
   dc.setFaceDraw(DomeCamera.NEGATIVE_Z, false);
-  canvas = createGraphics(2048, 1024, P3D);
+  canvas = createGraphics(CANVAS_WIDTH, CANVAS_HEIGHT, P3D);
   mesh = new ProjectionMesh(canvas);
   mesh.setHeight(238);
   mesh.setRadius1(66);

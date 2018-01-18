@@ -82,8 +82,8 @@ ArrayList<RadioButtonGroup> radio = new ArrayList<RadioButtonGroup>();
 
 boolean domeDisplay = true;
 int DOME_SIZE = 1024;
-int PREVIEW_WIDTH = 1200;
-int PREVIEW_HEIGHT = 600;
+int PREVIEW_WIDTH = 1920;
+int PREVIEW_HEIGHT = 960;
 
 void settings() {
   size(DOME_SIZE, DOME_SIZE, Dome.RENDERER);
@@ -219,7 +219,8 @@ void displayFlows(PGraphics pg) {
       pg.stroke(255, 31);
       pg.strokeWeight(2);
       if (mf.flow > MIGRATION_FLOW_LOWER_LIMIT) {
-        mf.display(pg, height/2, MARGIN);
+        //mf.display(pg, height/2, MARGIN);
+        mf.displayRounded(pg, flowLayout.h, flowLayout.y);
       }
     } else {
       if (mf.origin.name.equals(hoverCountry)) {
@@ -231,7 +232,8 @@ void displayFlows(PGraphics pg) {
         pg.noStroke();
       }
       if (mf.flow > MIGRATION_FLOW_LOWER_LIMIT) {
-        mf.display(pg, height/2, MARGIN);
+        //mf.display(pg, height/2, MARGIN);
+        mf.displayRounded(pg, flowLayout.h, flowLayout.y);
       }
     }
   }

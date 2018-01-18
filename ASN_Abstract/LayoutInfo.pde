@@ -13,4 +13,20 @@ class LayoutInfo {
     hGap = theHGap;
     vGap = theVGap;
   }
+
+  float getUnitHeight(int count) {
+    return (h - (count - 1) * vGap) / float(count);
+  }
+
+  float getUnitWidth(int count) {
+    return (w - (count - 1) * hGap) / float(count);
+  }
+
+  float deltaX(int count) {
+    return getUnitWidth(count) + hGap;
+  }
+
+  float deltaY(int count) {
+    return getUnitHeight(count) + vGap;
+  }
 }

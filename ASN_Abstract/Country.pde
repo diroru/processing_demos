@@ -9,6 +9,7 @@ public class Country implements Comparable {
   int year;
   String name;
   String iso3;
+  boolean highlight = false;
 
   ArrayList<Datum> data = new ArrayList<Datum>();
 
@@ -53,11 +54,64 @@ public class Country implements Comparable {
 
   void display(PGraphics g) {
     //g.fill(col);
-    g.rect(this.currentX, this.currentY, this.currentH, this.currentH);
-    if (hover) {
+    g.noStroke();
+    if (highlight) {
       g.fill(255);
+      g.rect(this.currentX-GAP, this.currentY-GAP, this.currentW+GAP*2, this.currentH+GAP*2);
+    }
+
+    int accidentCount = getAccidentCount();
+    float casualtyPercentage = getCasualtyPercentage();
+    if (accidentCount == 0) {
+      g.fill(255, 16);
+    } else {
+      if (casualtyPercentage == 0f) {
+        g.fill(255, 63);
+      } else if (casualtyPercentage < 0.9) {
+        g.fill(192, 0, 0);
+      } else {
+        g.fill(255, 0, 0);
+      }
+    }
+    g.rect(this.currentX, this.currentY, this.currentW, this.currentH);
+    if (hover) {
+
       //g.text(this.name, mappedMouse.x + 10, mappedMouse.y - 10);
     }
+  }
+
+  float getCasualtyPercentage() {
+    float occupantSum = 0;
+    float fatalitySum = 0;
+    for (Datum d : data) {
+      occupantSum += d.total_occupants;
+      fatalitySum += d.total_fatalities;
+    }
+    if (fatalitySum == 0f) {
+      return 0;
+    }
+    return fatalitySum/occupantSum;
+  }
+
+  void setStartLayout(float theX, float theY, float theW, float theH) {
+    startX = theX;
+    startY = theY;
+    startW = theW;
+    startH = theH;
+  }
+
+  void setCurrentLayout(float theX, float theY, float theW, float theH) {
+    currentX = theX;
+    currentY = theY;
+    currentW = theW;
+    currentH = theH;
+  }
+
+  void setEndLayout(float theX, float theY, float theW, float theH) {
+    endX = theX;
+    endY = theY;
+    endW = theW;
+    endH = theH;
   }
 
   //COMPARISON
@@ -99,13 +153,19 @@ public class Country implements Comparable {
     //println("mouseEvent: " + e);
     switch(e.getAction()) {
     case MouseEvent.MOVE:
+      //println("MOVE", e);
       hover = isHover(mappedMouse.x, mappedMouse.y);
+      //println(mappedMouse.x, mappedMouse.y, currentX, currentY);
       if (hover) {
+        setHighlight(name, year);
       } else {
+        //unsetHighlight();
       }
       break;
     case MouseEvent.CLICK:
-      println("CLICK", e);
+      if (isHover(mappedMouse.x, mappedMouse.y)) {
+        println("CLICK", e);
+      }
       break;
     }
   }

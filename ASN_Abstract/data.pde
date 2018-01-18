@@ -17,6 +17,7 @@ void initData() {
     TreeMap<Integer, Country> countryMap = new TreeMap<Integer, Country>(); 
     for (int year = YEAR_START; year <= YEAR_END; year++) {
       Country theCountryInYear = new Country(countryName, year, this);
+      countries.add(theCountryInYear);
       countryMap.put(year, theCountryInYear);
     }
     dataBase.put(countryName, countryMap);
@@ -57,14 +58,17 @@ TreeMap<Integer, ArrayList<Country>> getCountriesByYears(TreeMap<String, TreeMap
       //println("dec", currentDecade);
       for (int i = 0; i < 10; i++) {
         int yearInDecade = year + i;
-        for (String countryName : countryNames) {
-          Country c = countries.get(countryName);
-          if (c == null) {
-            c = db.get(countryName).get(yearInDecade);
-          } else {
-            c = new Country(yearInDecade, c, db.get(countryName).get(yearInDecade), this);
+        if (yearInDecade <= yearEnd) {
+          for (String countryName : countryNames) {
+            Country c = countries.get(countryName);
+            if (c == null) {
+              c = db.get(countryName).get(yearInDecade);
+            } else {
+              c = new Country(yearInDecade, c, db.get(countryName).get(yearInDecade), this);
+            }
+            countries.remove(countryName);
+            countries.put(countryName, c);
           }
-          countries.put(countryName, c);
         }
       }
       result.put(year, new ArrayList<Country>(countries.values()));
@@ -91,4 +95,15 @@ TreeMap<Integer, ArrayList<Country>> getCountriesByYears(ArrayList<Integer> deca
 
 TreeMap<Integer, ArrayList<Country>> getCountriesByYears() {
   return getCountriesByYears(dataBase, YEAR_START, YEAR_END, new ArrayList<Integer>());
+}
+
+ArrayList<Country> getCountries() {
+  /*
+  ArrayList<Country> result = new ArrayList<Country>();
+  for (ArrayList<Country> c : getCountriesByYears().values()) {
+     result.addAll(c);
+  }  
+  return result;
+  */
+  return countries;
 }

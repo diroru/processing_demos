@@ -87,6 +87,7 @@ int PREVIEW_HEIGHT = 600;
 
 void settings() {
   size(DOME_SIZE, DOME_SIZE, Dome.RENDERER);
+  //pixelDensity(displayDensity());
 }
 
 void setup() {

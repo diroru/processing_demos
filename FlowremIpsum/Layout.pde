@@ -24,11 +24,13 @@ void makeLayout(float x0, float y0, float layoutWidth, float layoutHeight, float
     //theCountry.setX(x);
     //we set the layout values for each country
     //setting start position
+    theCountry.setEndLayout(x,y,countryWidth,countryHeight,theColor,theDuration);
+    /*
     theCountry.setEndPos(x, y, theDuration);
     theCountry.w = countryWidth;
     theCountry.h = countryHeight;
     theCountry.setColor(theColor);
-
+    */
     //x needs to be incremented for the next country / bar
     x = x + countryWidth + gap;
   }

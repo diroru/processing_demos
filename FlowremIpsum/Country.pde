@@ -13,8 +13,9 @@ public class Country implements Comparable { //<>// //<>// //<>// //<>//
   HashMap<Integer, Long> pop = new HashMap<Integer, Long>();
   float startX = 0f, endX = 0f, currentX = 0f;
   float startY = 0f, endY = 0f, currentY = 0f;
-  float w, h;
-  color col;
+  float startW = 0f, endW = 0f, currentW = 0f;
+  float startH = 0f, endH = 0f, currentH = 0f;
+  int startColor = #000000, endColor = #000000, currentColor = #000000;
   int activeYear = GPI_YEAR_END;
   boolean hover = false;
 
@@ -84,7 +85,7 @@ public class Country implements Comparable { //<>// //<>// //<>// //<>//
 
   //used by migration flow
   float cx() {
-    return currentX + w * 0.5;
+    return currentX + currentW * 0.5;
   }
 
   float cy() {
@@ -116,6 +117,24 @@ public class Country implements Comparable { //<>// //<>// //<>// //<>//
     animationEnd = animationStart + duration;
     lastTime = animationStart;
   }
+  
+  void setEndLayout(float x, float y, float w, float h, int theColor, int duration) {
+    endW = w;
+    endH = h;
+    endX = x;
+    endY = y;
+    endColor = theColor;
+    
+    startX = currentX;
+    startY = currentY;
+    startW = currentW;
+    startH = currentH;
+    startColor = currentColor; 
+    
+    animationStart = millis();
+    animationEnd = animationStart + duration;
+    lastTime = animationStart;
+  }
   /*
   void setEndY(float y, int duration) {
    endY = y;
@@ -131,19 +150,24 @@ public class Country implements Comparable { //<>// //<>// //<>// //<>//
    }
    */
   void setColor(color theColor) {
-    col = theColor;
+    currentColor = theColor;
   }
 
-  //time goes from 0 to 1
   void update(long delta) {
     long now = lastTime + delta;
     now = Math.min(animationEnd, now);
     if (now == animationEnd || animationStart == animationEnd) {
       currentX = endX;
       currentY = endY;
+      currentW = endW;
+      currentH = endH;
+      currentColor = endColor;
     } else {
       currentX = map(now, animationStart, animationEnd, startX, endX);
       currentY = map(now, animationStart, animationEnd, startY, endY);
+      currentW = map(now, animationStart, animationEnd, startW, endW);
+      currentH = map(now, animationStart, animationEnd, startH, endH);
+      currentColor = lerpColor(startColor, endColor, norm(now, animationStart, animationEnd));
     }
     /*
     if (time == 1) {
@@ -156,8 +180,9 @@ public class Country implements Comparable { //<>// //<>// //<>// //<>//
 
 
   void display(PGraphics g) {
-    g.fill(col);
-    g.rect(this.currentX, this.currentY, this.w, this.h);
+    //g.fill(255,0,0);
+    g.fill(currentColor);
+    g.rect(this.currentX, this.currentY, this.currentW, this.currentH);
     if (hover) {
       g.fill(255);
       g.text(this.name, mappedMouse.x + 10, mappedMouse.y - 10);
@@ -211,7 +236,7 @@ public class Country implements Comparable { //<>// //<>// //<>// //<>//
   }
 
   public boolean isHover(float x, float y) {
-    return x >= currentX && x <= currentX + w && y >= currentY && y <= currentY + h;
+    return x >= currentX && x <= currentX + currentW && y >= currentY && y <= currentY + currentH;
     //return x >= currentX && x <= currentX + w;
   }
 

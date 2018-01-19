@@ -81,6 +81,7 @@ vec3 conicVector() {
   return conicVector(bottom, radiusBottom, height, radiusTop);
 }
 
+//TODO: check this!!!
 vec3 rotateZ(vec3 v, float theta) {
   float x = v.x * cos(theta) + v.y * sin(theta);
   float y = -v.x * sin(theta) + v.y * cos(theta);
@@ -97,7 +98,7 @@ vec3 conicIntersection(vec3 ray, float bottom, float radiusBottom, float height,
   //rotating the ray into the XZ plane
   float theta = atan(ray.y, ray.x);
 
-  vec3 r = rotateZ(ray, -theta);
+  vec3 r = rotateZ(ray, theta);
 
   vec3 d = vec3(radiusBottom, 0, 0);
 
@@ -107,20 +108,35 @@ vec3 conicIntersection(vec3 ray, float bottom, float radiusBottom, float height,
   //vectors are parallel
 
   if (den == 0.0) {
-    return vec3(0.0);
+    return vec3(-1.0);
   }
   //cone is degenerate, TODO: further cases
   if (nom == 0.0) {
-    return vec3(0.0);
+    discard;
+    return vec3(-1.0);
   }
   float lambda = nom / den;
+  if (lambda < 0.0 || lambda > 1.0) {
+    discard;
+    return vec3(-1.0);
+  }
   //return rotateZ(d + lambda * c, theta);
-  return vec3(lambda, theta / PI * 0.5 + 0.5,  0.0);
+  return vec3(theta / PI * 0.5 + 0.5 , lambda,  0.0);
 
   //return vec3(1.0, theta / PI * 0.5 + 0.5,  0.0);
   //return r;
 }
 
+vec2 conicTexCoordinates(vec3 ray, float bottom, float radiusBottom, float height, float radiusTop, float deltaS) {
+  vec3 v = conicIntersection(ray, bottom, radiusBottom, height, radiusTop);
+  if (v.s == -1.0) {
+    discard;
+    //return vec2(-1.0);
+  }
+  float s = mod(v.s + deltaS, 1.0);
+  float t = v.t;
+  return vec2(s,t);
+}
 
 void main() {
   //vec3 color = vec3(textureCube(cubemap, vec3(vertTexCoord,1.0)));
@@ -128,9 +144,9 @@ void main() {
   vec3 ray = latLonToXYZ(latLon);
   vec3 color = ray * 0.5 + vec3(0.5);
   //gl_FragColor = vec4(color, 1.0);
-  vec3 test = ray;
-  test = conicIntersection(ray, bottom, radiusBottom, height, radiusTop);
-  gl_FragColor = vec4(test, 1.0);
+  vec2 st = conicTexCoordinates(ray, bottom, radiusBottom, height, radiusTop, rotation);
+  //gl_FragColor = vec4(st, 0.0, 1.0);
+  gl_FragColor = texture(canvas, st);
   //vec3 color = vec3(textureCube(cubemap, ray));
 
   vec3 gridColor = getGrid(latLon.yx, vec3(1.0, 1.0, 0.0), 45.0, 0.6, 15.0, 0.2);

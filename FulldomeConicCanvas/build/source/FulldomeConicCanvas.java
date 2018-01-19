@@ -16,9 +16,12 @@ public class FulldomeConicCanvas extends PApplet {
 
 PShader domeShader;
 PShape domeQuad;
+PImage img;
 
 public void setup() {
   
+  
+  img = loadImage("images/World_Equirectangular.jpg");
   domeShader = loadShader("glsl/fulldomeCone.frag", "glsl/fulldomeCone.vert");
   domeShader.set("aperture", 1.0f);
   domeShader.set("radiusBottom", height*0.5f);
@@ -26,6 +29,7 @@ public void setup() {
   domeShader.set("bottom", 0.0f);
   domeShader.set("height", PApplet.parseFloat(height));
   domeShader.set("rotation", 0.0f);
+  domeShader.set("canvas", img);
   initShape();
 }
 
@@ -37,6 +41,9 @@ public void draw() {
   shape(domeQuad);
   resetShader();
   popMatrix();
+  domeShader.set("rotation", frameCount/2000f);
+  domeShader.set("radiusBottom", mouseX + 0f);
+  domeShader.set("radiusTop", mouseY + 0f);
 }
 
 public void initShape() {
@@ -51,7 +58,7 @@ public void initShape() {
   domeQuad.vertex(-width * 0.5f, height * 0.5f, 0, 1, 0);
   domeQuad.endShape();
 }
-  public void settings() {  size(600, 600, P3D); }
+  public void settings() {  size(600, 600, P3D);  pixelDensity(displayDensity()); }
   static public void main(String[] passedArgs) {
     String[] appletArgs = new String[] { "--present", "--window-color=#666666", "--stop-color=#cccccc", "FulldomeConicCanvas" };
     if (passedArgs != null) {

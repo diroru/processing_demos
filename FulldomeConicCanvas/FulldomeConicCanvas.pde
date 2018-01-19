@@ -1,8 +1,11 @@
 PShader domeShader;
 PShape domeQuad;
+PImage img;
 
 void setup() {
   size(600, 600, P3D);
+  pixelDensity(displayDensity());
+  img = loadImage("images/World_Equirectangular.jpg");
   domeShader = loadShader("glsl/fulldomeCone.frag", "glsl/fulldomeCone.vert");
   domeShader.set("aperture", 1.0f);
   domeShader.set("radiusBottom", height*0.5f);
@@ -10,6 +13,7 @@ void setup() {
   domeShader.set("bottom", 0.0f);
   domeShader.set("height", float(height));
   domeShader.set("rotation", 0.0f);
+  domeShader.set("canvas", img);
   initShape();
 }
 
@@ -21,6 +25,9 @@ void draw() {
   shape(domeQuad);
   resetShader();
   popMatrix();
+  domeShader.set("rotation", frameCount/2000f);
+  domeShader.set("radiusBottom", mouseX + 0f);
+  domeShader.set("radiusTop", mouseY + 0f);
 }
 
 void initShape() {

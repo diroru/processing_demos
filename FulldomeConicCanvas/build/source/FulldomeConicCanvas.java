@@ -20,6 +20,12 @@ PShape domeQuad;
 public void setup() {
   
   domeShader = loadShader("glsl/fulldomeCone.frag", "glsl/fulldomeCone.vert");
+  domeShader.set("aperture", 1.0f);
+  domeShader.set("radiusBottom", height*0.5f);
+  domeShader.set("radiusTop", height*0.5f);
+  domeShader.set("bottom", 0.0f);
+  domeShader.set("height", PApplet.parseFloat(height));
+  domeShader.set("rotation", 0.0f);
   initShape();
 }
 

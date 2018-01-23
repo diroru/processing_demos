@@ -8,14 +8,13 @@ class ConicMeshInfo {
   }
 
   PGraphics getCanvas() {
-    return getCanvas(APERTURE, CONE_ORIENTATION, CONE_RADIUS_BOTTOM, CONE_RADIUS_TOP, CONE_HEIGHT, CONE_BOTTOM);
+    return getCanvas(APERTURE, CONE_RADIUS_BOTTOM, CONE_RADIUS_TOP, CONE_HEIGHT, CONE_BOTTOM);
   }
 
-  PGraphics getCanvas(float aperture, float coneOrientation, float radiusBottom, float radiusTop, float cHeight, float bottom) {
+  PGraphics getCanvas(float aperture, float radiusBottom, float radiusTop, float coneHeight, float bottom) {
 
-    // float coneAngle = acos((radiusTop - radiusBottom) / cHeight);
-    float coneAngle = atan2(cHeight, radiusTop - radiusBottom);
-    float coneHeight = cHeight;
+    // float coneAngle = acos((radiusTop - radiusBottom) / coneHeight);
+    float coneAngle = atan2(coneHeight, radiusTop - radiusBottom);
     float scaleFactor = (canvas.height - 2 * margin) / max(coneHeight, max(radiusTop, radiusBottom) * 2f);
     float dRadius = radiusBottom;
     if (coneAngle > HALF_PI) {

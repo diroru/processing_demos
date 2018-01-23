@@ -11,9 +11,9 @@ uniform float renderGrid;
 //the axis of the mesh is z
 uniform float radiusBottom;
 uniform float radiusTop;
-uniform float bottom; //z coordinate
-uniform float height; //along the z axis
-uniform float rotation;
+uniform float coneBottom; //z coordinate
+uniform float coneHeight; //along the z axis
+uniform float coneOrientation;
 
 varying vec2 vertTexCoord;
 
@@ -70,15 +70,15 @@ vec3 getGrid(vec2 longLat, vec3 colour, float gratOffset0, float gratWidth0, flo
 }
 
 //see comments on top about reference frame
-vec3 conicVector(float bottom, float radiusBottom, float height, float radiusTop) {
+vec3 conicVector(float radiusBottom, float height, float radiusTop) {
   //vec3 p0 = vec3(radiusBottom, 0, bottom);
   vec3 p0 = vec3(radiusBottom, 0, 0);
-  vec3 p1 = vec3(radiusTop, 0, bottom + height);
+  vec3 p1 = vec3(radiusTop, 0, height);
   return p1 - p0;
 }
 
 vec3 conicVector() {
-  return conicVector(bottom, radiusBottom, height, radiusTop);
+  return conicVector(radiusBottom, coneHeight, radiusTop);
 }
 
 //TODO: check this!!!
@@ -100,9 +100,9 @@ vec3 conicIntersection(vec3 ray, float bottom, float radiusBottom, float height,
 
   vec3 r = rotateZ(ray, theta);
 
-  vec3 d = vec3(radiusBottom, 0, 0);
+  vec3 d = vec3(radiusBottom, 0, bottom);
 
-  vec3 c = conicVector(bottom, radiusBottom, height, radiusTop);
+  vec3 c = conicVector(radiusBottom, height, radiusTop);
   float nom = r.x * d.z - r.z * d.x;
   float den = c.x * r.z - c.z * r.x;
   //vectors are parallel
@@ -144,7 +144,7 @@ void main() {
   vec3 ray = latLonToXYZ(latLon);
   vec3 color = ray * 0.5 + vec3(0.5);
   //gl_FragColor = vec4(color, 1.0);
-  vec2 st = conicTexCoordinates(ray, bottom, radiusBottom, height, radiusTop, rotation);
+  vec2 st = conicTexCoordinates(ray, coneBottom, radiusBottom, coneHeight, radiusTop, coneOrientation);
   //gl_FragColor = vec4(st, 0.0, 1.0);
   gl_FragColor = texture(canvas, st);
   //vec3 color = vec3(textureCube(cubemap, ray));

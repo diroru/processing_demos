@@ -60,10 +60,10 @@ PVector domeXYToXYZ(PVector xy, float aperture) {
 }
 
 ///
-PVector conicVector(float bottom, float radiusBottom, float height, float radiusTop) {
+PVector conicVector(float bottom, float radiusBottom, float cHeight, float radiusTop) {
   //vec3 p0 = vec3(radiusBottom, 0, bottom);
   PVector p0 = new PVector(radiusBottom, 0, 0);
-  PVector p1 = new PVector(radiusTop, 0, bottom + height);
+  PVector p1 = new PVector(radiusTop, 0, cHeight);
   return PVector.sub(p1, p0);
 }
 
@@ -86,7 +86,7 @@ PVector conicIntersection(PVector ray, float bottom, float radiusBottom, float h
 
   PVector r = rotateZ(ray, theta);
 
-  PVector d = new PVector(radiusBottom, 0, 0);
+  PVector d = new PVector(radiusBottom, 0, bottom);
 
   PVector c = conicVector(bottom, radiusBottom, height, radiusTop);
   float nom = r.x * d.z - r.z * d.x;

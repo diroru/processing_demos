@@ -8,9 +8,9 @@ final int CANVAS_MODE = 1;
 PGraphics canvas;
 ConicMeshInfo coneInfo;
 
-float APERTURE = 1f;
+float APERTURE = 2f;
 float CONE_RADIUS_BOTTOM = 512;
-float CONE_RADIUS_TOP = 0;
+float CONE_RADIUS_TOP = 512;
 float CONE_HEIGHT = 512;
 float CONE_BOTTOM = 0;
 float CONE_ORIENTATION = 0;
@@ -50,8 +50,9 @@ void draw() {
   canvas.endDraw();
   //image(canvas,0,0, canvasToWindowRatio() * canvas.width, canvasToWindowRatio() * canvas.height );
   CONE_ORIENTATION = frameCount/10000f;
-  CONE_RADIUS_BOTTOM = mouseX + 0f;
-  CONE_RADIUS_TOP = mouseY + 0f;
+  //CONE_RADIUS_BOTTOM = mouseX + 0f;
+  CONE_RADIUS_TOP = mouseX + 0f;
+  CONE_BOTTOM = mouseY - height*0.5;
   updateShader();
   pushMatrix();
   translate(width*0.5,height*0.5);
@@ -67,9 +68,9 @@ void updateShader() {
   domeShader.set("aperture", APERTURE);
   domeShader.set("radiusBottom", CONE_RADIUS_BOTTOM);
   domeShader.set("radiusTop", CONE_RADIUS_TOP);
-  domeShader.set("bottom", CONE_BOTTOM);
-  domeShader.set("height", CONE_HEIGHT);
-  domeShader.set("rotation", CONE_ORIENTATION);
+  domeShader.set("coneBottom", CONE_BOTTOM);
+  domeShader.set("coneHeight", CONE_HEIGHT);
+  domeShader.set("coneOrientation", CONE_ORIENTATION);
 }
 
 void initShape() {

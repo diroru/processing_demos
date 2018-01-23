@@ -6,6 +6,7 @@ final int FULLDOME_MODE = 0;
 final int CANVAS_MODE = 1;
 
 PGraphics canvas;
+ConicMeshInfo coneInfo;
 
 float APERTURE = 1f;
 float CONE_RADIUS_BOTTOM = 512;
@@ -24,6 +25,8 @@ void setup() {
   canvas.background(0);
   canvas.image(img,0,0);
   canvas.endDraw();
+
+  coneInfo = new ConicMeshInfo(400,400);
 
   domeShader = loadShader("glsl/fulldomeCone.frag", "glsl/fulldomeCone.vert");
   updateShader();
@@ -46,7 +49,7 @@ void draw() {
   canvas.ellipse(mm.x + canvas.width, mm.y, 10, 10);
   canvas.endDraw();
   //image(canvas,0,0, canvasToWindowRatio() * canvas.width, canvasToWindowRatio() * canvas.height );
-  CONE_ORIENTATION = frameCount/5000f;
+  CONE_ORIENTATION = frameCount/10000f;
   CONE_RADIUS_BOTTOM = mouseX + 0f;
   CONE_RADIUS_TOP = mouseY + 0f;
   updateShader();
@@ -56,6 +59,8 @@ void draw() {
   shape(domeQuad);
   resetShader();
   popMatrix();
+
+  coneInfo.display();
 }
 
 void updateShader() {

@@ -19,7 +19,7 @@ void setup() {
   scaleFactor = width / 1920f;
   println(scaleFactor);
   background = loadImage("background_map.png");
-  testFont = loadFont("Roboto-Light-48.vlw");
+  testFont = loadFont("SourceSansPro-Regular-44.vlw");
 
   initData();
   
@@ -36,9 +36,9 @@ void draw() {
   textFont(testFont);
   
   String s = "Hello World!!!&#*";
-  fill(255,0,0,127);
+  fill(232,26,154,300);
   drawTangentialText(s, mouseX, mouseY);
-  fill(0,255,0,127);
+  fill(28,229,142,300);
   drawArcTextCentered(s, mouseX, mouseY);
   
   //text("Hello", 0, 48);

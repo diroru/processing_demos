@@ -10,7 +10,7 @@ Table unusualData;
 
 Timeline timeline;
 float TIME = 0;
-float TIME_INC = 0.0002;
+float TIME_INC = 0.0005;
 float SEEK_TIME = 1;
 float SEEK_INC = 0.005f;
 float SEEK_EPSILON = 0.001;

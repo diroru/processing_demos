@@ -1,4 +1,4 @@
-public class CrashDot { //<>// //<>// //<>//
+public class CrashDot { //<>// //<>// //<>// //<>//
   Datum myDatum;
   Timeline myTimeline;
   float myRadius = 1.6;
@@ -48,14 +48,14 @@ public class CrashDot { //<>// //<>// //<>//
 
   void display() {
     if (mouseOver) {
-      fill(255, 255,255, 155);
+      fill(255);
     } else {
-      fill(255, 255, 255);
+      fill(155);
     }
       
     float deltaTime = (TIME - myNormTime) / GLOW_DURATION;
     if (deltaTime >= 0 && deltaTime <= 1) {
-      fill(255, 255, 255 - deltaTime*255);
+      fill(255 - deltaTime*100);
     }
     
     ellipseMode(RADIUS);

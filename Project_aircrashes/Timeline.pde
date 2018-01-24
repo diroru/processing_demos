@@ -12,10 +12,11 @@ class Timeline {
   float myPadding = 2;
   float timePointerSize = 30 * scaleFactor;
   float timePointerDelta = 80 * scaleFactor;
+  float buttonWidth = 30*scaleFactor;
   //TODO: yearInc!!!
-  TimelineButton myButton = new TimelineButton();
+  TimelineButton[] myButtons;
 
-  Timeline(float theRadius, float theHeight, float theStartAngle, float theYearContainerWidth, int theStartYear, int theEndYear, int theRepeatCount, PFont theFont, float theFontSize) {
+  Timeline(float theRadius, float theHeight, float theStartAngle, float theYearContainerWidth, int theStartYear, int theEndYear, int theRepeatCount, PFont theFont, float theFontSize, PApplet parent) {
     myRadius = theRadius;
     myHeight = theHeight;
     startAngle = theStartAngle;
@@ -25,6 +26,11 @@ class Timeline {
     repeatCount = theRepeatCount;
     myFont = theFont;
     myFontSize = theFontSize;
+    myButtons = new TimelineButton[repeatCount];
+    for (int i = 0; i < myButtons.length; i++) {
+      myButtons[i] = new TimelineButton(buttonWidth, this, buttonPhi(i), parent);
+    }
+    
   }
 
   void display(float currentTime) {
@@ -33,10 +39,11 @@ class Timeline {
     noFill();
     //TODO: define padding!
     stroke(103);
-    //stroke(255, 0, 0);
-    //ellipse(width*0.5, height*0.5, (myRadius - myHeight*0.5) + 2, (myRadius - myHeight*0.5) + 2);
     //strokeCap(PROJECT);
     drawArcAround(0, TWO_PI);
+    //stroke(255, 0, 0);
+    //strokeWeight(1);
+    //ellipse(width*0.5, height*0.5, (myRadius - myHeight*0.5) + 2, (myRadius - myHeight*0.5) + 2);
 
     for (int i = 0; i < repeatCount; i++) {
       float phi0 = startAngle + i * TWO_PI / repeatCount;
@@ -49,7 +56,7 @@ class Timeline {
       float nextWidth = myHeight + 20;
       fill(255);
       noStroke();
-      rect(0, myRadius-myHeight, myHeight, myHeight);
+      //rect(0, myRadius-myHeight, myHeight, myHeight);
       popMatrix();
       //float phi = phi0-getPhiFromSides(nextWidth, myRadius);
       float phi = startPhi(i);
@@ -77,6 +84,9 @@ class Timeline {
     popStyle();
 
     drawTimePointer(currentTime);
+    for (TimelineButton tlb:myButtons) {
+      tlb.display();
+    }
   }
 
   void drawTimePointer(float currentTime) {
@@ -100,9 +110,14 @@ class Timeline {
     }
   }
   
+  float buttonPhi(int repeatNo) {
+    float phi = startPhi(repeatNo);
+    return phi + getPhiFromSides(buttonWidth * 4, myRadius);
+  }
+  
   float startPhi(int repeatNo) {
     float phi0 = startAngle + repeatNo * TWO_PI / repeatCount;
-    phi0 -= getPhiFromSides(myButton.getWidth(), myRadius);
+    phi0 -= getPhiFromSides(buttonWidth, myRadius);
     return phi0;
   }
 
@@ -159,6 +174,14 @@ class Timeline {
     ellipseMode(RADIUS);
     strokeWeight(myHeight + myPadding * 2);
     arc(width*0.5, height*0.5, (myRadius - myHeight*0.5) + 2, (myRadius - myHeight*0.5) + 2, phi0-deltaPhi*0.5, phi0+deltaPhi*0.5);
+  }
+  
+  float innerRadius() {
+    return myRadius - 0.8 * (myHeight + myPadding * 2);
+  }
+  
+  float outerRadius() {
+    return myRadius + 0.2 * (myHeight + myPadding * 2);
   }
 
   PVector getCrashDotPosition(Datum d, float deltaRadius) {

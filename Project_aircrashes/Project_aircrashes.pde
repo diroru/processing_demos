@@ -28,15 +28,16 @@ void setup() {
   initData();
   
   //textSize(24);
-  timeline = new Timeline((1920 - 150)/2 * scaleFactor, 40 * scaleFactor, HALF_PI, 130 * scaleFactor, YEAR_START, YEAR_END, 2, loadFont("SourceSansPro-SemiBold-40.vlw"), 40* scaleFactor);
+  timeline = new Timeline((1920 - 390)/2 * scaleFactor, 35 * scaleFactor, HALF_PI, 110 * scaleFactor, YEAR_START, YEAR_END, 2, loadFont("SourceSansPro-SemiBold-40.vlw"), 40* scaleFactor);
   
   initDots();
   hint(DISABLE_DEPTH_TEST);
 }
 
 void draw() {
+  float margin=180*scaleFactor;
   background(0);
-  image(background, 0,0, width, height);
+  image(background, margin,margin, width-2*margin, height-2*margin);
   textFont(corpusFont);
   
   /*
@@ -62,4 +63,7 @@ void draw() {
   if (TIME > 1) {
     TIME = 0;
   }
+  ellipseMode(RADIUS);
+  fill(255,255,0,31);
+  ellipse(width*0.5,height*0.5,width*0.5,height*0.5);
 } 

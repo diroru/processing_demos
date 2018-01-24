@@ -9,6 +9,7 @@ class Timeline {
   color bgColor;
   int yearInc = 5;
   float myFontSize;
+  float myPadding = 2;
   //TODO: yearInc!!!
 
   Timeline(float theRadius, float theHeight, float theStartAngle, float theYearContainerWidth, int theStartYear, int theEndYear, int theRepeatCount, PFont theFont, float theFontSize) {
@@ -23,19 +24,17 @@ class Timeline {
     myFontSize = theFontSize;
   }
 
-  void display() {
+  void display(float currentTime) {
     pushStyle();
 
     noFill();
     //TODO: define padding!
-    float padding = 2;
-    strokeWeight(myHeight + padding * 2);
     stroke(103);
     //stroke(255, 0, 0);
-    ellipseMode(RADIUS);
-    ellipse(width*0.5, height*0.5, (myRadius - myHeight*0.5) + 2, (myRadius - myHeight*0.5) + 2);
-
-    noStroke();
+    //ellipse(width*0.5, height*0.5, (myRadius - myHeight*0.5) + 2, (myRadius - myHeight*0.5) + 2);
+    //strokeCap(PROJECT);
+    drawArcAround(0,TWO_PI);
+    
     for (int i = 0; i < repeatCount; i++) {
       float phi0 = startAngle + i * TWO_PI / repeatCount;
       textFont(myFont);
@@ -46,16 +45,31 @@ class Timeline {
       //TODO: button
       float nextWidth = myHeight + 20;
       fill(255);
+      noStroke();
       rect(0, myRadius-myHeight, myHeight, myHeight);
       popMatrix();
-      float phi = phi0-getPhiFromSides(nextWidth, myRadius) ;
-
+      float phi = phi0-getPhiFromSides(nextWidth, myRadius);
+      
+      PVector pos;
       for (int year = startYear; year <= endYear; year+=yearInc) {
-        PVector pos = new PVector(0, myRadius);
+        pos = new PVector(0, myRadius);
         pos.rotate(phi);
         drawArcTextCentered(year + "", pos.x + width*0.5, pos.y+height*0.5);
         phi -= getPhiFromSides(yearContainerWidth, myRadius);
       }
+      //draw current date
+      int[] date = getDatumFromNormMoment(currentTime);
+      String dateString = nf(date[0],2) + "/" + nf(date[1],2) + "/" + date[2];
+      phi -= getPhiFromSides(textWidth(dateString)-yearContainerWidth, myRadius);
+      
+      stroke(255);
+      noFill();
+      drawArcAround(phi + HALF_PI, getPhiFromSides(textWidth(dateString), myRadius));
+      pos = new PVector(0, myRadius);
+      pos.rotate(phi);
+      fill(0);
+      drawArcTextCentered(dateString, pos.x + width*0.5, pos.y+height*0.5);
+      
     }
     popStyle();
   }
@@ -99,6 +113,12 @@ class Timeline {
       ellipse(pos.x, pos.y, rad, rad);
     }
     popMatrix();
+  }
+  
+  void drawArcAround(float phi0, float deltaPhi) {
+    ellipseMode(RADIUS);
+    strokeWeight(myHeight + myPadding * 2);
+    arc(width*0.5, height*0.5, (myRadius - myHeight*0.5) + 2, (myRadius - myHeight*0.5) + 2, phi0-deltaPhi*0.5, phi0+deltaPhi*0.5);
   }
   
   PVector getCrashDotPosition(Datum d, float deltaRadius) {

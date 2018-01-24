@@ -29,6 +29,10 @@ float getNormalizedMoment(int d, int m, int y, int startYear, int endYear) {
   return moment / (timeInterval-0f);
 }
 
+int[] getDatumFromNormMoment(float theMoment) {
+  return getDatumFromNormMoment(theMoment, YEAR_START, YEAR_END);
+}
+
 int[] getDatumFromNormMoment(float theMoment, int startYear, int endYear) {
   float timeInterval = (endYear - startYear) * 366 * theMoment;
   int deltaYears = floor(timeInterval / 366f);

@@ -10,11 +10,12 @@ Table unusualData;
 
 Timeline timeline;
 float TIME = 0;
-float TIME_INC = 0.0005;
+float TIME_INC = 0.0002;
 float SEEK_TIME = 1;
 float SEEK_INC = 0.005f;
-float SEEK_EPSILON = 0.01;
+float SEEK_EPSILON = 0.001;
 float SEEK_DURATION = 100f;
+float GLOW_DURATION = 0.01;
 int YEAR_START = 1930;
 int YEAR_END = 2015;
 int REPEAT_COUNT = 2;

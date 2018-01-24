@@ -5,10 +5,12 @@ public class CrashDot { //<>// //<>//
   PVector myPos;
   float margin = 0.7;
   boolean mouseOver = false;
+  float myNormTime;
 
   CrashDot(Datum theDatum, Timeline theTimeline, ArrayList<CrashDot> previousOnes, PApplet parent, int repeatNo) {
     myDatum = theDatum;
     myTimeline = theTimeline;
+    myNormTime = getNormalizedMoment(myDatum, myTimeline);
     setPosition(myDatum, myTimeline, previousOnes, repeatNo);
     parent.registerMethod("mouseEvent", this);
   }
@@ -50,6 +52,11 @@ public class CrashDot { //<>// //<>//
     } else {
       fill(255, 255, 255);
     }
+      
+    float deltaTime = (TIME - myNormTime) / GLOW_DURATION;
+    if (deltaTime >= 0 && deltaTime <= 1) {
+      fill(255, 255, 255 - deltaTime*255);
+    }
     
     ellipseMode(RADIUS);
     ellipse(myPos.x, myPos.y, myRadius, myRadius);
@@ -72,9 +79,9 @@ public class CrashDot { //<>// //<>//
       //println("CLICK", e);
       
       if(mouseOver) {
-        SEEK_TIME = getNormalizedMoment(myDatum, myTimeline);
-        //SEEK_INC = (SEEK_TIME - TIME) / SEEK_DURATION;
-        SEEK_INC = signum(SEEK_TIME - TIME) * abs(SEEK_INC);
+        SEEK_TIME = myNormTime;
+        SEEK_INC = (SEEK_TIME - TIME) / SEEK_DURATION;
+        //SEEK_INC = signum(SEEK_TIME - TIME) * abs(SEEK_INC);
         currentState = STATE_SEEKING;
       }
       break;

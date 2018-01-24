@@ -30,7 +30,6 @@ class Timeline {
     for (int i = 0; i < myButtons.length; i++) {
       myButtons[i] = new TimelineButton(buttonWidth, this, buttonPhi(i), parent);
     }
-    
   }
 
   void display(float currentTime) {
@@ -84,7 +83,7 @@ class Timeline {
     popStyle();
 
     drawTimePointer(currentTime);
-    for (TimelineButton tlb:myButtons) {
+    for (TimelineButton tlb : myButtons) {
       tlb.display();
     }
   }
@@ -96,25 +95,25 @@ class Timeline {
       float phi = (phi1 - phi0) * currentTime + phi0;
       PVector p0 = new PVector(-timePointerSize * 0.5, myRadius - timePointerDelta);
       p0.rotate(phi);
-      p0.add(width*0.5,height*0.5);
+      p0.add(width*0.5, height*0.5);
       PVector p1 = new PVector(timePointerSize * 0.5, myRadius - timePointerDelta);
       p1.rotate(phi);
-      p1.add(width*0.5,height*0.5);
+      p1.add(width*0.5, height*0.5);
       PVector p2 = new PVector(0, myRadius - timePointerDelta + timePointerSize * sqrt(3) * 0.5);
       p2.rotate(phi);
       p2.add(width*0.5, height*0.5);
 
-      fill(0,255,0,192);
+      fill(0, 255, 0, 192);
       triangle(p0.x, p0.y, p1.x, p1.y, p2.x, p2.y);
       //ellipse(pos.x + width*0.5, pos.y + height*0.5, 5, 5);
     }
   }
-  
+
   float buttonPhi(int repeatNo) {
     float phi = startPhi(repeatNo);
     return phi + getPhiFromSides(buttonWidth * 4, myRadius);
   }
-  
+
   float startPhi(int repeatNo) {
     float phi0 = startAngle + repeatNo * TWO_PI / repeatCount;
     phi0 -= getPhiFromSides(buttonWidth, myRadius);
@@ -123,9 +122,9 @@ class Timeline {
 
   float endPhi(int repeatNo) {
     float phi = startPhi(repeatNo);
-     for (int year = startYear; year < endYear; year+=yearInc) {
-        phi -= getPhiFromSides(yearContainerWidth, myRadius);
-      }
+    for (int year = startYear; year < endYear; year+=yearInc) {
+      phi -= getPhiFromSides(yearContainerWidth, myRadius);
+    }
     return phi;
   }
 
@@ -175,11 +174,11 @@ class Timeline {
     strokeWeight(myHeight + myPadding * 2);
     arc(width*0.5, height*0.5, (myRadius - myHeight*0.5) + 2, (myRadius - myHeight*0.5) + 2, phi0-deltaPhi*0.5, phi0+deltaPhi*0.5);
   }
-  
+
   float innerRadius() {
     return myRadius - 0.8 * (myHeight + myPadding * 2);
   }
-  
+
   float outerRadius() {
     return myRadius + 0.2 * (myHeight + myPadding * 2);
   }

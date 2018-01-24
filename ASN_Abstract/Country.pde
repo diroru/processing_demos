@@ -80,9 +80,18 @@ public class Country implements Comparable {
     if (now == animationEnd || animationStart == animationEnd) {
       currentX = endX;
       currentY = endY;
+      currentW = endW;
+      currentH = endH;
+      startX = endX;
+      startY = endY;
+      startW = endW;
+      startH = endH;
+      //println("foo");
     } else {
       currentX = map(now, animationStart, animationEnd, startX, endX);
       currentY = map(now, animationStart, animationEnd, startY, endY);
+      currentW = map(now, animationStart, animationEnd, startW, endW);
+      currentH = map(now, animationStart, animationEnd, startH, endH);
     }
     /*
     if (time == 1) {
@@ -100,7 +109,7 @@ public class Country implements Comparable {
       g.fill(255);
       g.rect(this.currentX-GAP, this.currentY-GAP, this.currentW+GAP*2, this.currentH+GAP*2);
     }
-  
+
     g.noStroke();
     g.fill(c1);
     g.beginShape();
@@ -108,8 +117,8 @@ public class Country implements Comparable {
     g.vertex(this.currentX + this.currentW, this.currentY);
     g.vertex(this.currentX, this.currentY + this.currentH);
     g.endShape(CLOSE);
-    
-    
+
+
     g.fill(c0);
     g.beginShape();
     g.vertex(this.currentX + this.currentW, this.currentY);
@@ -117,23 +126,23 @@ public class Country implements Comparable {
     g.vertex(this.currentX, this.currentY + this.currentH);
     g.endShape(CLOSE);
 
-  
+
     /*
-  
-    int accidentCount = getAccidentCount();
-    float casualtyPercentage = getCasualtyPercentage();
-    if (accidentCount == 0) {
-      g.fill(255, 16);
-    } else {
-      if (casualtyPercentage == 0f) {
-        g.fill(255, 63);
-      } else if (casualtyPercentage < 0.9) {
-        g.fill(192, 0, 0);
-      } else {
-        g.fill(255, 0, 0);
-      }
-    }
-    */
+
+     int accidentCount = getAccidentCount();
+     float casualtyPercentage = getCasualtyPercentage();
+     if (accidentCount == 0) {
+     g.fill(255, 16);
+     } else {
+     if (casualtyPercentage == 0f) {
+     g.fill(255, 63);
+     } else if (casualtyPercentage < 0.9) {
+     g.fill(192, 0, 0);
+     } else {
+     g.fill(255, 0, 0);
+     }
+     }
+     */
     //g.rect(this.currentX, this.currentY, this.currentW, this.currentH);
     if (hover) {
 
@@ -193,13 +202,23 @@ public class Country implements Comparable {
     endH = theH;
   }
 
+  void setEndLayout(float theX, float theY, float theW, float theH, int duration) {
+    endX = theX;
+    endY = theY;
+    endW = theW;
+    endH = theH;
+    animationStart = millis();
+    animationEnd = animationStart + duration;
+    lastTime = animationStart;
+  }
+
   //COMPARISON
   @Override
     public boolean equals(Object obj) {
     if (!(obj instanceof Country)) {
       return false;
     }
-    Country c = ((Country) obj); 
+    Country c = ((Country) obj);
     return c.year == this.year && c.name.equals(this.name);
   }
 
@@ -216,8 +235,8 @@ public class Country implements Comparable {
     switch(currentSorting) {
     case SORT_BY_NAME:
       return this.name.compareTo(otherCountry.name);
-    case SORT_BY_ACCIDENT_COUNT:
-      return this.getAccidentCount() - otherCountry.getAccidentCount();
+      // case SORT_BY_ACCIDENT_COUNT:
+      //   return this.getAccidentCount() - otherCountry.getAccidentCount();
     case SORT_BY_FATALITY_COUNT:
       //return this.getFatalityCount() - otherCountry.getFatalityCount();
       return getFatalityComparison(this.name, otherCountry.name, currentYear);

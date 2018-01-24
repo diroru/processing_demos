@@ -5,7 +5,7 @@ class LayoutInfo {
   float w, h;
   //gaps
   float hGap, vGap;
-    
+
   LayoutInfo(float theX, float theY, float theW, float theH, float theHGap, float theVGap) {
     x = theX;
     y = theY;
@@ -21,6 +21,12 @@ class LayoutInfo {
 
   float getUnitWidth(int count) {
     return (w - (count - 1) * hGap) / float(count);
+  }
+
+  float getUnitWidthWithDetails(int count, int dCountryCount, int dCountryWidth) {
+    float result = (w - dCountryCount * dCountryWidth - (count - 1) * hGap) / float(count - dCountryCount);
+    println(result);
+    return result;
   }
 
   float deltaX(int count) {

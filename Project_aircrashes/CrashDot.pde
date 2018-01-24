@@ -1,4 +1,4 @@
-public class CrashDot { //<>// //<>// //<>// //<>// //<>//
+public class CrashDot { //<>//
   Datum myDatum;
   Timeline myTimeline;
   float myRadius = 2.5;

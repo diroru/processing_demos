@@ -9,6 +9,10 @@ Table worstData;
 Table unusualData;
 
 Timeline timeline;
+float TIME = 0;
+float TIME_INC = 0.01;
+int YEAR_START = 1930;
+int YEAR_END = 2015;
 ArrayList<Datum> data = new ArrayList<Datum>();
 ArrayList<CrashDot> myDots = new ArrayList<CrashDot>();
 
@@ -24,7 +28,7 @@ void setup() {
   initData();
   
   //textSize(24);
-  timeline = new Timeline((1920 - 150)/2 * scaleFactor, 40 * scaleFactor, HALF_PI, 130* scaleFactor, 1930, 2015, 2, loadFont("SourceSansPro-SemiBold-40.vlw"), 40* scaleFactor);
+  timeline = new Timeline((1920 - 150)/2 * scaleFactor, 40 * scaleFactor, HALF_PI, 130* scaleFactor, YEAR_START, YEAR_END, 2, loadFont("SourceSansPro-SemiBold-40.vlw"), 40* scaleFactor);
   
   initDots();
   hint(DISABLE_DEPTH_TEST);

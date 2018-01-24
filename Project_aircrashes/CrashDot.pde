@@ -45,7 +45,7 @@ public class CrashDot { //<>// //<>// //<>// //<>// //<>//
   }
 
   void display() {
-    fill(255, 255, 0, 127);
+    fill(255, 255, 255, 300);
     ellipseMode(RADIUS);
     ellipse(myPos.x, myPos.y, myRadius, myRadius);
     if (mouseOver) {

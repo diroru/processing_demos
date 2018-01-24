@@ -1,4 +1,4 @@
-public class CrashDot { //<>// //<>//
+public class CrashDot { //<>// //<>// //<>//
   Datum myDatum;
   Timeline myTimeline;
   float myRadius = 1.6;
@@ -48,7 +48,7 @@ public class CrashDot { //<>// //<>//
 
   void display() {
     if (mouseOver) {
-      fill(255, 255, 0);
+      fill(255, 255,255, 155);
     } else {
       fill(255, 255, 255);
     }

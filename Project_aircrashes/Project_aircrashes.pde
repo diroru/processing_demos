@@ -10,7 +10,7 @@ Table unusualData;
 
 Timeline timeline;
 float TIME = 0;
-float TIME_INC = 0.0001;
+float TIME_INC = 0.0005;
 int YEAR_START = 1930;
 int YEAR_END = 2015;
 ArrayList<Datum> data = new ArrayList<Datum>();
@@ -59,4 +59,7 @@ void draw() {
   }
   
   TIME += TIME_INC;
+  if (TIME > 1) {
+    TIME = 0;
+  }
 } 

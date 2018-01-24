@@ -22,7 +22,7 @@ float getNormalizedMoment(int d, int m, int y, int startYear, int endYear) {
   //TODO: might need long sometimes
   int timeInterval = (endYear - startYear) * 366;
 
-  int moment = d + (y - startYear) * 366;
+  int moment = d - 1 + (y - startYear) * 366;
   for (int i = 0; i < m - 1; i++) {
     moment += days[i];
   }
@@ -42,7 +42,7 @@ int[] getDatumFromNormMoment(float theMoment, int startYear, int endYear) {
   int day = 0;
   for (int i = 0; i < days.length; i++) {
     if (d <= daysInYear) {
-      day = daysInYear - d;
+      day = daysInYear - d + 1;
       d += days[i];
       month = i + 1;
     }

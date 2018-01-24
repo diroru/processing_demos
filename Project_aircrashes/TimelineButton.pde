@@ -16,7 +16,7 @@ public class TimelineButton {
     pushStyle();
     noFill();
     if (mouseOver) {
-      stroke(0, 0, 255);
+      stroke(255, 255, 255,100);
     } else {
       stroke(255);
     }

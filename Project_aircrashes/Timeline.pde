@@ -103,7 +103,7 @@ class Timeline {
       p2.rotate(phi);
       p2.add(width*0.5, height*0.5);
 
-      fill(0, 255, 0, 192);
+      fill(255, 255, 255, 255);
       triangle(p0.x, p0.y, p1.x, p1.y, p2.x, p2.y);
       //ellipse(pos.x + width*0.5, pos.y + height*0.5, 5, 5);
     }

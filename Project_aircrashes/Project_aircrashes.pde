@@ -11,10 +11,21 @@ Table unusualData;
 Timeline timeline;
 float TIME = 0;
 float TIME_INC = 0.0005;
+float SEEK_TIME = 1;
+float SEEK_INC = 0.005f;
+float SEEK_EPSILON = 0.01;
+float SEEK_DURATION = 100f;
 int YEAR_START = 1930;
 int YEAR_END = 2015;
+int REPEAT_COUNT = 2;
+
 ArrayList<Datum> data = new ArrayList<Datum>();
 ArrayList<CrashDot> myDots = new ArrayList<CrashDot>();
+
+final int STATE_PLAY = 0;
+final int STATE_PAUSED = 1;
+final int STATE_SEEKING = 2;
+int currentState = STATE_PAUSED;
 
 void setup() {
   //size(1920, 1920, P3D);
@@ -28,7 +39,7 @@ void setup() {
   initData();
 
   //textSize(24);
-  timeline = new Timeline((1920 - 390)/2 * scaleFactor, 35 * scaleFactor, HALF_PI, 110 * scaleFactor, YEAR_START, YEAR_END, 2, loadFont("SourceSansPro-SemiBold-40.vlw"), 40* scaleFactor, this);
+  timeline = new Timeline((1920 - 390)/2 * scaleFactor, 35 * scaleFactor, HALF_PI, 110 * scaleFactor, YEAR_START, YEAR_END, REPEAT_COUNT, loadFont("SourceSansPro-SemiBold-40.vlw"), 40* scaleFactor, this);
 
   initDots();
   hint(DISABLE_DEPTH_TEST);
@@ -58,12 +69,26 @@ void draw() {
   for (CrashDot cd : myDots) {
     cd.display();
   }
-
-  TIME += TIME_INC;
-  if (TIME > 1) {
-    TIME = 0;
+  
+  switch(currentState) {
+    case STATE_PLAY:
+      TIME += TIME_INC;
+      if (TIME > 1) {
+        TIME = 0;
+        currentState = STATE_PAUSED;
+      }
+    break;
+    case STATE_SEEKING:
+      TIME += SEEK_INC;
+      if (abs(SEEK_TIME - TIME) < SEEK_EPSILON) {
+        currentState = STATE_PAUSED;
+      }
+    break;
   }
+  
+  /*
   ellipseMode(RADIUS);
   fill(255,255,0,31);
   ellipse(width*0.5,height*0.5,width*0.5,height*0.5);
+  */
 }

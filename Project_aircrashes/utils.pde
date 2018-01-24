@@ -66,3 +66,10 @@ PVector center() {
 float getPhiFromSides(float base, float radius) {
   return asin(base * 0.5 / radius) * 2;
 }
+
+int signum(float f) {
+  if (f >= 0) {
+    return 1;
+  }
+  return -1;
+}

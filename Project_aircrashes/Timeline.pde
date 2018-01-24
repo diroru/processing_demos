@@ -183,7 +183,7 @@ class Timeline {
     return myRadius + 0.2 * (myHeight + myPadding * 2);
   }
 
-  PVector getCrashDotPosition(Datum d, float deltaRadius) {
+  PVector getCrashDotPosition(Datum d, float deltaRadius, int repeatNo) {
     //float moment = d.getNormMoment(startYear,endYear);
     float moment = getNormalizedMomentNoDayNoMonth(d, this);
     //pushMatrix();
@@ -194,9 +194,9 @@ class Timeline {
     textFont(myFont);
     textSize(myFontSize);
 
-    float nextWidth = myHeight + 20;
-    float phi = phi0-getPhiFromSides(nextWidth, myRadius);
-    float startPhi = phi;
+    //float nextWidth = myHeight + 20;
+    //float phi = phi0-getPhiFromSides(nextWidth, myRadius);
+    float phi = startPhi(repeatNo);
     for (int year = startYear; year < endYear; year+=yearInc) {
       phi -= getPhiFromSides(yearContainerWidth, myRadius);
     }
@@ -205,7 +205,7 @@ class Timeline {
 
     noStroke();
 
-    float theta = map(moment, 0, 1, startPhi, endPhi);
+    float theta = map(moment, 0, 1, startPhi(repeatNo), endPhi(repeatNo));
     PVector pos = new PVector(0, myRadius + deltaRadius);
     pos.rotate(theta);
     pos.add(new PVector(width *0.5, height*0.5));

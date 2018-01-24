@@ -16,9 +16,17 @@ public class TimelineButton {
     pushStyle();
     noFill();
     if (mouseOver) {
-      stroke(0,0,255);
+      stroke(0, 0, 255);
     } else {
       stroke(255);
+    }
+    switch(currentState) {
+    case STATE_PLAY:
+      break;
+    case STATE_PAUSED:
+      break;
+    case STATE_SEEKING:
+      break;
     }
     myTimeline.drawArcAround(myAngle + HALF_PI, myDeltaAngle);
     popStyle();
@@ -45,6 +53,19 @@ public class TimelineButton {
       break;
     case MouseEvent.CLICK:
       //println("CLICK", e);
+      if (mouseOver) {
+        switch(currentState) {
+        case STATE_PLAY:
+          currentState = STATE_PAUSED;
+          break;
+        case STATE_PAUSED:
+          currentState = STATE_PLAY;
+          break;
+        case STATE_SEEKING:
+          currentState = STATE_PLAY;
+          break;
+        }
+      }
       break;
     }
   }

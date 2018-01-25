@@ -3,7 +3,9 @@ color SECONDARY= #FF8000;
 color INDEX1= #FFFFFF;
 color INDEX2= #BBBBBB;
 color INDEX3= #818181;
-color INDEX4= #414141;
+//color INDEX4= #414141;
+color INDEX4= #222222;
+
 color POPULATION= #402000;
 color WHITE = #FFFFFF;
 color DARK_GREY = color(74);

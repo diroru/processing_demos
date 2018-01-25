@@ -15,8 +15,8 @@ final int MIGRATION_YEAR_START = 1980;
 final int MIGRATION_YEAR_END = 2013;
 final int YEAR_START = 2008;
 final int YEAR_END = 2016;
-final int GPI_MIN = 1;
-final int GPI_MAX = 5;
+final float GPI_MIN = 1.1;
+final float GPI_MAX = 3.8;
 final int SET_START_POS = 0;
 final int SET_END_POS = 1;
 

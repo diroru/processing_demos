@@ -22,6 +22,7 @@ void unsetHighlight() {
   }
 }
 
+/*
 PVector mapMouse(PGraphics target, int mx, int my) {
   float x, y;
   if (domeDisplay) {
@@ -41,3 +42,4 @@ PVector mapMouse(PGraphics target, int mx, int my) {
   }
   return new PVector(x,y);
 }
+*/

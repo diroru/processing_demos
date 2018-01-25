@@ -124,7 +124,7 @@ void draw() {
   canvas.ellipse(mappedMouse.x + canvas.width, mappedMouse.y, 5, 5);
   canvas.endDraw();
   // } else {
-  background(127);
+  background(0);
   switch(CURRENT_MODE) {
   case FULLDOME_MODE:
     pushMatrix();
@@ -176,7 +176,7 @@ void displayYears(int deltaX) {
     canvas.pushStyle();
     canvas.textFont(smallFont);
     canvas.fill(WHITE);
-    canvas.textAlign(LEFT,TOP);
+    canvas.textAlign(LEFT, TOP);
     if (year % 10 == 0) {
       canvas.text(year+"", matrixLayout.x - deltaX, matrixLayout.getYNo(year-YEAR_START, YEAR_END-YEAR_START) - 2);
     }
@@ -198,6 +198,9 @@ void keyPressed() {
     break;
   case ' ':
     canvas.save("output/test.png");
+    break;
+  case 's':
+    saveFrame("output/test.png");
     break;
   case 'd':
     switch(CURRENT_MODE) {

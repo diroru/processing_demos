@@ -33,9 +33,13 @@ ArrayList<Country> makeDetailedLayout(LayoutInfo theLayout, int thePos, int dCou
     //println(year);
     int countriesInRow = 0;
     for (Country theCountry : c.get(year)) {
-      float cellWidth = cellWidthNormal;
+      float cellWidth;
       if (countriesInRow < dCountryCount) {
+        theCountry.displayDetailed = true;
         cellWidth = dCountryWidth;
+      } else {
+        cellWidth = cellWidthNormal;
+        theCountry.displayDetailed = false;
       }
       count++;
       //print(theCountry.name + ",");
@@ -84,6 +88,7 @@ ArrayList<Country> makeLayout(LayoutInfo theLayout, int thePos) {
     //println(year);
     for (Country theCountry : c.get(year)) {
       count++;
+      theCountry.displayDetailed = false;
       //print(theCountry.name + ",");
       switch(thePos) {
       case SET_START_POS:

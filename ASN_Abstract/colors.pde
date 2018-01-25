@@ -23,3 +23,11 @@ int getColor(int percentage) {
   }
   return FATALITIES_ALL;
 }
+
+int getColor(Datum d) {
+  int p = 0;
+  if (d.total_occupants > 0 && d.total_fatalities > 0) {
+    p = (d.total_fatalities * 100) / d.total_occupants; 
+  }
+  return getColor(p);
+}

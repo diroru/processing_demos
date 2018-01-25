@@ -133,7 +133,7 @@ vec2 conicTexCoordinates(vec3 ray, float bottom, float radiusBottom, float heigh
     discard;
     //return vec2(-1.0);
   }
-  float s = mod(v.s + deltaS, 1.0);
+  float s = 1.0 - mod(v.s + deltaS, 1.0);
   float t = v.t;
   return vec2(s,t);
 }

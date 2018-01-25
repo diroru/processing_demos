@@ -36,6 +36,10 @@ class LayoutInfo {
   float deltaY(int count) {
     return getUnitHeight(count) + vGap;
   }
+  
+  float getYNo(int no, int count) {
+    return y + deltaY(count) * no + vGap;
+  }
 }
 
 LayoutInfo layoutFromCellSize(float x, float y, float cellWidth, float cellHeight, float hGap, float vGap, int hCount, int vCount) {

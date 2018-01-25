@@ -116,7 +116,7 @@ PVector conicTexCoordinates(PVector ray, float bottom, float radiusBottom, float
   if (v == null) {
     return null;
   }
-  float s = (v.x + deltaS) % 1.0;
+  float s = 1.0 - (v.x + deltaS) % 1.0;
   float t = 1.0 - v.y;
   return new PVector(s,t);
 }

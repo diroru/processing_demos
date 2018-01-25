@@ -24,7 +24,7 @@ class MigrationFlow {
 
   void displayRounded(PGraphics g, float maxHeight, float y0) {
     float y = y0 + map(flow, 0, MIGRATION_FLOW_MAX, maxHeight, 0);
-    drawRoundedLine(g, origin.cx(), origin.cy(), origin.cx(), y, destination.cx(), y, destination.cx(), destination.cy(), 0);
+    drawRoundedLine(g, origin.cx(), origin.cy(), origin.cx(), y, destination.cx(), y, destination.cx(), destination.cy(), 10); //last number is amount of roundness
   }
 
   void displayBezier(PGraphics g, float maxHeight, float y) {

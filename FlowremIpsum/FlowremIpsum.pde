@@ -1,4 +1,4 @@
-import java.util.*; //<>// //<>//
+import java.util.*; //<>// //<>// //<>//
 //import java.awt.event.*;
 //import javax.swing.event.*;
 //import java.awt.event.*;
@@ -102,9 +102,9 @@ int CANVAS_WIDTH = 2048;
 int CANVAS_HEIGHT = 1024;
 
 void settings() {
-  //size(DOME_SIZE, DOME_SIZE, Dome.RENDERER);
+  size(DOME_SIZE, DOME_SIZE, P3D);
   //pixelDensity(displayDensity()); //uncomment for retina rendering
-  fullScreen( P3D, SPAN);
+  //fullScreen( P3D, SPAN);
 }
 
 void setup() {
@@ -187,6 +187,12 @@ void draw() {
     ys.display(canvas);
   }
 
+<<<<<<< HEAD
+=======
+  canvas.fill(1/6f, 1, 1, 0.5);
+  canvas.ellipse(mappedMouse.x, mappedMouse.y, 10, 10);
+
+>>>>>>> 5b4f4f959affe9df9b9ba63b6fae4345f445da93
   //DRAW POPULATION GUIDES
   canvas.stroke(1/3f, 1, 1, 1);
   canvas.strokeWeight(2);
@@ -258,6 +264,12 @@ void displayFlows(PGraphics pg) {
 
 void keyPressed() {
   switch(key) {
+<<<<<<< HEAD
+=======
+  case 'g':
+    mesh.toggleGrid();
+    break;
+>>>>>>> 5b4f4f959affe9df9b9ba63b6fae4345f445da93
   case ' ':
     canvas.save("output/test.png");
     break;
@@ -276,5 +288,9 @@ void keyPressed() {
       surface.setSize(DOME_SIZE, DOME_SIZE);
       break;
     }
+<<<<<<< HEAD
+=======
+    break;
+>>>>>>> 5b4f4f959affe9df9b9ba63b6fae4345f445da93
   }
 }

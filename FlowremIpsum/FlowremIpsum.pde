@@ -1,4 +1,4 @@
-import java.util.*; //<>// //<>// //<>//
+import java.util.*; //<>//
 //import java.awt.event.*;
 //import javax.swing.event.*;
 //import java.awt.event.*;
@@ -95,33 +95,32 @@ PVector mappedMouse = new PVector();
 ArrayList<RadioButtonGroup> radio = new ArrayList<RadioButtonGroup>();
 
 boolean domeDisplay = true;
-int DOME_SIZE = 1920;
+int DOME_SIZE = 960;
 int PREVIEW_WIDTH = 1920;
 int PREVIEW_HEIGHT = 960;
 int CANVAS_WIDTH = 2048;
 int CANVAS_HEIGHT = 1024;
 
 void settings() {
-  size(DOME_SIZE, DOME_SIZE, P3D);
+  size(DOME_SIZE, DOME_SIZE, P3D); //for working on the laptop (single screen)
   //pixelDensity(displayDensity()); //uncomment for retina rendering
-  //fullScreen( P3D, SPAN);
+  //fullScreen( P3D, SPAN); //for presenting in the dome (double screen)
 }
 
 void setup() {
   //size(1024, 1024, Dome.RENDERER);
   //initial default camera, i.e. interface to interact with the renderer.
-  colorMode(HSB, 1, 1, 1, 1);
-  canvas = createGraphics(2048, 1024, JAVA2D);
-
+  //colorMode(HSB, 1, 1, 1, 1);
+  canvas = createGraphics(2048, 1024, P2D);
   canvas.beginDraw();
   canvas.background(0);
-    canvas.colorMode(HSB, 1, 1, 1);
+  //canvas.colorMode(HSB, 1, 1, 1);
   canvas.endDraw();
   
   initShape();
   initCanvas();
   initShader();
-
+  initFonts();
 
   //mesh.toggleShape();
   //mesh.toggleGrid();
@@ -130,13 +129,13 @@ void setup() {
   float graphHeight = (canvas.height - MARGIN * 3 - yearBarHeight) * 0.5;
   float graphWidth = canvas.width - MARGIN * 3 - panelWidth;
   panelLayout = new LayoutInfo(MARGIN, MARGIN, panelWidth, canvas.height - 2*MARGIN);
-  graphLayout = new LayoutInfo(panelWidth + 2 * MARGIN, canvas.height - (MARGIN + graphHeight), graphWidth, graphHeight);
+  graphLayout = new LayoutInfo(panelWidth + 2 * MARGIN, height - (MARGIN + graphHeight), graphWidth, graphHeight);
   flowLayout = new LayoutInfo(panelWidth + 2 * MARGIN, MARGIN, graphWidth, graphHeight);
   graphLayout.gap = gap;
 
   //pixelDensity(2);
   canvas.ellipseMode(CORNER);
-  canvas.textSize(20);
+  //canvas.textSize(20);
   loadData(false);
   initRadio();
   //Example of animating between two layouts
@@ -163,17 +162,17 @@ void setup() {
 }
 
 void draw() {
+  
   mappedMouse = mappedMouse(CURRENT_MODE);
   // The dome projection is centered at (0, 0), so the mouse coordinates
   // need to be offset by (width/2, height/2)
   canvas.beginDraw();
   //draw countries
-  canvas.background(1,1,1);
+  canvas.background(0);
 
+  canvas.fill(WHITE);
   canvas.noStroke();
-  canvas.fill(1);
-  canvas.noStroke();
-
+  
   long delta = millis() - lastTime;
   for (Country theCountry : countries) {
     //println(theCountry.name);
@@ -187,14 +186,8 @@ void draw() {
     ys.display(canvas);
   }
 
-<<<<<<< HEAD
-=======
-  canvas.fill(1/6f, 1, 1, 0.5);
-  canvas.ellipse(mappedMouse.x, mappedMouse.y, 10, 10);
-
->>>>>>> 5b4f4f959affe9df9b9ba63b6fae4345f445da93
   //DRAW POPULATION GUIDES
-  canvas.stroke(1/3f, 1, 1, 1);
+  canvas.stroke(DARK_GREY);
   canvas.strokeWeight(2);
   for (int i = 0; i < 10; i++) {
     float y = graphLayout.y + constrainedLogScale(pow(10, i), graphLayout.h);
@@ -205,14 +198,16 @@ void draw() {
     rbg.display(canvas);
   }
   
-  canvas.fill(1/6f, 1, 1, 0.5);
-  canvas.stroke(255,0,0);
+  canvas.fill(255, 255, 0, 127);
+  canvas.ellipseMode(RADIUS);
+  canvas.noStroke();
   canvas.ellipse(mappedMouse.x, mappedMouse.y, 10, 10);
-  canvas.endDraw();
+  canvas.ellipse(mappedMouse.x + canvas.width, mappedMouse.y, 10, 10);
 
-  background(0);
+  canvas.endDraw();
   switch(CURRENT_MODE) {
   case FULLDOME_MODE:
+    background(0);
     pushMatrix();
     translate(width*0.5, height*0.5);
     shader(domeShader);
@@ -221,7 +216,7 @@ void draw() {
     popMatrix();
     break;
   case CANVAS_MODE:
-    background(0.167, 1, 1);
+    background(255, 255, 0);
     fitImage(canvas);
     break;
   }
@@ -239,7 +234,7 @@ void displayFlows(PGraphics pg) {
   ArrayList<MigrationFlow> yearlyMigrationFlows = migrationFlows.get(currentYear); 
   for (MigrationFlow mf : yearlyMigrationFlows) {
     if (hoverCountry == null) {
-      pg.stroke(1, 0.1);
+      pg.stroke(WHITE, 25);
       pg.strokeWeight(2);
       if (mf.flow > MIGRATION_FLOW_LOWER_LIMIT) {
         //mf.display(pg, height/2, MARGIN);
@@ -247,9 +242,9 @@ void displayFlows(PGraphics pg) {
       }
     } else {
       if (mf.origin.name.equals(hoverCountry)) {
-        pg.stroke(0, 1, 1, 0.2);
+        pg.stroke(WHITE, 50);
       } else if (mf.destination.name.equals(hoverCountry)) {
-        pg.stroke(0.5, 1, 1, 0.2);
+        pg.stroke(PRIMARY);
       } else {
         //stroke(255, 1);
         pg.noStroke();
@@ -264,12 +259,6 @@ void displayFlows(PGraphics pg) {
 
 void keyPressed() {
   switch(key) {
-<<<<<<< HEAD
-=======
-  case 'g':
-    mesh.toggleGrid();
-    break;
->>>>>>> 5b4f4f959affe9df9b9ba63b6fae4345f445da93
   case ' ':
     canvas.save("output/test.png");
     break;
@@ -288,9 +277,5 @@ void keyPressed() {
       surface.setSize(DOME_SIZE, DOME_SIZE);
       break;
     }
-<<<<<<< HEAD
-=======
-    break;
->>>>>>> 5b4f4f959affe9df9b9ba63b6fae4345f445da93
   }
 }

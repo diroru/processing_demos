@@ -34,7 +34,14 @@ PVector getConicMappedMouse(float mx, float my, float canvasWidth, float canvasH
   if (st == null) {
     return new PVector(-1, -1);
   }
-  return new PVector(st.x * canvasWidth, st.y * canvasHeight);
+  PVector result = new PVector(st.x * canvasWidth, st.y * canvasHeight);
+  if (result.x < 0) {
+    result.x += canvasWidth;
+  }
+  if (result.x > canvasWidth) {
+    result.x -= canvasWidth;
+  }
+  return result;
 }
 
 ///

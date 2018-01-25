@@ -44,7 +44,7 @@ PVector mappedMouse = new PVector();
 LayoutInfo matrixLayout;
 PGraphics canvas;
 
-int DOME_SIZE = 960;
+int DOME_SIZE = 1920;
 int PREVIEW_WIDTH = 1536;
 int PREVIEW_HEIGHT = 768;
 int CANVAS_WIDTH = 2048;
@@ -69,8 +69,9 @@ long lastTime;
 PFont headerFont, corpusFont, smallFont;
 
 void settings() {
-  size(DOME_SIZE, DOME_SIZE, P3D);
-  pixelDensity(displayDensity());
+  //size(DOME_SIZE, DOME_SIZE, P3D);
+  //pixelDensity(displayDensity());
+  fullScreen(P3D, SPAN);
 }
 
 void setup() {

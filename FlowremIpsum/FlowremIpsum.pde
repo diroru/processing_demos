@@ -87,7 +87,7 @@ int PREVIEW_HEIGHT = 960;
 
 void settings() {
   size(DOME_SIZE, DOME_SIZE, Dome.RENDERER);
-  pixelDensity(displayDensity()); //uncomment for retina rendering
+  //pixelDensity(displayDensity()); //uncomment for retina rendering 
 }
 
 void setup() {
@@ -194,7 +194,7 @@ void post() {
 
   canvas.fill(1/6f, 1, 1, 0.5);
   canvas.ellipse(mappedMouse.x, mappedMouse.y, 10, 10);
-  
+
   //DRAW POPULATION GUIDES
   canvas.stroke(1/3f, 1, 1, 1);
   canvas.strokeWeight(2);
@@ -245,7 +245,7 @@ void displayFlows(PGraphics pg) {
 }
 
 void keyPressed() {
- switch(key) {
+  switch(key) {
   case 'g':
     mesh.toggleGrid();
     break;
@@ -262,4 +262,5 @@ void keyPressed() {
       surface.setSize(PREVIEW_WIDTH, PREVIEW_HEIGHT);
     }
     break;
-  }}
+  }
+}

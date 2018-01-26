@@ -10,7 +10,7 @@ Table unusualData;
 
 Timeline timeline;
 float TIME = 0;
-float TIME_INC = 0.0005;
+float TIME_INC = 0.0007;
 float SEEK_TIME = 1;
 float SEEK_INC = 0.005f;
 float SEEK_EPSILON = 0.001;
@@ -58,6 +58,17 @@ void draw() {
 
   textFont(corpusFont);
 
+<<<<<<< HEAD
+  
+  String s = "100 worst and unusual Aircrashes   1933 - 2014";
+ // fill(232,255,154,300);
+ // drawTangentialText(s,  width-2*margin, height-2*margin);
+  //fill(28,229,142,300);
+  //fill (255);
+  //textSize(12);
+ // drawArcTextCentered(s, width-1.8*margin, height-1.8*margin);
+  // s.rotate(phi);
+=======
   /*
   String s = "Hello World!!!&#*";
    fill(232,26,154,300);
@@ -65,6 +76,7 @@ void draw() {
    fill(28,229,142,300);
    drawArcTextCentered(s, mouseX, mouseY);
    */
+>>>>>>> 4999d9a9f33346fec8f15dfcafceb944bb68c0b9
   //text("Hello", 0, 48);
   timeline.display(TIME);
 

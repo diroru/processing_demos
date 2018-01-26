@@ -23,9 +23,16 @@ float logScale(float val, float scale) {
   return logScale(val, POPULATION_MAX, scale);
 }
 
-float constrainedLogScale(float val, float minVal, float base, float scale) {
-  float lVal = log(val) / log(base);
-  float lValMin = log(minVal) / log(base);
+float constrainedLogScale(float val, float minVal, float maxVal) {
+  return constrainedLogScale(val, minVal, maxVal, 1f);
+}
+
+float constrainedLogScale(float val, float minVal, float maxVal, float scale) {
+  if (minVal <= 0) {
+    println("constrained log scale ERROR: min val shouldn’t be <= 0");
+  }
+  float lVal = log(val) / log(maxVal);
+  float lValMin = log(minVal) / log(maxVal);
   float scaleCorrection = 1 - lValMin;
   return max(lVal - lValMin, 0) * scale / scaleCorrection;
 }

@@ -101,6 +101,8 @@ int PREVIEW_HEIGHT = 960;
 int CANVAS_WIDTH = 2048;
 int CANVAS_HEIGHT = 1024;
 
+String[] POP_LABELS = {"1", "10", "100", "1k", "10k", "100k", "1mio", "10mio", "100mio", "1bio"}; 
+
 void settings() {
   size(DOME_SIZE, DOME_SIZE, P3D); //for working on the laptop (single screen)
   pixelDensity(displayDensity()); //uncomment for retina rendering
@@ -117,12 +119,16 @@ void setup() {
   //mesh.toggleShape();
   //mesh.toggleGrid();
   float panelWidth = 200;
-  float yearBarHeight = 100f;
-  float graphHeight = (canvas.height - MARGIN * 3 - yearBarHeight) * 0.5;
-  float graphWidth = canvas.width - MARGIN * 3 - panelWidth;
-  panelLayout = new LayoutInfo(MARGIN, MARGIN, panelWidth, canvas.height - 2*MARGIN);
-  graphLayout = new LayoutInfo(panelWidth + 2 * MARGIN, canvas.height - (graphHeight + yearBarHeight), graphWidth, graphHeight);
-  flowLayout = new LayoutInfo(panelWidth + 2 * MARGIN, MARGIN, graphWidth, graphHeight);
+  float yearBarHeight = 30f;
+  //float graphHeight = (canvas.height - MARGIN * 3 - yearBarHeight) * 0.5;
+  float graphHeight = 500;
+  //float graphWidth = canvas.width - MARGIN * 3 - panelWidth;
+  float graphLeft = 250;
+  graphLayout = new LayoutInfo(graphLeft, canvas.height - (graphHeight + yearBarHeight + MARGIN - 10), canvas.width-MARGIN-graphLeft, graphHeight);
+  panelLayout = new LayoutInfo(MARGIN, graphLayout.y, panelWidth, canvas.height - 2*MARGIN);
+  //flowLayout = new LayoutInfo(panelWidth + 2 * MARGIN, MARGIN, graphWidth, graphHeight);
+  float flowHeight = 350;
+  flowLayout = new LayoutInfo(graphLayout.x, graphLayout.y - flowHeight - MARGIN, graphLayout.w, flowHeight);
   graphLayout.gap = gap;
 
   //pixelDensity(2);
@@ -141,14 +147,19 @@ void setup() {
 
   int repeat = 3;
   int count = YEAR_END - YEAR_START + 1;
-  for (int i = 0; i <= repeat * count; i++) {
-    int year = i % count + YEAR_START;
-    float dw = (canvas.width - panelWidth - 2*MARGIN) / (repeat * float(count));
-    float y = canvas.height - yearBarHeight;
-    float w = 50;
-    float h  = 50;
-    LayoutInfo yearLayout = new LayoutInfo(panelWidth + 2*MARGIN + dw * i, y, w, h);
-    yearSelectors.add(new YearSelector(year, yearLayout, this));
+  float yearX = graphLayout.x;
+  float yearY = canvas.height - yearBarHeight;
+  float yearW = 35;
+  float dw = (graphLayout.w- MARGIN*2*(repeat-1) - yearW) / (repeat * float(count)-1);
+  float yearH  = INFO_SIZE;
+  for (int i = 0; i < repeat; i++) {
+    for (int j= 0; j < count; j++) {
+      int year = j + YEAR_START;
+      LayoutInfo yearLayout = new LayoutInfo(yearX, yearY, yearW, yearH);
+      yearSelectors.add(new YearSelector(year, yearLayout, this));
+      yearX += dw;
+    }
+    yearX += MARGIN*2;
   }
   lastTime = millis();
   //canvas.hint(DISABLE_DEPTH_TEST);
@@ -162,18 +173,8 @@ void draw() {
   canvas.beginDraw();
   //draw countries
   canvas.background(0);
-  //DRAW POPULATION GUIDES
-  canvas.stroke(DARK_GREY);
-  canvas.strokeWeight(1);
-  canvas.beginShape(LINES);
-  for (int i = 0; i < 10; i++) {
-    float y = graphLayout.y + constrainedLogScale(pow(10, i), graphLayout.h);
-    //canvas.line(0, y, 100, canvas.width, y, 100);
-    canvas.vertex(graphLayout.x, y, -3);
-    canvas.vertex(graphLayout.x + graphLayout.w, y, -3);
-  }
-  canvas.endShape();
 
+  drawFlowGraphLegend(graphLayout, flowLayout, MARGIN, canvas);
 
   canvas.fill(WHITE);
   canvas.noStroke();
@@ -205,6 +206,13 @@ void draw() {
 
   displayMouse();
 
+
+  /*//DEBUG
+   canvas.fill(255, 0, 0, 63);
+   canvas.rect(flowLayout.x, flowLayout.y, flowLayout.w, flowLayout.h);
+   canvas.fill(0, 255, 0, 63);
+   canvas.rect(graphLayout.x, graphLayout.y, graphLayout.w, graphLayout.h);
+   */
   canvas.endDraw();
   switch(CURRENT_MODE) {
   case FULLDOME_MODE:
@@ -223,6 +231,36 @@ void draw() {
   }
 }
 
+void drawFlowGraphLegend(LayoutInfo graphLayout, LayoutInfo flowLayout, float margin, PGraphics pg) {
+  //DRAW POPULATION GUIDES & LABELS
+  int startExponentPopulation = floor(log(POPULATION_CUTOFF)/log(10));
+  pg.textFont(INFO);
+  pg.textAlign(RIGHT, CENTER);
+  float y = 0;
+  for (int i = startExponentPopulation; i < 10; i++) {
+    y = graphLayout.y + constrainedLogScale(pow(10, i), POPULATION_CUTOFF, POPULATION_MAX, graphLayout.h);
+    pg.stroke(DARK_GREY);
+    pg.line(graphLayout.x, y, -3, graphLayout.x + graphLayout.w, y, -3);
+    pg.fill(255);
+    pg.noStroke();
+    pg.text(POP_LABELS[i], graphLayout.x - margin, y);
+    //println(y);
+  }
+  pg.text("POPULATION", graphLayout.x - margin, y + margin + INFO_SIZE);
+  //DRAW MIGRATION GUIDES & LABELS
+  int startExponentMigration = floor(log(MIGRATION_FLOW_LOWER_LIMIT)/log(10));
+  y = 0;
+  for (int i = startExponentMigration; i < 6; i++) {
+    y = flowLayout.y + flowLayout.h - constrainedLogScale(pow(10, i), MIGRATION_FLOW_LOWER_LIMIT, MIGRATION_FLOW_MAX, flowLayout.h);
+    pg.stroke(DARK_GREY);
+    pg.line(flowLayout.x, y, -3, flowLayout.x + flowLayout.w, y, -3);
+    pg.fill(255);
+    pg.noStroke();
+    pg.text(POP_LABELS[i], flowLayout.x - margin, y);
+  }
+  pg.text("MIGRATION", flowLayout.x - margin, y - margin - INFO_SIZE);
+}
+
 void displayFlows(PGraphics pg, Country activeCountry) {
   pg.noFill();
   pg.strokeWeight(2);
@@ -233,7 +271,7 @@ void displayFlows(PGraphics pg, Country activeCountry) {
       if (mf.flow > MIGRATION_FLOW_LOWER_LIMIT) {
         //mf.display(pg, height/2, MARGIN);
         pg.beginShape(POLYGON);
-        mf.displayNormal(pg, flowLayout.h, flowLayout.y);
+        mf.displayNormal(pg, flowLayout);
         pg.endShape();
       }
     }
@@ -242,7 +280,7 @@ void displayFlows(PGraphics pg, Country activeCountry) {
       //mf.display(pg, height/2, MARGIN);
       if (mf.flow > MIGRATION_FLOW_LOWER_LIMIT) {
         pg.beginShape(POLYGON);
-        mf.displayHighlighted(pg, flowLayout.h, flowLayout.y, activeCountry);
+        mf.displayHighlighted(pg, flowLayout, activeCountry);
         pg.endShape();
       }
     }

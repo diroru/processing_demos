@@ -77,7 +77,7 @@ float CONE_RADIUS_BOTTOM = 186;
 float CONE_RADIUS_TOP = 66;
 float CONE_HEIGHT = 238;
 float CONE_BOTTOM = 0;
-float CONE_ORIENTATION = 0;
+float CONE_ORIENTATION = PI/6f;
 PShader domeShader;
 PShape domeQuad;
 
@@ -102,9 +102,9 @@ int CANVAS_WIDTH = 2048;
 int CANVAS_HEIGHT = 1024;
 
 void settings() {
-  size(DOME_SIZE, DOME_SIZE, P3D); //for working on the laptop (single screen)
+  //size(DOME_SIZE, DOME_SIZE, P3D); //for working on the laptop (single screen)
   //pixelDensity(displayDensity()); //uncomment for retina rendering
-  //fullScreen( P3D, SPAN); //for presenting in the dome (double screen)
+  fullScreen( P3D, SPAN); //for presenting in the dome (double screen)
 }
 
 void setup() {
@@ -125,11 +125,11 @@ void setup() {
   //mesh.toggleShape();
   //mesh.toggleGrid();
   float panelWidth = 200;
-  float yearBarHeight = 30f;
+  float yearBarHeight = 100f;
   float graphHeight = (canvas.height - MARGIN * 3 - yearBarHeight) * 0.5;
   float graphWidth = canvas.width - MARGIN * 3 - panelWidth;
   panelLayout = new LayoutInfo(MARGIN, MARGIN, panelWidth, canvas.height - 2*MARGIN);
-  graphLayout = new LayoutInfo(panelWidth + 2 * MARGIN, height - (MARGIN + graphHeight), graphWidth, graphHeight);
+  graphLayout = new LayoutInfo(panelWidth + 2 * MARGIN, canvas.height - (graphHeight + yearBarHeight), graphWidth, graphHeight);
   flowLayout = new LayoutInfo(panelWidth + 2 * MARGIN, MARGIN, graphWidth, graphHeight);
   graphLayout.gap = gap;
 
@@ -152,9 +152,9 @@ void setup() {
   for (int i = 0; i <= repeat * count; i++) {
     int year = i % count + YEAR_START;
     float dw = (canvas.width - panelWidth - 2*MARGIN) / (repeat * float(count));
-    float y = canvas.height - MARGIN;
+    float y = canvas.height - yearBarHeight;
     float w = 50;
-    float h  = 20;
+    float h  = 50;
     LayoutInfo yearLayout = new LayoutInfo(panelWidth + 2*MARGIN + dw * i, y, w, h);
     yearSelectors.add(new YearSelector(year, yearLayout, this));
   }
@@ -169,7 +169,13 @@ void draw() {
   canvas.beginDraw();
   //draw countries
   canvas.background(0);
-
+  //DRAW POPULATION GUIDES
+  canvas.stroke(DARK_GREY);
+  canvas.strokeWeight(2);
+  for (int i = 0; i < 10; i++) {
+    float y = graphLayout.y + constrainedLogScale(pow(10, i), graphLayout.h);
+    canvas.line(0, y, canvas.width, y);
+  }
   canvas.fill(WHITE);
   canvas.noStroke();
   
@@ -184,14 +190,6 @@ void draw() {
   displayFlows(canvas);
   for (YearSelector ys : yearSelectors) {
     ys.display(canvas);
-  }
-
-  //DRAW POPULATION GUIDES
-  canvas.stroke(DARK_GREY);
-  canvas.strokeWeight(2);
-  for (int i = 0; i < 10; i++) {
-    float y = graphLayout.y + constrainedLogScale(pow(10, i), graphLayout.h);
-    canvas.line(0, y, canvas.width, y);
   }
 
   for (RadioButtonGroup rbg : radio) {

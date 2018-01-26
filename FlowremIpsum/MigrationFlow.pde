@@ -24,9 +24,10 @@ class MigrationFlow {
 
   void displayRounded(PGraphics g, float maxHeight, float y0) {
     float y = y0 + map(flow, 0, MIGRATION_FLOW_MAX, maxHeight, 0);
-    drawRoundedLine(g, origin.cx(), origin.cy(), origin.cx(), y, destination.cx(), y, destination.cx(), destination.cy(), 0);
+    drawRoundedLine(g, origin.cx(), origin.cy(), origin.cx(), y, destination.cx(), y, destination.cx(), destination.cy(), 10); //last number is amount of roundness
   }
 
+  /*
   void displayBezier(PGraphics g, float maxHeight, float y) {
     float x0 = origin.cx();
     float y0 = origin.cy();
@@ -43,6 +44,7 @@ class MigrationFlow {
     g.bezierVertex(x2, y2, x2, y2, x3, y3);
     g.endShape();
   }
+  */
 }
 
 void drawRoundedLine(PGraphics pg, float x0, float y0, float x1, float y1, float x2, float y2, float x3, float y3, float maxRadius) {

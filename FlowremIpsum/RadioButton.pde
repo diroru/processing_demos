@@ -90,17 +90,25 @@ public class RadioButton {
 
   void display(PGraphics g) {
     if (hover) {
-      g.fill(1);
+      g.fill(PRIMARY);
     } else if (selected) {
-      g.fill(1/6f, 1, 1, 1);
+      g.fill(WHITE);
     } else {
-      g.fill(0.5);
+      g.fill(WHITE);
     }
     g.text(label, x, y + h);
+    if (selected) {
+      g.fill(WHITE);
+    } else {
+       g.fill(DARK_GREY);
+    }
+    //TODO: dot size, other form
+    g.ellipse(x-15,y,15,15);
     //g.rect(x,y,w,h);
   }
 
   boolean isHover(float mx, float my) {
+    //return ((mx >= x && mx <= x + w) || (mx >= x + canvas.width && mx <= x + w + canvas.width)) && (my >= y && my <= y + h);
     return mx >= x && mx <= x + w && my >= y && my <= y + h;
   }
 

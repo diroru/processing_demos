@@ -147,10 +147,10 @@ PVector mapMouse(PGraphics target, int mx, int my) {
     return new PVector(x, y);
   } else {
     float scaleFactor = fittingScaleFactor(target);
-    x = map(mouseX,0,width,0,width/scaleFactor);
-    y = map(mouseY,0,height,0,height/scaleFactor);
+    x = map(mouseX, 0, width, 0, width/scaleFactor);
+    y = map(mouseY, 0, height, 0, height/scaleFactor);
   }
-  return new PVector(x,y);
+  return new PVector(x, y);
 }
 
 void setCurrentYear(int theNewYear) {

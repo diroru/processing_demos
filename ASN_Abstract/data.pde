@@ -11,6 +11,9 @@ void initData() {
   }
   currentYear = YEAR_END;
   countryNames = new ArrayList<String>(countryNameSet);
+  for (String cn : countryNames) {
+    fatalitiesByCountry.put(cn, new Integer(0));
+  }
   Collections.sort(countryNames);
   println(countryNames, countryNames.size() );
 
@@ -41,7 +44,18 @@ void initData() {
     }
   }
 
-  //println("MAX PER YEAR", MAX_FATALITIES_PER_YEAR);
+  for (ArrayList<Country> countriesByYears : getCountriesByYears().values()) {
+    int fatailitesPerYear = 0;
+    for (Country c : countriesByYears) {
+      fatailitesPerYear += c.getFatalityCount();
+      int existing = fatalitiesByCountry.get(c.name);
+      fatalitiesByCountry.put(c.name, existing + c.getFatalityCount());
+    }
+    MAX_FATALITIES_PER_YEAR = max(MAX_FATALITIES_PER_YEAR, fatailitesPerYear);
+  }
+
+  println("YEARS", YEAR_START, "-", YEAR_END);
+  println("MAX PER YEAR", MAX_FATALITIES_PER_YEAR);
 }
 
 TreeMap<Integer, ArrayList<Country>> getCountriesByYears(TreeMap<String, TreeMap<Integer, Country>>db, int yearStart, int yearEnd, ArrayList<Integer> decades) {
@@ -117,10 +131,14 @@ int getRowCount() {
   return YEAR_END - YEAR_START;
 }
 
-Country getContryInYear(String countryName, int year) {
+Country getCountryInYear(String countryName, int year) {
   return dataBase.get(countryName).get(year);
 }
 
 int getFatalityComparison(String countryA, String countryB, int theYear) {
-  return getContryInYear(countryA, theYear).getTotalFatalities() - getContryInYear(countryB, theYear).getTotalFatalities();
+  return getCountryInYear(countryA, theYear).getTotalFatalities() - getCountryInYear(countryB, theYear).getTotalFatalities();
+}
+
+int getFatalityComparison(String countryA, String countryB) {
+  return fatalitiesByCountry.get(countryB) - fatalitiesByCountry.get(countryA);
 }

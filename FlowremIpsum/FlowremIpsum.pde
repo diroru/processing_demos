@@ -1,8 +1,8 @@
-import java.util.*; //<>// //<>//
+import java.util.*; //<>//
 //import java.awt.event.*;
 //import javax.swing.event.*;
 //import java.awt.event.*;
-import codeanticode.planetarium.*;
+//import codeanticode.planetarium.*;
 import controlP5.*;
 import java.lang.reflect.*;
 
@@ -15,8 +15,8 @@ final int MIGRATION_YEAR_START = 1980;
 final int MIGRATION_YEAR_END = 2013;
 final int YEAR_START = 2008;
 final int YEAR_END = 2016;
-final int GPI_MIN = 1;
-final int GPI_MAX = 5;
+final float GPI_MIN = 1.1;
+final float GPI_MAX = 3.8;
 final int SET_START_POS = 0;
 final int SET_END_POS = 1;
 
@@ -62,11 +62,25 @@ ArrayList<YearSelector> yearSelectors = new ArrayList<YearSelector>();
 int MARGIN = 20;
 LayoutInfo panelLayout, graphLayout, flowLayout, yearsLayout; 
 
-DomeCamera dc;
+//DomeCamera dc;
 ControlP5 cp5;
 
-int gridMode = Dome.NORMAL;
-ProjectionMesh mesh;
+//int gridMode = Dome.NORMAL;
+//ProjectionMesh mesh;
+
+final int FULLDOME_MODE = 0;
+final int CANVAS_MODE = 1;
+int CURRENT_MODE = FULLDOME_MODE;
+
+float APERTURE = 1f;
+float CONE_RADIUS_BOTTOM = 186;
+float CONE_RADIUS_TOP = 66;
+float CONE_HEIGHT = 238;
+float CONE_BOTTOM = 0;
+float CONE_ORIENTATION = PI/6f;
+PShader domeShader;
+PShape domeQuad;
+
 PGraphics canvas;
 
 float xAngle = 0f;
@@ -81,45 +95,47 @@ PVector mappedMouse = new PVector();
 ArrayList<RadioButtonGroup> radio = new ArrayList<RadioButtonGroup>();
 
 boolean domeDisplay = true;
-int DOME_SIZE = 1024;
+int DOME_SIZE = 960;
 int PREVIEW_WIDTH = 1920;
 int PREVIEW_HEIGHT = 960;
+int CANVAS_WIDTH = 2048;
+int CANVAS_HEIGHT = 1024;
 
 void settings() {
-  size(DOME_SIZE, DOME_SIZE, Dome.RENDERER);
-  pixelDensity(displayDensity()); //uncomment for retina rendering
+  //size(DOME_SIZE, DOME_SIZE, P3D); //for working on the laptop (single screen)
+  //pixelDensity(displayDensity()); //uncomment for retina rendering
+  fullScreen( P3D, SPAN); //for presenting in the dome (double screen)
 }
 
 void setup() {
   //size(1024, 1024, Dome.RENDERER);
   //initial default camera, i.e. interface to interact with the renderer.
-  colorMode(HSB, 1, 1, 1, 1);
-  dc = new DomeCamera(this);
-  dc.setDomeAperture(1f);
-  //we enable the sixth side, sothat we see what is happenning
-  dc.setFaceDraw(DomeCamera.NEGATIVE_Z, false);
-  canvas = createGraphics(2048, 1024, P3D);
+  //colorMode(HSB, 1, 1, 1, 1);
+  canvas = createGraphics(2048, 1024, P2D);
   canvas.beginDraw();
-  canvas.colorMode(HSB, 1, 1, 1, 1);
+  canvas.background(0);
+  //canvas.colorMode(HSB, 1, 1, 1);
   canvas.endDraw();
-  mesh = new ProjectionMesh(canvas);
-  mesh.setHeight(238);
-  mesh.setRadius1(66);
-  mesh.setRadius0(186);
+  
+  initShape();
+  initCanvas();
+  initShader();
+  initFonts();
+
   //mesh.toggleShape();
   //mesh.toggleGrid();
   float panelWidth = 200;
-  float yearBarHeight = 30f;
+  float yearBarHeight = 100f;
   float graphHeight = (canvas.height - MARGIN * 3 - yearBarHeight) * 0.5;
   float graphWidth = canvas.width - MARGIN * 3 - panelWidth;
   panelLayout = new LayoutInfo(MARGIN, MARGIN, panelWidth, canvas.height - 2*MARGIN);
-  graphLayout = new LayoutInfo(panelWidth + 2 * MARGIN, height - (MARGIN + graphHeight), graphWidth, graphHeight);
+  graphLayout = new LayoutInfo(panelWidth + 2 * MARGIN, canvas.height - (graphHeight + yearBarHeight), graphWidth, graphHeight);
   flowLayout = new LayoutInfo(panelWidth + 2 * MARGIN, MARGIN, graphWidth, graphHeight);
   graphLayout.gap = gap;
 
   //pixelDensity(2);
-  ellipseMode(CORNER);
-  textSize(20);
+  canvas.ellipseMode(CORNER);
+  //canvas.textSize(20);
   loadData(false);
   initRadio();
   //Example of animating between two layouts
@@ -136,49 +152,33 @@ void setup() {
   for (int i = 0; i <= repeat * count; i++) {
     int year = i % count + YEAR_START;
     float dw = (canvas.width - panelWidth - 2*MARGIN) / (repeat * float(count));
-    float y = canvas.height - MARGIN;
+    float y = canvas.height - yearBarHeight;
     float w = 50;
-    float h  = 20;
+    float h  = 50;
     LayoutInfo yearLayout = new LayoutInfo(panelWidth + 2*MARGIN + dw * i, y, w, h);
     yearSelectors.add(new YearSelector(year, yearLayout, this));
   }
   lastTime = millis();
 }
 
-void pre() {
-  mappedMouse = mapMouse(canvas, mouseX, mouseY);
-}
-
 void draw() {
-  if (domeDisplay) {
-
-    background(0);
-    pushMatrix();
-
-    translate(width/2, height/2, 0f);
-    rotateX(radians(xAngle));
-    rotateY(radians(yAngle));
-    rotateZ(radians(zAngle));
-    translate(deltaX, deltaY, deltaZ);
-    mesh.display();
-    popMatrix();
-  } else {
-    background(255, 255, 0);
-    fitImage(canvas);
-  }
-}
-
-void post() {
+  
+  mappedMouse = mappedMouse(CURRENT_MODE);
   // The dome projection is centered at (0, 0), so the mouse coordinates
   // need to be offset by (width/2, height/2)
   canvas.beginDraw();
   //draw countries
   canvas.background(0);
-
+  //DRAW POPULATION GUIDES
+  canvas.stroke(DARK_GREY);
+  canvas.strokeWeight(2);
+  for (int i = 0; i < 10; i++) {
+    float y = graphLayout.y + constrainedLogScale(pow(10, i), graphLayout.h);
+    canvas.line(0, y, canvas.width, y);
+  }
+  canvas.fill(WHITE);
   canvas.noStroke();
-  canvas.fill(1);
-  canvas.noStroke();
-
+  
   long delta = millis() - lastTime;
   for (Country theCountry : countries) {
     //println(theCountry.name);
@@ -192,21 +192,32 @@ void post() {
     ys.display(canvas);
   }
 
-  canvas.fill(1/6f, 1, 1, 0.5);
-  canvas.ellipse(mappedMouse.x, mappedMouse.y, 10, 10);
-  
-  //DRAW POPULATION GUIDES
-  canvas.stroke(1/3f, 1, 1, 1);
-  canvas.strokeWeight(2);
-  for (int i = 0; i < 10; i++) {
-    float y = graphLayout.y + constrainedLogScale(pow(10, i), graphLayout.h);
-    canvas.line(0, y, canvas.width, y);
-  }
-
   for (RadioButtonGroup rbg : radio) {
     rbg.display(canvas);
   }
+  
+  canvas.fill(255, 255, 0, 127);
+  canvas.ellipseMode(RADIUS);
+  canvas.noStroke();
+  canvas.ellipse(mappedMouse.x, mappedMouse.y, 10, 10);
+  canvas.ellipse(mappedMouse.x + canvas.width, mappedMouse.y, 10, 10);
+
   canvas.endDraw();
+  switch(CURRENT_MODE) {
+  case FULLDOME_MODE:
+    background(0);
+    pushMatrix();
+    translate(width*0.5, height*0.5);
+    shader(domeShader);
+    shape(domeQuad);
+    resetShader();
+    popMatrix();
+    break;
+  case CANVAS_MODE:
+    background(255, 255, 0);
+    fitImage(canvas);
+    break;
+  }
 }
 
 void displayFlows(PGraphics pg) {
@@ -221,7 +232,7 @@ void displayFlows(PGraphics pg) {
   ArrayList<MigrationFlow> yearlyMigrationFlows = migrationFlows.get(currentYear); 
   for (MigrationFlow mf : yearlyMigrationFlows) {
     if (hoverCountry == null) {
-      pg.stroke(1, 0.1);
+      pg.stroke(WHITE, 25);
       pg.strokeWeight(2);
       if (mf.flow > MIGRATION_FLOW_LOWER_LIMIT) {
         //mf.display(pg, height/2, MARGIN);
@@ -229,9 +240,9 @@ void displayFlows(PGraphics pg) {
       }
     } else {
       if (mf.origin.name.equals(hoverCountry)) {
-        pg.stroke(0, 1, 1, 0.2);
+        pg.stroke(WHITE, 50);
       } else if (mf.destination.name.equals(hoverCountry)) {
-        pg.stroke(0.5, 1, 1, 0.2);
+        pg.stroke(PRIMARY);
       } else {
         //stroke(255, 1);
         pg.noStroke();
@@ -245,21 +256,24 @@ void displayFlows(PGraphics pg) {
 }
 
 void keyPressed() {
- switch(key) {
-  case 'g':
-    mesh.toggleGrid();
-    break;
+  switch(key) {
   case ' ':
     canvas.save("output/test.png");
     break;
-  case 'd':
-    domeDisplay = !domeDisplay;
-    if (domeDisplay) {
-      dc.enable();
-      surface.setSize(DOME_SIZE, DOME_SIZE);
-    } else {
-      dc.disable();
-      surface.setSize(PREVIEW_WIDTH, PREVIEW_HEIGHT);
-    }
+  case 's':
+    saveFrame("output/test.png");
     break;
-  }}
+  case 'd':
+    switch(CURRENT_MODE) {
+    case FULLDOME_MODE:
+      CURRENT_MODE = CANVAS_MODE;
+      surface.setSize(PREVIEW_WIDTH, PREVIEW_HEIGHT);
+
+      break;
+    case CANVAS_MODE:
+      CURRENT_MODE = FULLDOME_MODE;
+      surface.setSize(DOME_SIZE, DOME_SIZE);
+      break;
+    }
+  }
+}

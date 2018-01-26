@@ -47,6 +47,7 @@ public class CrashDot { //<>// //<>// //<>// //<>//
   }
 
   void display() {
+    noStroke();
     if (mouseOver) {
       fill(255);
     } else {

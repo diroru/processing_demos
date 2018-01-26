@@ -16,8 +16,9 @@ void makeLayout(float x0, float y0, float layoutWidth, float layoutHeight, float
     //float gpi = 2f;
     //float countryHeight = map(pop, POPULATION_MIN, POPULATION_MAX, 0, layoutHeight - 5) + 5;
     float countryHeight = constrainedLogScale(pop, layoutHeight);
-    float gray = map(gpi, GPI_MIN, GPI_MAX, 0.5, 0.1);
-    color theColor = color(gray, 1, 1);
+    //float gray = map(gpi, GPI_MIN, GPI_MAX, INDEX1, INDEX4);
+    color theColor = lerpColor(INDEX1, INDEX4, norm(gpi, GPI_MIN, GPI_MAX));
+    //color theColor = lerpColor(#ffffff, #000000, norm(gpi, GPI_MIN, GPI_MAX));
     //float y = layoutHeight - countryHeight + y0;
     float y = y0;
     //it is cleaner to say, but it needs to be implemented!

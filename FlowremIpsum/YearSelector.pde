@@ -10,14 +10,17 @@ public class YearSelector {
   }
 
   void display(PGraphics g) {
-    g.fill(255);
-    g.text(year, myLayout.x, myLayout.y + myLayout.h);
+    
     if (hover) {
-      g.fill(1/3,1,1,0.2);
+      g.fill(PRIMARY);
+    } else if (year == currentYear){
+      g.fill(WHITE);
     } else {
-      g.fill(0,1,1,0.2);
+      g.fill(DARK_GREY);
     }
-    g.rect(myLayout.x, myLayout.y, myLayout.w, myLayout.h);
+    g.textFont(INFO);
+    g.text(year, myLayout.x, myLayout.y + myLayout.h);
+    //g.rect(myLayout.x, myLayout.y, myLayout.w, myLayout.h);
   }
 
   boolean isHover(float x, float y) {

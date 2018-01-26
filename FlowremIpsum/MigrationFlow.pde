@@ -24,34 +24,37 @@ class MigrationFlow {
 
   void displayRounded(PGraphics g, float maxHeight, float y0) {
     float y = y0 + map(flow, 0, MIGRATION_FLOW_MAX, maxHeight, 0);
-    drawRoundedLine(g, origin.cx(), origin.cy(), origin.cx(), y, destination.cx(), y, destination.cx(), destination.cy(), 10); //last number is amount of roundness
+    drawRoundedLine(g, origin.cx(), origin.cy(), origin.cx(), y, destination.cx(), y, destination.cx(), destination.cy(), 10, WHITE, 127); //last number is amount of roundness
   }
 
-  /*
-  void displayBezier(PGraphics g, float maxHeight, float y) {
-    float x0 = origin.cx();
-    float y0 = origin.cy();
-    float x1 = x0;
-    float y1 = y + map(flow, 0, MIGRATION_FLOW_MAX, maxHeight, 0);
-    float x2 = destination.cx();
-    float y2 = y1;
-    float x3 = x2;
-    float y3 = destination.cy();
-    g.stroke(1, map(flow, 0, MIGRATION_FLOW_MAX, 0.1, 1));
-    g.beginShape();
-    g.vertex(x0, y0);
-    g.bezierVertex(x1, y1, x1, y1, (x1+x2)*0.5, y1);
-    g.bezierVertex(x2, y2, x2, y2, x3, y3);
-    g.endShape();
+  void displayNormal(PGraphics pg, float maxHeight, float y0) {
+    float flowNorm = getNormFlow(flow);    
+    float y = y0 + map(flowNorm, 0, 1, maxHeight, 0);
+    float alpha =  map(flowNorm, 0, 1, 0, 255);
+    drawRoundedLine(pg, origin.cx(), origin.cy(), origin.cx(), y, destination.cx(), y, destination.cx(), destination.cy(), 10, WHITE, alpha); //last number is amount of roundness
   }
-  */
+
+  void displayHighlighted(PGraphics pg, float maxHeight, float y0, Country activeCountry) {
+    if (activeCountry.name.equals(origin.name) || activeCountry.name.equals(destination.name)) {
+      color c = activeCountry.name.equals(origin.name) ? SECONDARY : PRIMARY;
+      float flowNorm = getNormFlow(flow);
+      float y = y0 + map(flowNorm, 0, 1, maxHeight, 0);
+      drawRoundedLine(pg, origin.cx(), origin.cy(), origin.cx(), y, destination.cx(), y, destination.cx(), destination.cy(), 10, c, 127); //last number is amount of roundness
+    }
+  }
 }
 
-void drawRoundedLine(PGraphics pg, float x0, float y0, float x1, float y1, float x2, float y2, float x3, float y3, float maxRadius) {
-  drawRoundedLine(pg, new PVector(x0, y0), new PVector(x1, y1), new PVector(x2, y2), new PVector(x3, y3), maxRadius);
+float getNormFlow(float flow) {
+  //TODO: logscale
+  return norm(flow, 0, MIGRATION_FLOW_MAX);
 }
 
-void drawRoundedLine(PGraphics pg, PVector p0, PVector p1, PVector p2, PVector p3, float maxRadius) {
+void drawRoundedLine(PGraphics pg, float x0, float y0, float x1, float y1, float x2, float y2, float x3, float y3, float maxRadius, color c, float alpha) {
+  drawRoundedLine(pg, new PVector(x0, y0), new PVector(x1, y1), new PVector(x2, y2), new PVector(x3, y3), maxRadius, c, alpha);
+}
+
+void drawRoundedLine(PGraphics pg, PVector p0, PVector p1, PVector p2, PVector p3, float maxRadius, color c, float alpha) {
+  pg.stroke(c, alpha);
   if (p1.x > p2.x) {
     PVector temp = p1.copy();
     p1 = p2.copy();
@@ -60,7 +63,7 @@ void drawRoundedLine(PGraphics pg, PVector p0, PVector p1, PVector p2, PVector p
     p0 = p3.copy();
     p3 = temp.copy();
   }
-  
+
   float y1 = min(p0.y, p3.y);
   float y0 = p1.y;
   float x0 = min(p1.x, p2.x);
@@ -70,7 +73,7 @@ void drawRoundedLine(PGraphics pg, PVector p0, PVector p1, PVector p2, PVector p
     radius = min(radius, maxRadius);
   }
 
-  pg.beginShape();
+  //pg.beginShape(); //don’t forget to call it in outer loop!!!
   pg.vertex(p0.x, p0.y);
   pg.vertex(p0.x, p1.y + radius);
   pg.quadraticVertex(p0.x, p1.y, p1.x + radius, p1.y);
@@ -79,22 +82,5 @@ void drawRoundedLine(PGraphics pg, PVector p0, PVector p1, PVector p2, PVector p
   pg.quadraticVertex(p2.x, p2.y, p2.x, p2.y + radius);
   //vertex(p2.x, p2.y + radius);
   pg.vertex(p3.x, p3.y);
-  pg.endShape();
-
-  /*
-  beginShape();
-   vertex(p0.x,p0.y);
-   vertex(p0.x,p1.y + radius);
-   vertex(p1.x + radius,p1.y);
-   vertex(p2.x - radius,p1.y);
-   vertex(p2.x, p2.y + radius);
-   vertex(p3.x, p3.y);
-   endShape();
-   */
-  /*
-  stroke(255,255,0);
-   line(p0.x,p0.y,p1.x,p1.y);
-   line(p1.x,p1.y,p2.x,p2.y);
-   line(p2.x,p2.y,p3.x,p3.y);
-   */
+  //pg.endShape(); //don’t forget to call it in outer loop!!!
 }

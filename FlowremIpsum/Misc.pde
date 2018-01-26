@@ -61,6 +61,7 @@ void initShader() {
 void initCanvas() {
   canvas = createGraphics(CANVAS_WIDTH, CANVAS_HEIGHT, P3D);
   canvas.beginDraw();
+  canvas.ortho();
   canvas.background(0);
   canvas.endDraw();
 }

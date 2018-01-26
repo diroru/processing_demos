@@ -18,17 +18,26 @@ public class Country implements Comparable { //<>//
   int startColor = #000000, endColor = #000000, currentColor = #000000;
   int activeYear = GPI_YEAR_END;
   boolean hover = false;
+  boolean selected = false;
 
   int sortingMethod = SORT_BY_CONTINENT_THEN_NAME;
   long animationStart, animationEnd, lastTime;
+  
+  float nameWidth;
+  LayoutInfo myContainerLayout;
 
   //constructor method
-  Country(String theName, String theIso3, String theRegion, String theSubRegion, PApplet parent) {
+  Country(String theName, String theIso3, String theRegion, String theSubRegion, PApplet parent, PGraphics canvas, LayoutInfo theContainerLayout) {
     name = theName;
     iso3 = theIso3;
     region = theRegion;
     subRegion = theSubRegion;
     parent.registerMethod("mouseEvent", this);
+    canvas.beginDraw();
+    canvas.textFont(INFO);
+    nameWidth = canvas.textWidth(name);
+    canvas.endDraw();
+    myContainerLayout = theContainerLayout;
   }
 
   void setGPI(Integer year, Float value) {
@@ -117,20 +126,20 @@ public class Country implements Comparable { //<>//
     animationEnd = animationStart + duration;
     lastTime = animationStart;
   }
-  
+
   void setEndLayout(float x, float y, float w, float h, int theColor, int duration) {
     endW = w;
     endH = h;
     endX = x;
     endY = y;
     endColor = theColor;
-    
+
     startX = currentX;
     startY = currentY;
     startW = currentW;
     startH = currentH;
-    startColor = currentColor; 
-    
+    startColor = currentColor;
+
     animationStart = millis();
     animationEnd = animationStart + duration;
     lastTime = animationStart;
@@ -144,7 +153,7 @@ public class Country implements Comparable { //<>//
   void setCurrentX(float x) {
    currentX = x;
    }
-   
+
    void setCurrentY(float y) {
    currentY = y;
    }
@@ -181,13 +190,43 @@ public class Country implements Comparable { //<>//
 
   void display(PGraphics g) {
     //g.fill(255,0,0);
+    //g.fill(255,0,0);
+    //g.rect(this.currentX, this.currentY, this.currentW, this.currentH);
     g.fill(currentColor);
-    g.rect(this.currentX, this.currentY, this.currentW, this.currentH);
+    if (hover || selected) {
+      g.fill(PRIMARY);
+    }
+    float z = -1;
+    g.vertex(this.currentX, this.currentY, z);
+    g.vertex(this.currentX + this.currentW, this.currentY, z);
+    g.vertex(this.currentX + this.currentW, this.currentY + this.currentH, z);
+    g.vertex(this.currentX, this.currentY + this.currentH, z);
+    //display country name
+    if (hover || selected) {
+      g.endShape();
+      g.textFont(INFO);
+      g.textAlign(BOTTOM, LEFT);
+      float m = 5; //margin
+      float nameY = currentY + currentH + m;
+      g.fill(PRIMARY);
+      if (currentY + currentH + nameWidth + m > myContainerLayout.y + myContainerLayout.h) {
+        g.fill(0);
+        nameY -= nameWidth + 2*m;        
+      }
+      g.pushMatrix();
+      g.translate(currentX, nameY);
+      g.rotate(HALF_PI);
+      g.text(name, 0, 0);
+      g.popMatrix();
+      g.beginShape(QUADS);
+    }
+    /*
     if (hover) {
       //  g.textSize(60);
       g.fill(WHITE);
       g.text(this.name, mappedMouse.x + 10, mappedMouse.y - 10);
     }
+    */
   }
 
   //COMPARISON
@@ -196,7 +235,7 @@ public class Country implements Comparable { //<>//
     if (!(obj instanceof Country)) {
       return false;
     }
-    Country c = ((Country) obj); 
+    Country c = ((Country) obj);
     return c.iso3.equals(this.iso3);
   }
 
@@ -208,7 +247,7 @@ public class Country implements Comparable { //<>//
     //TODO!!!
     int regionComparison = this.region.compareTo(otherCountry.region);
     int nameComparison = this.name.compareTo(otherCountry.name);
-    int populationComparison = this.getPOP(activeYear).compareTo(otherCountry.getPOP(activeYear)); 
+    int populationComparison = this.getPOP(activeYear).compareTo(otherCountry.getPOP(activeYear));
 
     switch(sortingMethod) {
     case SORT_BY_NAME:
@@ -237,9 +276,9 @@ public class Country implements Comparable { //<>//
   }
 
     //shows countrynames hovering on a bar / without a bar
-  public boolean isHover(float x, float y) { 
-    //return x >= currentX && x <= currentX + currentW && y >= currentY && y <= currentY + currentH;
-    return x >= currentX && x <= currentX + currentW;
+  public boolean isHover(float x, float y) {
+    return x >= currentX && x <= currentX + currentW && y >= currentY && y <= currentY + currentH;
+    //return x >= currentX && x <= currentX + currentW;
   }
 
   void mouseEvent(MouseEvent e) {
@@ -255,6 +294,11 @@ public class Country implements Comparable { //<>//
       break;
     case MouseEvent.CLICK:
       //println("CLICK", e);
+      if (hover) {
+        selected = true;
+      } else {
+        selected = false;
+      }
       break;
     }
   }

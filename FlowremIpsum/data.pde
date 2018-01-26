@@ -15,7 +15,7 @@ void loadData(boolean verbose) {
     String subRegion = row.getString("sub-region");
 
     //make new country, only local
-    Country theCountry = new Country(name, iso3, region, subRegion, this);
+    Country theCountry = new Country(name, iso3, region, subRegion, this, canvas, graphLayout);
 
     //add to collection of countries
     countries.add(theCountry);

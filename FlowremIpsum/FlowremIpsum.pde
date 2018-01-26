@@ -48,10 +48,10 @@ ArrayList<Country> countries = new ArrayList<Country>();
 //Map of countries, labelled by names
 HashMap<String, Country> countriesByName = new HashMap<String, Country>();
 
-HashMap<Integer, ArrayList<MigrationFlow>> migrationFlows = new HashMap<Integer, ArrayList<MigrationFlow>>(); 
+HashMap<Integer, ArrayList<MigrationFlow>> migrationFlows = new HashMap<Integer, ArrayList<MigrationFlow>>();
 
 //lookup table for mismatched country names
-HashMap<String, String> countryLookupTable = new HashMap<String, String>(); 
+HashMap<String, String> countryLookupTable = new HashMap<String, String>();
 ArrayList<String> missingCountries = new ArrayList<String>();
 
 int currentYear = 2013;
@@ -60,7 +60,7 @@ HashSet<Country> hoverCountries = new HashSet<Country>();
 ArrayList<YearSelector> yearSelectors = new ArrayList<YearSelector>();
 
 int MARGIN = 20;
-LayoutInfo panelLayout, graphLayout, flowLayout, yearsLayout; 
+LayoutInfo panelLayout, graphLayout, flowLayout, yearsLayout;
 
 //DomeCamera dc;
 ControlP5 cp5;
@@ -102,23 +102,15 @@ int CANVAS_WIDTH = 2048;
 int CANVAS_HEIGHT = 1024;
 
 void settings() {
-  //size(DOME_SIZE, DOME_SIZE, P3D); //for working on the laptop (single screen)
-  //pixelDensity(displayDensity()); //uncomment for retina rendering
-  fullScreen( P3D, SPAN); //for presenting in the dome (double screen)
+  size(DOME_SIZE, DOME_SIZE, P3D); //for working on the laptop (single screen)
+  pixelDensity(displayDensity()); //uncomment for retina rendering
+  //fullScreen( P3D, SPAN); //for presenting in the dome (double screen)
 }
 
 void setup() {
-  //size(1024, 1024, Dome.RENDERER);
-  //initial default camera, i.e. interface to interact with the renderer.
-  //colorMode(HSB, 1, 1, 1, 1);
-  canvas = createGraphics(2048, 1024, P2D);
-  canvas.beginDraw();
-  canvas.background(0);
-  //canvas.colorMode(HSB, 1, 1, 1);
-  canvas.endDraw();
-  
-  initShape();
+
   initCanvas();
+  initShape();
   initShader();
   initFonts();
 
@@ -159,10 +151,11 @@ void setup() {
     yearSelectors.add(new YearSelector(year, yearLayout, this));
   }
   lastTime = millis();
+  //canvas.hint(DISABLE_DEPTH_TEST);
 }
 
 void draw() {
-  
+
   mappedMouse = mappedMouse(CURRENT_MODE);
   // The dome projection is centered at (0, 0), so the mouse coordinates
   // need to be offset by (width/2, height/2)
@@ -171,23 +164,37 @@ void draw() {
   canvas.background(0);
   //DRAW POPULATION GUIDES
   canvas.stroke(DARK_GREY);
-  canvas.strokeWeight(2);
+  canvas.strokeWeight(1);
+  canvas.beginShape(LINES);
   for (int i = 0; i < 10; i++) {
     float y = graphLayout.y + constrainedLogScale(pow(10, i), graphLayout.h);
-    canvas.line(0, y, canvas.width, y);
+    //canvas.line(0, y, 100, canvas.width, y, 100);
+    canvas.vertex(graphLayout.x, y, -3);
+    canvas.vertex(graphLayout.x + graphLayout.w, y, -3);
   }
+  canvas.endShape();
+
+
   canvas.fill(WHITE);
   canvas.noStroke();
-  
+
   long delta = millis() - lastTime;
+  canvas.beginShape(QUADS);
   for (Country theCountry : countries) {
     //println(theCountry.name);
     theCountry.update(delta);
-    theCountry.display(canvas);
   }
+  Country activeCountry = null;
+  for (Country theCountry : countries) {
+    theCountry.display(canvas);
+    if (theCountry.selected || theCountry.hover) {
+      activeCountry = theCountry;
+    }
+  }
+  canvas.endShape();
   lastTime = millis();
 
-  displayFlows(canvas);
+  displayFlows(canvas, activeCountry);
   for (YearSelector ys : yearSelectors) {
     ys.display(canvas);
   }
@@ -195,12 +202,8 @@ void draw() {
   for (RadioButtonGroup rbg : radio) {
     rbg.display(canvas);
   }
-  
-  canvas.fill(255, 255, 0, 127);
-  canvas.ellipseMode(RADIUS);
-  canvas.noStroke();
-  canvas.ellipse(mappedMouse.x, mappedMouse.y, 10, 10);
-  canvas.ellipse(mappedMouse.x + canvas.width, mappedMouse.y, 10, 10);
+
+  displayMouse();
 
   canvas.endDraw();
   switch(CURRENT_MODE) {
@@ -220,38 +223,44 @@ void draw() {
   }
 }
 
-void displayFlows(PGraphics pg) {
+void displayFlows(PGraphics pg, Country activeCountry) {
   pg.noFill();
-  String hoverCountry = null;
+  pg.strokeWeight(2);
 
-  if (hoverCountries.size() > 0) {
-    Country hc = (Country)(hoverCountries.iterator().next());
-    hoverCountry = hc.name;
-  }
-
-  ArrayList<MigrationFlow> yearlyMigrationFlows = migrationFlows.get(currentYear); 
-  for (MigrationFlow mf : yearlyMigrationFlows) {
-    if (hoverCountry == null) {
-      pg.stroke(WHITE, 25);
-      pg.strokeWeight(2);
+  ArrayList<MigrationFlow> yearlyMigrationFlows = migrationFlows.get(currentYear);
+  if (activeCountry == null) {
+    for (MigrationFlow mf : yearlyMigrationFlows) {
       if (mf.flow > MIGRATION_FLOW_LOWER_LIMIT) {
         //mf.display(pg, height/2, MARGIN);
-        mf.displayRounded(pg, flowLayout.h, flowLayout.y);
-      }
-    } else {
-      if (mf.origin.name.equals(hoverCountry)) {
-        pg.stroke(WHITE, 50);
-      } else if (mf.destination.name.equals(hoverCountry)) {
-        pg.stroke(PRIMARY);
-      } else {
-        //stroke(255, 1);
-        pg.noStroke();
-      }
-      if (mf.flow > MIGRATION_FLOW_LOWER_LIMIT) {
-        //mf.display(pg, height/2, MARGIN);
-        mf.displayRounded(pg, flowLayout.h, flowLayout.y);
+        pg.beginShape(POLYGON);
+        mf.displayNormal(pg, flowLayout.h, flowLayout.y);
+        pg.endShape();
       }
     }
+  } else {
+    for (MigrationFlow mf : yearlyMigrationFlows) {
+      //mf.display(pg, height/2, MARGIN);
+      if (mf.flow > MIGRATION_FLOW_LOWER_LIMIT) {
+        pg.beginShape(POLYGON);
+        mf.displayHighlighted(pg, flowLayout.h, flowLayout.y, activeCountry);
+        pg.endShape();
+      }
+    }
+
+    /*
+      if (mf.origin.name.equals(hoverCountry)) {
+     pg.stroke(WHITE, 50);
+     } else if (mf.destination.name.equals(hoverCountry)) {
+     pg.stroke(PRIMARY);
+     } else {
+     //stroke(255, 1);
+     pg.noStroke();
+     }
+     if (mf.flow > MIGRATION_FLOW_LOWER_LIMIT) {
+     //mf.display(pg, height/2, MARGIN);
+     mf.displayRounded(pg, flowLayout.h, flowLayout.y);
+     }
+     */
   }
 }
 

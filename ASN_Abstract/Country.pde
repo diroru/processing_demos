@@ -118,7 +118,6 @@ public class Country implements Comparable {
       g.fill(WHITE);
       float w = getFatalityCount() / float(MAX_FATALITIES_PER_YEAR) * currentW;
       g.rect(currentX, currentY, w, currentH);
-      
     } else {
       g.noStroke();
       g.fill(c1);
@@ -156,6 +155,40 @@ public class Country implements Comparable {
      }
      */
     //g.rect(this.currentX, this.currentY, this.currentW, this.currentH);
+    if (hover) {
+
+      //g.text(this.name, mappedMouse.x + 10, mappedMouse.y - 10);
+    }
+  }
+
+  void displayRegular(PGraphics g) {
+    g.fill(c1);
+    g.vertex(this.currentX, this.currentY);
+    g.vertex(this.currentX + this.currentW, this.currentY);
+    g.vertex(this.currentX, this.currentY + this.currentH);
+    g.fill(c0);
+    g.vertex(this.currentX + this.currentW, this.currentY);
+    g.vertex(this.currentX + this.currentW, this.currentY + this.currentH);
+    g.vertex(this.currentX, this.currentY + this.currentH);
+    if (hover) {
+      //g.text(this.name, mappedMouse.x + 10, mappedMouse.y - 10);
+    }
+  }
+
+ void displayDetailed(PGraphics g) {
+
+    if (displayDetailed) {
+      g.fill(NO_CRASHES);
+      g.vertex(currentX, currentY);
+      g.vertex(currentX + currentW, currentY);
+      g.vertex(currentX + currentW, currentY + currentH);
+      g.vertex(currentX, currentY + currentH);
+      g.fill(WHITE);
+      float w = getFatalityCount() / float(MAX_FATALITIES_PER_YEAR) * currentW;
+      g.vertex(currentX, currentY);
+      g.vertex(currentX + w, currentY);
+      g.vertex(currentX + w, currentY + currentH);
+      g.vertex(currentX, currentY + currentH);    }
     if (hover) {
 
       //g.text(this.name, mappedMouse.x + 10, mappedMouse.y - 10);
@@ -223,11 +256,11 @@ public class Country implements Comparable {
     animationEnd = animationStart + duration;
     lastTime = animationStart;
   }
-  
+
   String getHeader() {
     return name + ", " + year;
   }
-  
+
   void drawFatalities(PGraphics p, float x, float y, Datum d) {
     p.fill(getColor(d));
     String f = d.total_fatalities + " / "; 

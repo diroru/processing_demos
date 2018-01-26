@@ -69,9 +69,9 @@ long lastTime;
 PFont headerFont, corpusFont, smallFont;
 
 void settings() {
-  //size(DOME_SIZE, DOME_SIZE, P3D);
+  size(DOME_SIZE, DOME_SIZE, P3D);
   //pixelDensity(displayDensity());
-  fullScreen(P3D, SPAN);
+  //fullScreen(P3D, SPAN);
 }
 
 void setup() {
@@ -112,10 +112,25 @@ void draw() {
 
   canvas.fill(255);
   canvas.noStroke();
+
   for (Country dc : displayableCountries) {
     dc.update(delta);
-    dc.display(canvas);
   }
+  
+  canvas.noStroke();
+  canvas.beginShape(TRIANGLES);
+  for (Country dc : displayableCountries) {
+    dc.displayRegular(canvas);
+  }
+  canvas.endShape();
+  
+  canvas.beginShape(QUADS);
+  for (Country dc : displayableCountries) {
+    dc.displayDetailed(canvas);
+  }
+  canvas.endShape();
+  
+  
   displayLabels(canvas.height - BOTTOM_REGION_HEIGHT + MARGIN, displayableCountries);
   displayYears(100);
   drawTooltip();

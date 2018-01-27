@@ -15,8 +15,13 @@ public class RadioButtonGroup {
   }
 
   void addRadioButton(RadioButton rb) {
-    if (buttons.size() == 0) {
+    addRadioButton(rb, false);
+  }
+
+  void addRadioButton(RadioButton rb, boolean isSelected) {
+    if (buttons.size() == 0 || isSelected) {
       selected = rb;
+      rb.selected = true;
     }
     buttons.add(rb);
     lastButton = rb;

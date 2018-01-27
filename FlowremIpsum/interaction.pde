@@ -135,10 +135,16 @@ void setByName() {
 }
 
 void setShowAll() {
+  if (currentShowMode == SHOW_TOP_THREE) {
+    currentShowMode = SHOW_ALL;
+  }
   println("SHOW ALL pressed");
 }
 
 void setShowTopThree() {
+  if (currentShowMode == SHOW_ALL) {
+    currentShowMode = SHOW_TOP_THREE;
+  }
   println("SHOW TOP THREE pressed");
 }
 
@@ -171,6 +177,10 @@ void displayMouse() {
 }
 
 void setCurrentYear(int theNewYear) {
+  yearlyMigrationFlows = migrationFlows.get(currentYear);
+  println("setting year to", theNewYear, yearlyMigrationFlows.size());
+
+  Collections.sort(yearlyMigrationFlows);
   currentYear = theNewYear;
   makeLayout();
 }

@@ -5,6 +5,7 @@ class LayoutInfo {
   float w, h;
   //gaps
   float hGap, vGap;
+  float cellWidth, cellHeight;
 
   LayoutInfo(float theX, float theY, float theW, float theH, float theHGap, float theVGap) {
     x = theX;
@@ -45,12 +46,18 @@ class LayoutInfo {
 LayoutInfo layoutFromCellSize(float x, float y, float cellWidth, float cellHeight, float hGap, float vGap, int hCount, int vCount) {
   float layoutWidth = cellWidth * hCount + hGap * (hCount - 1);
   float layoutHeight = cellHeight * vCount + hGap * (vCount - 1);
-  return new LayoutInfo(x,y,layoutWidth,layoutHeight,hGap,vGap);
+  LayoutInfo result = new LayoutInfo(x,y,layoutWidth,layoutHeight,hGap,vGap);
+  result.cellWidth = cellWidth;
+  result.cellHeight = cellHeight;
+  return result;
 }
 
 LayoutInfo layoutFromCellSizeRightAlign(float right, float bottom, float cellWidth, float cellHeight, float hGap, float vGap, int hCount, int vCount) {
   float layoutWidth = cellWidth * hCount + hGap * (hCount - 1);
   float layoutHeight = cellHeight * vCount + hGap * (vCount - 1);
   println(right-layoutWidth,bottom-layoutHeight,layoutWidth,layoutHeight,hGap,vGap);
-  return new LayoutInfo(right-layoutWidth,bottom-layoutHeight,layoutWidth,layoutHeight,hGap,vGap);
+  LayoutInfo result = new LayoutInfo(right-layoutWidth,bottom-layoutHeight,layoutWidth,layoutHeight,hGap,vGap); 
+  result.cellWidth = cellWidth;
+  result.cellHeight = cellHeight;
+  return result;
 }

@@ -1,18 +1,18 @@
 //overloaded with global vars
 PVector mappedMouse(int mode) {
-  return mappedMouse(mode, mouseX, mouseY, canvas.width, canvas.height, APERTURE, CONE_RADIUS_TOP, CONE_RADIUS_BOTTOM, CONE_HEIGHT, CONE_BOTTOM, CONE_ORIENTATION);
+  return mappedMouse(mode, mouseX, mouseY, 0, canvas.width, canvas.height, APERTURE, CONE_RADIUS_TOP, CONE_RADIUS_BOTTOM, CONE_HEIGHT, CONE_BOTTOM, CONE_ORIENTATION);
 }
 
 //decoupled version
-PVector mappedMouse(int mode, int mx, int my, int canvasWidth, int canvasHeight, float aperture, float coneRadiusTop, float coneRadiusBottom, float coneHeight, float coneBottom, float coneOrientation) {
+PVector mappedMouse(int mode, int mx, int my, int dmy, int canvasWidth, int canvasHeight, float aperture, float coneRadiusTop, float coneRadiusBottom, float coneHeight, float coneBottom, float coneOrientation) {
   PVector result = new PVector();
   switch(mode) {
     case CANVAS_MODE:
       //canvas to sketch radio
-      result = new PVector(mx / canvasToWindowRatio(canvasWidth, canvasHeight, width, height), my / canvasToWindowRatio(canvasWidth, canvasHeight, width, height));
+      result = new PVector(mx / canvasToWindowRatio(canvasWidth, canvasHeight, width, height), my / canvasToWindowRatio(canvasWidth, canvasHeight, width, height) - dmy);
     break;
     case FULLDOME_MODE:
-      result = getConicMappedMouse(mx, my, canvasWidth, canvasHeight, width, height);
+      result = getConicMappedMouse(mx, my, dmy, canvasWidth, canvasHeight, width, height);
     break;
   }
   return result;
@@ -27,6 +27,10 @@ float canvasToWindowRatio(float cw, float ch, float ww, float wh) {
 }
 
 PVector getConicMappedMouse(float mx, float my, float canvasWidth, float canvasHeight, float windowWidth, float windowHeight) {
+  return getConicMappedMouse(mx, my, 0, canvasWidth, canvasHeight, windowWidth, windowHeight);
+}
+
+PVector getConicMappedMouse(float mx, float my, float dmy, float canvasWidth, float canvasHeight, float windowWidth, float windowHeight) {
   PVector normalizedMouse = new PVector(norm(mx, 0, windowWidth), norm(my, 0, windowHeight));
   PVector latLon = domeXYToLatLon(normalizedMouse, APERTURE * PI);
   PVector ray = latLonToXYZ(latLon);
@@ -34,7 +38,7 @@ PVector getConicMappedMouse(float mx, float my, float canvasWidth, float canvasH
   if (st == null) {
     return new PVector(-1, -1);
   }
-  return new PVector(st.x * canvasWidth, st.y * canvasHeight);
+  return new PVector(st.x * canvasWidth, st.y * (canvasHeight - dmy *  canvasToWindowRatio(canvasWidth, canvasHeight, width, height)));
 }
 
 ///

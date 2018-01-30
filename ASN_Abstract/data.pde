@@ -1,4 +1,4 @@
-void initData() {
+void initData() { //<>// //<>//
   dataTable = loadTable("plane-crashes.iso8_v3.csv", "header");
   countryNameSet = new HashSet<String>();
   for (int i = 0; i < dataTable.getRowCount(); i++) {
@@ -35,8 +35,8 @@ void initData() {
       c = countryMap.get(d.year);
       c.addDatum(d);
     } 
-    catch(Exception e) { //<>//
-      if (countryMap == null) { //<>//
+    catch(Exception e) {
+      if (countryMap == null) {
         println("ERROR in DB!!!, null", c, d);
       } else {
         println("ERROR in DB!!!", countryMap.size(), c, d);
@@ -44,18 +44,27 @@ void initData() {
     }
   }
 
+  HashMap<String, Integer> maxFatalatiesByCountry = new HashMap<String, Integer>();
+  for (String cn : countryNameSet) {
+    maxFatalatiesByCountry.put(cn, 0);
+  }
   for (ArrayList<Country> countriesByYears : getCountriesByYears().values()) {
     int fatailitesPerYear = 0;
     for (Country c : countriesByYears) {
       fatailitesPerYear += c.getFatalityCount();
       int existing = fatalitiesByCountry.get(c.name);
       fatalitiesByCountry.put(c.name, existing + c.getFatalityCount());
+      maxFatalatiesByCountry.put(c.name, max(maxFatalatiesByCountry.get(c.name), c.getFatalityCount()));
     }
     MAX_FATALITIES_PER_YEAR = max(MAX_FATALITIES_PER_YEAR, fatailitesPerYear);
+  }
+  for (Integer f : maxFatalatiesByCountry.values()) {
+    MAX_FATALITIES_PER_COUNTRY_PER_YEAR = max(MAX_FATALITIES_PER_COUNTRY_PER_YEAR, f);
   }
 
   println("YEARS", YEAR_START, "-", YEAR_END);
   println("MAX PER YEAR", MAX_FATALITIES_PER_YEAR);
+  println("MAX PER COUNTRY PER YEAR", MAX_FATALITIES_PER_COUNTRY_PER_YEAR);
 }
 
 TreeMap<Integer, ArrayList<Country>> getCountriesByYears(TreeMap<String, TreeMap<Integer, Country>>db, int yearStart, int yearEnd, ArrayList<Integer> decades) {
@@ -115,11 +124,11 @@ TreeMap<Integer, ArrayList<Country>> getCountriesByYears() {
 ArrayList<Country> getCountries() {
   /*
   ArrayList<Country> result = new ArrayList<Country>();
-  for (ArrayList<Country> c : getCountriesByYears().values()) {
-     result.addAll(c);
-  }  
-  return result;
-  */
+   for (ArrayList<Country> c : getCountriesByYears().values()) {
+   result.addAll(c);
+   }  
+   return result;
+   */
   return countries;
 }
 

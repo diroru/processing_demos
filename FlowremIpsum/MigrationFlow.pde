@@ -1,4 +1,4 @@
-class MigrationFlow {
+class MigrationFlow implements Comparable {
   Country origin, destination;
   int year;
   Long flow;
@@ -27,26 +27,79 @@ class MigrationFlow {
     drawRoundedLine(g, origin.cx(), origin.cy(), origin.cx(), y, destination.cx(), y, destination.cx(), destination.cy(), 10, WHITE, 127); //last number is amount of roundness
   }
 
-  void displayNormal(PGraphics pg, float maxHeight, float y0) {
+  void displayNormal(PGraphics pg, LayoutInfo theLayout) {
     float flowNorm = getNormFlow(flow);    
-    float y = y0 + map(flowNorm, 0, 1, maxHeight, 0);
+    float yTop = theLayout.y + theLayout.h - map(flowNorm, 0, 1, 0, theLayout.h  );
     float alpha =  map(flowNorm, 0, 1, 0, 255);
-    drawRoundedLine(pg, origin.cx(), origin.cy(), origin.cx(), y, destination.cx(), y, destination.cx(), destination.cy(), 10, WHITE, alpha); //last number is amount of roundness
+    drawRoundedLine(pg, origin.cx(), origin.cy(), origin.cx(), yTop, destination.cx(), yTop, destination.cx(), destination.cy(), 10, WHITE, alpha); //last number is amount of roundness
   }
 
-  void displayHighlighted(PGraphics pg, float maxHeight, float y0, Country activeCountry) {
+  void displayHighlighted(PGraphics pg, LayoutInfo theLayout, Country activeCountry) {
     if (activeCountry.name.equals(origin.name) || activeCountry.name.equals(destination.name)) {
       color c = activeCountry.name.equals(origin.name) ? SECONDARY : PRIMARY;
       float flowNorm = getNormFlow(flow);
-      float y = y0 + map(flowNorm, 0, 1, maxHeight, 0);
-      drawRoundedLine(pg, origin.cx(), origin.cy(), origin.cx(), y, destination.cx(), y, destination.cx(), destination.cy(), 10, c, 127); //last number is amount of roundness
+      float yTop = theLayout.y + theLayout.h - map(flowNorm, 0, 1, 0, theLayout.h);
+      drawRoundedLine(pg, origin.cx(), origin.cy(), origin.cx(), yTop, destination.cx(), yTop, destination.cx(), destination.cy(), 10, c, 127); //last number is amount of roundness
     }
+  }
+
+  void displayAsTop(PGraphics pg, LayoutInfo theLayout, Country activeCountry, int No) {
+    color c = SECONDARY;
+    if (activeCountry != null && activeCountry.name.equals(origin.name)) {
+      c = PRIMARY;
+    }
+    float flowNorm = getNormFlow(flow);
+    float yTop = theLayout.y + theLayout.h - map(flowNorm, 0, 1, 0, theLayout.h);
+    pg.beginShape(POLYGON);
+    drawRoundedLine(pg, origin.cx(), origin.cy(), origin.cx(), yTop, destination.cx(), yTop, destination.cx(), destination.cy(), 10, c, 127); //last number is amount of roundness
+    pg.endShape();
+    switch(No) {
+    case 0:
+      pg.textFont(TOPNUMBER);
+      break;
+    case 1:
+      pg.textFont(SECONDNUMBER);
+      break;
+    case 2:
+      pg.textFont(THIRDNUMBER);
+      break;
+    }
+    pg.textAlign(BOTTOM, LEFT);
+    pg.fill(WHITE);
+    pg.noStroke();
+    pg.text(flow + "", min(origin.cx() + 10, destination.cx() + 10), yTop - 10);
+    pg.textAlign(TOP, LEFT);
+    pg.fill(PRIMARY);
+    pg.textFont(INFOHEADLINE);
+    pg.text("People moved from " + origin.name + " to " + destination.name, min(origin.cx() + 10, destination.cx() + 10), yTop + 25);
+  }
+
+  //COMPARISON
+  @Override
+    public boolean equals(Object obj) {
+    if (!(obj instanceof MigrationFlow)) {
+      return false;
+    }
+    MigrationFlow mf = ((MigrationFlow) obj);
+    return mf.origin.equals(this.origin) && mf.destination.equals(this.destination) && mf.year == this.year;
+  }
+
+  @Override
+    public int compareTo(Object o) {
+    MigrationFlow other = (MigrationFlow) o;
+    return int(other.flow - this.flow);
+  }
+  boolean isActive(Country activeCountry) {
+    return this.origin.name.equals(activeCountry.name) || this.destination.name.equals(activeCountry.name);
   }
 }
 
+
 float getNormFlow(float flow) {
-  //TODO: logscale
-  return norm(flow, 0, MIGRATION_FLOW_MAX);
+  //return norm(flow, 0, MIGRATION_FLOW_MAX);
+  float result = constrainedLogScale(flow, MIGRATION_FLOW_LOWER_LIMIT, MIGRATION_FLOW_MAX);
+  //println(result);
+  return result;
 }
 
 void drawRoundedLine(PGraphics pg, float x0, float y0, float x1, float y1, float x2, float y2, float x3, float y3, float maxRadius, color c, float alpha) {
@@ -54,6 +107,7 @@ void drawRoundedLine(PGraphics pg, float x0, float y0, float x1, float y1, float
 }
 
 void drawRoundedLine(PGraphics pg, PVector p0, PVector p1, PVector p2, PVector p3, float maxRadius, color c, float alpha) {
+  pg.noFill();
   pg.stroke(c, alpha);
   if (p1.x > p2.x) {
     PVector temp = p1.copy();

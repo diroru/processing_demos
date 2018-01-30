@@ -29,6 +29,10 @@ final int SORT_BY_POPULATION = 4;
 final int SORT_BY_CONTINENT_THEN_POPULATION = 5;
 int currentSortingMethod = SORT_BY_GPI;
 
+final int SHOW_ALL = 0;
+final int SHOW_TOP_THREE = 1;
+int currentShowMode = SHOW_TOP_THREE;
+
 //float TIME = 0;
 //float TIME_INC = 0.05;
 int DEFAULT_DURATION = 500; //in millis;
@@ -49,6 +53,7 @@ ArrayList<Country> countries = new ArrayList<Country>();
 HashMap<String, Country> countriesByName = new HashMap<String, Country>();
 
 HashMap<Integer, ArrayList<MigrationFlow>> migrationFlows = new HashMap<Integer, ArrayList<MigrationFlow>>();
+HashMap<String, PImage> flags = new HashMap<String, PImage>();
 
 //lookup table for mismatched country names
 HashMap<String, String> countryLookupTable = new HashMap<String, String>();
@@ -60,7 +65,7 @@ HashSet<Country> hoverCountries = new HashSet<Country>();
 ArrayList<YearSelector> yearSelectors = new ArrayList<YearSelector>();
 
 int MARGIN = 20;
-LayoutInfo panelLayout, graphLayout, flowLayout, yearsLayout;
+LayoutInfo panelLayout, graphLayout, flowLayout, yearsLayout, countryInfoLayout;
 
 //DomeCamera dc;
 ControlP5 cp5;
@@ -101,6 +106,10 @@ int PREVIEW_HEIGHT = 960;
 int CANVAS_WIDTH = 2048;
 int CANVAS_HEIGHT = 1024;
 
+String[] POP_LABELS = {"1", "10", "100", "1k", "10k", "100k", "1mio", "10mio", "100mio", "1bio"};
+
+ArrayList<MigrationFlow> yearlyMigrationFlows;
+
 void settings() {
   size(DOME_SIZE, DOME_SIZE, P3D); //for working on the laptop (single screen)
   pixelDensity(displayDensity()); //uncomment for retina rendering
@@ -117,13 +126,20 @@ void setup() {
   //mesh.toggleShape();
   //mesh.toggleGrid();
   float panelWidth = 200;
-  float yearBarHeight = 100f;
-  float graphHeight = (canvas.height - MARGIN * 3 - yearBarHeight) * 0.5;
-  float graphWidth = canvas.width - MARGIN * 3 - panelWidth;
-  panelLayout = new LayoutInfo(MARGIN, MARGIN, panelWidth, canvas.height - 2*MARGIN);
-  graphLayout = new LayoutInfo(panelWidth + 2 * MARGIN, canvas.height - (graphHeight + yearBarHeight), graphWidth, graphHeight);
-  flowLayout = new LayoutInfo(panelWidth + 2 * MARGIN, MARGIN, graphWidth, graphHeight);
+  float yearBarHeight = 30f;
+  //float graphHeight = (canvas.height - MARGIN * 3 - yearBarHeight) * 0.5;
+  float graphHeight = 500;
+  //float graphWidth = canvas.width - MARGIN * 3 - panelWidth;
+  float graphLeft = 250;
+  graphLayout = new LayoutInfo(graphLeft, canvas.height - (graphHeight + yearBarHeight + MARGIN - 10), canvas.width-MARGIN-graphLeft, graphHeight);
   graphLayout.gap = gap;
+  panelLayout = new LayoutInfo(MARGIN, graphLayout.y, panelWidth, canvas.height - 2*MARGIN);
+
+  //flowLayout = new LayoutInfo(panelWidth + 2 * MARGIN, MARGIN, graphWidth, graphHeight);
+  float flowHeight = 350;
+  flowLayout = new LayoutInfo(graphLayout.x, graphLayout.y - flowHeight - MARGIN, graphLayout.w, flowHeight);
+  countryInfoLayout = new LayoutInfo(MARGIN, 300, panelLayout.w, 300);
+
 
   //pixelDensity(2);
   canvas.ellipseMode(CORNER);
@@ -141,17 +157,25 @@ void setup() {
 
   int repeat = 3;
   int count = YEAR_END - YEAR_START + 1;
-  for (int i = 0; i <= repeat * count; i++) {
-    int year = i % count + YEAR_START;
-    float dw = (canvas.width - panelWidth - 2*MARGIN) / (repeat * float(count));
-    float y = canvas.height - yearBarHeight;
-    float w = 50;
-    float h  = 50;
-    LayoutInfo yearLayout = new LayoutInfo(panelWidth + 2*MARGIN + dw * i, y, w, h);
-    yearSelectors.add(new YearSelector(year, yearLayout, this));
+  float yearX = graphLayout.x;
+  float yearY = canvas.height - yearBarHeight;
+  float yearW = 35;
+  float dw = (graphLayout.w- MARGIN*2*(repeat-1) - yearW) / (repeat * float(count)-1);
+  float yearH  = INFO_SIZE;
+  for (int i = 0; i < repeat; i++) {
+    for (int j= 0; j < count; j++) {
+      int year = j + YEAR_START;
+      LayoutInfo yearLayout = new LayoutInfo(yearX, yearY, yearW, yearH);
+      yearSelectors.add(new YearSelector(year, yearLayout, this));
+      yearX += dw;
+    }
+    yearX += MARGIN*2;
   }
   lastTime = millis();
   //canvas.hint(DISABLE_DEPTH_TEST);
+
+
+  setCurrentYear(2014);
 }
 
 void draw() {
@@ -162,18 +186,8 @@ void draw() {
   canvas.beginDraw();
   //draw countries
   canvas.background(0);
-  //DRAW POPULATION GUIDES
-  canvas.stroke(DARK_GREY);
-  canvas.strokeWeight(1);
-  canvas.beginShape(LINES);
-  for (int i = 0; i < 10; i++) {
-    float y = graphLayout.y + constrainedLogScale(pow(10, i), graphLayout.h);
-    //canvas.line(0, y, 100, canvas.width, y, 100);
-    canvas.vertex(graphLayout.x, y, -3);
-    canvas.vertex(graphLayout.x + graphLayout.w, y, -3);
-  }
-  canvas.endShape();
 
+  drawFlowGraphLegend(graphLayout, flowLayout, MARGIN, canvas);
 
   canvas.fill(WHITE);
   canvas.noStroke();
@@ -204,7 +218,14 @@ void draw() {
   }
 
   displayMouse();
+  displayCountryInfo(canvas, activeCountry, countryInfoLayout);
 
+  /*//DEBUG
+   canvas.fill(255, 0, 0, 63);
+   canvas.rect(flowLayout.x, flowLayout.y, flowLayout.w, flowLayout.h);
+   canvas.fill(0, 255, 0, 63);
+   canvas.rect(graphLayout.x, graphLayout.y, graphLayout.w, graphLayout.h);
+   */
   canvas.endDraw();
   switch(CURRENT_MODE) {
   case FULLDOME_MODE:
@@ -223,44 +244,123 @@ void draw() {
   }
 }
 
+void drawFlowGraphLegend(LayoutInfo graphLayout, LayoutInfo flowLayout, float margin, PGraphics pg) {
+  //DRAW POPULATION GUIDES & LABELS
+  int startExponentPopulation = floor(log(POPULATION_CUTOFF)/log(10));
+  pg.textFont(INFO);
+  pg.textAlign(RIGHT, CENTER);
+  float y = 0;
+  for (int i = startExponentPopulation; i < 10; i++) {
+    y = graphLayout.y + constrainedLogScale(pow(10, i), POPULATION_CUTOFF, POPULATION_MAX, graphLayout.h);
+    pg.stroke(DARK_GREY);
+    pg.line(graphLayout.x, y, -3, graphLayout.x + graphLayout.w, y, -3);
+    pg.fill(255);
+    pg.noStroke();
+    pg.text(POP_LABELS[i], graphLayout.x - margin, y);
+    //println(y);
+  }
+  pg.text("POPULATION", graphLayout.x - margin, y + margin + INFO_SIZE);
+  //DRAW MIGRATION GUIDES & LABELS
+  int startExponentMigration = floor(log(MIGRATION_FLOW_LOWER_LIMIT)/log(10));
+  y = 0;
+  for (int i = startExponentMigration; i < 6; i++) {
+    y = flowLayout.y + flowLayout.h - constrainedLogScale(pow(10, i), MIGRATION_FLOW_LOWER_LIMIT, MIGRATION_FLOW_MAX, flowLayout.h);
+    pg.stroke(DARK_GREY);
+    pg.line(flowLayout.x, y, -3, flowLayout.x + flowLayout.w, y, -3);
+    pg.fill(255);
+    pg.noStroke();
+    pg.text(POP_LABELS[i], flowLayout.x - margin, y);
+  }
+  pg.text("MIGRATION", flowLayout.x - margin, y - margin - INFO_SIZE);
+}
+
 void displayFlows(PGraphics pg, Country activeCountry) {
   pg.noFill();
   pg.strokeWeight(2);
 
-  ArrayList<MigrationFlow> yearlyMigrationFlows = migrationFlows.get(currentYear);
-  if (activeCountry == null) {
-    for (MigrationFlow mf : yearlyMigrationFlows) {
-      if (mf.flow > MIGRATION_FLOW_LOWER_LIMIT) {
-        //mf.display(pg, height/2, MARGIN);
-        pg.beginShape(POLYGON);
-        mf.displayNormal(pg, flowLayout.h, flowLayout.y);
-        pg.endShape();
+  if (currentShowMode == SHOW_TOP_THREE ) {
+    if (activeCountry == null) {
+      for (int i = 0; i < min(3, yearlyMigrationFlows.size()); i++) {
+        MigrationFlow mf = yearlyMigrationFlows.get(i);        
+        mf.displayAsTop(pg, flowLayout, activeCountry, i);
+      }
+    } else {
+      int count = 0;
+      int i = 0;
+      while (count < 3 && i < yearlyMigrationFlows.size()) {
+        MigrationFlow mf = yearlyMigrationFlows.get(i);
+        if (mf.isActive(activeCountry)) {
+          mf.displayAsTop(pg, flowLayout, activeCountry, count);
+          count++;
+        }
+        i++;
       }
     }
   } else {
-    for (MigrationFlow mf : yearlyMigrationFlows) {
-      //mf.display(pg, height/2, MARGIN);
-      if (mf.flow > MIGRATION_FLOW_LOWER_LIMIT) {
-        pg.beginShape(POLYGON);
-        mf.displayHighlighted(pg, flowLayout.h, flowLayout.y, activeCountry);
-        pg.endShape();
+    if (activeCountry == null) {
+      for (MigrationFlow mf : yearlyMigrationFlows) {
+        if (mf.flow > MIGRATION_FLOW_LOWER_LIMIT) {
+          //mf.display(pg, height/2, MARGIN);
+          pg.beginShape(POLYGON);
+          mf.displayNormal(pg, flowLayout);
+          pg.endShape();
+        }
       }
-    }
+    } else {
+      for (MigrationFlow mf : yearlyMigrationFlows) {
+        //mf.display(pg, height/2, MARGIN);
+        if (mf.flow > MIGRATION_FLOW_LOWER_LIMIT) {
+          pg.beginShape(POLYGON);
+          mf.displayHighlighted(pg, flowLayout, activeCountry);
+          pg.endShape();
+        }
+      }
 
-    /*
+      /*
       if (mf.origin.name.equals(hoverCountry)) {
-     pg.stroke(WHITE, 50);
-     } else if (mf.destination.name.equals(hoverCountry)) {
-     pg.stroke(PRIMARY);
-     } else {
-     //stroke(255, 1);
-     pg.noStroke();
-     }
-     if (mf.flow > MIGRATION_FLOW_LOWER_LIMIT) {
-     //mf.display(pg, height/2, MARGIN);
-     mf.displayRounded(pg, flowLayout.h, flowLayout.y);
-     }
-     */
+       pg.stroke(WHITE, 50);
+       } else if (mf.destination.name.equals(hoverCountry)) {
+       pg.stroke(PRIMARY);
+       } else {
+       //stroke(255, 1);
+       pg.noStroke();
+       }
+       if (mf.flow > MIGRATION_FLOW_LOWER_LIMIT) {
+       //mf.display(pg, height/2, MARGIN);
+       mf.displayRounded(pg, flowLayout.h, flowLayout.y);
+       }
+       */
+    }
+  }
+}
+
+void displayCountryInfo(PGraphics pg, Country activeCountry, LayoutInfo layout) {
+  if (activeCountry != null || hoverCountries.size() > 0) {
+    Country c = activeCountry;
+    if (c == null) {
+      c = hoverCountries.iterator().next();
+    }
+    float x = layout.x;
+    float y = layout.y;
+    PImage flag = flags.get(c.iso2);
+    if (flag != null) {        
+      pg.image(flag, x, y, 25, 18);
+    }
+    y+= 20 + MARGIN;
+    pg.textAlign(LEFT,BOTTOM);
+    pg.textFont(HEADLINETITLE);
+    pg.fill(PRIMARY);
+    pg.text(c.name,x,y,layout.w,HEADLINETITLE_SIZE);
+    pg.textFont(HEADLINEALTSUBTITLE);
+    y+= MARGIN*2 + HEADLINETITLE_SIZE;
+    pg.text("Global Peace Index: #", x, y);
+    y+= 5 + HEADLINEALTSUBTITLE_SIZE;
+    pg.text("Population: " + c.pop.get(currentYear), x, y);
+    y+= 5 + HEADLINEALTSUBTITLE_SIZE;
+    pg.text("Immigration: " + c.totalImmigraionFlow.get(currentYear), x, y);
+    y+= 5+ HEADLINEALTSUBTITLE_SIZE;
+    pg.text("Emigration: " + c.totalEmigraionFlow.get(currentYear), x, y);
+
   }
 }
 

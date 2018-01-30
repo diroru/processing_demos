@@ -34,7 +34,7 @@ int SECONDNUMBER_SIZE = 48;
 int THIRDNUMBER_SIZE = 36;
 
 void initFonts() {
-  HEADLINETITLE= loadFont ("Fonts/HelveticaNeue-Thin-40.vlw");
+  HEADLINETITLE= loadFont ("Fonts/HelveticaNeue-Bold-44.vlw");
   HEADLINESUBTITLE= loadFont ("Fonts/HelveticaNeue-Thin-40.vlw");
   HEADLINEALTSUBTITLE= loadFont ("Fonts/HelveticaNeue-Bold-14.vlw");
 

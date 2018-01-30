@@ -1,6 +1,6 @@
 public class Country implements Comparable { //<>//
   //attribute / field
-  String name, iso3, region, subRegion;
+  String name, iso3, iso2, region, subRegion;
   //gpi indices by year
   HashMap<Integer, Float> gpi = new HashMap<Integer, Float>();
   //migration flows by year and by country iso3
@@ -22,14 +22,15 @@ public class Country implements Comparable { //<>//
 
   int sortingMethod = SORT_BY_CONTINENT_THEN_NAME;
   long animationStart, animationEnd, lastTime;
-  
+
   float nameWidth;
   LayoutInfo myContainerLayout;
 
   //constructor method
-  Country(String theName, String theIso3, String theRegion, String theSubRegion, PApplet parent, PGraphics canvas, LayoutInfo theContainerLayout) {
+  Country(String theName, String theIso3, String theIso2, String theRegion, String theSubRegion, PApplet parent, PGraphics canvas, LayoutInfo theContainerLayout) {
     name = theName;
     iso3 = theIso3;
+    iso2 = theIso2;
     region = theRegion;
     subRegion = theSubRegion;
     parent.registerMethod("mouseEvent", this);
@@ -71,9 +72,12 @@ public class Country implements Comparable { //<>//
     String orgISO3 = flow.origin.iso3;
     if (immigrationFlows.get(y) == null) {
       immigrationFlows.put(y, new HashMap<String, Long>());
+      totalImmigraionFlow.put(y, 0L);
     }
     if (immigrationFlows.get(y).get(orgISO3) == null) {
       immigrationFlows.get(y).put(orgISO3, flow.flow);
+      long sum = totalImmigraionFlow.get(y) ;
+      totalImmigraionFlow.put(y, sum + flow.flow);
     } else {
       //println("IMMIGRATION FLOW already exists!", flow.origin.name, " -> ", flow.destination.name);
     }
@@ -84,9 +88,12 @@ public class Country implements Comparable { //<>//
     String dstISO3 = flow.destination.iso3;
     if (emigrationFlows.get(y) == null) {
       emigrationFlows.put(y, new HashMap<String, Long>());
+      totalEmigraionFlow.put(y, 0L);
     }
     if (emigrationFlows.get(y).get(dstISO3) == null) {
       emigrationFlows.get(y).put(dstISO3, flow.flow);
+      long sum = totalEmigraionFlow.get(y) ;
+      totalEmigraionFlow.put(y, sum + flow.flow);
     } else {
       //println("EMIGRATION FLOW already exists!", flow.origin.name, " -> ", flow.destination.name);
     }
@@ -153,7 +160,7 @@ public class Country implements Comparable { //<>//
   void setCurrentX(float x) {
    currentX = x;
    }
-
+   
    void setCurrentY(float y) {
    currentY = y;
    }
@@ -184,7 +191,7 @@ public class Country implements Comparable { //<>//
      startY = endY;
      }
      */
-     lastTime = now;
+    lastTime = now;
   }
 
 
@@ -211,7 +218,7 @@ public class Country implements Comparable { //<>//
       g.fill(PRIMARY);
       if (currentY + currentH + nameWidth + m > myContainerLayout.y + myContainerLayout.h) {
         g.fill(0);
-        nameY -= nameWidth + 2*m;        
+        nameY -= nameWidth + 2*m;
       }
       g.pushMatrix();
       g.translate(currentX, nameY);
@@ -222,11 +229,11 @@ public class Country implements Comparable { //<>//
     }
     /*
     if (hover) {
-      //  g.textSize(60);
-      g.fill(WHITE);
-      g.text(this.name, mappedMouse.x + 10, mappedMouse.y - 10);
-    }
-    */
+     //  g.textSize(60);
+     g.fill(WHITE);
+     g.text(this.name, mappedMouse.x + 10, mappedMouse.y - 10);
+     }
+     */
   }
 
   //COMPARISON
@@ -275,11 +282,20 @@ public class Country implements Comparable { //<>//
     return 0;
   }
 
-    //shows countrynames hovering on a bar / without a bar
+  //shows countrynames hovering on a bar / without a bar
   public boolean isHover(float x, float y) {
     return x >= currentX && x <= currentX + currentW && y >= currentY && y <= currentY + currentH;
     //return x >= currentX && x <= currentX + currentW;
   }
+
+  Long getImmigration(int theYear) {
+    return totalImmigraionFlow.get(theYear);
+  }
+
+  Long getEmigration(int theYear) {
+    return totalEmigraionFlow.get(theYear);
+  }
+
 
   void mouseEvent(MouseEvent e) {
     //println("mouseEvent: " + e);

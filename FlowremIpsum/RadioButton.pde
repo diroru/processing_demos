@@ -4,6 +4,7 @@ public class RadioButtonGroup {
 
   ArrayList<RadioButton> buttons = new ArrayList<RadioButton>();
   RadioButton selected = null;
+  RadioButton lastButton = null;
   PApplet parent;
 
   RadioButtonGroup(float theX, float theY, float theW, PApplet parent) {
@@ -14,10 +15,16 @@ public class RadioButtonGroup {
   }
 
   void addRadioButton(RadioButton rb) {
-    if (buttons.size() == 0) {
+    addRadioButton(rb, false);
+  }
+
+  void addRadioButton(RadioButton rb, boolean isSelected) {
+    if (buttons.size() == 0 || isSelected) {
       selected = rb;
+      rb.selected = true;
     }
     buttons.add(rb);
+    lastButton = rb;
   }
 
   float getNextY() {
@@ -31,12 +38,30 @@ public class RadioButtonGroup {
   float getHeight() {
     float result = 0;
     for (RadioButton rb : buttons) {
-      result += rb.h;
+      result += rb.h + rb.m;
     }
     return result;
   }
 
   void display(PGraphics g) {
+    float strokeW = 15;
+    float y0 = y + strokeW * 0.5;
+    float y1 = y + getHeight() - lastButton.h - lastButton.m + 2;
+    g.pushStyle();
+    g.stroke(DARK_GREY);
+    g.strokeCap(ROUND);
+    g.strokeWeight(strokeW);
+    g.beginShape(LINES);
+    g.vertex(x-strokeW, y0, -1);
+    g.vertex(x-strokeW, y1, -1);
+    g.endShape();
+    
+    g.ellipseMode(CENTER);
+    g.noStroke();
+    g.fill(DARK_GREY);
+    g.ellipse(x-strokeW, y0, strokeW, strokeW);
+    g.ellipse(x-strokeW, y1, strokeW, strokeW);
+    g.popStyle();
     for (RadioButton rb : buttons) {
       rb.display(g);
     }
@@ -62,18 +87,31 @@ public class RadioButtonGroup {
 }
 
 public class RadioButton {
-  float x, y, w, h;
+  float x, y, w, h, m;
   boolean selected = false;
   boolean hover = false;
   String label;
   Method callback;
   PApplet parent;
 
-  RadioButton(RadioButtonGroup parentGroup, float theHeight, String theLabel, PApplet theParent, String callbackName) {
+  RadioButton(RadioButtonGroup parentGroup, float theHeight, String theLabel, PApplet theParent, PGraphics pg, String callbackName) {
+    this(parentGroup, theHeight, theHeight*0.5, theLabel, theParent, pg, callbackName);
+  }
+
+  RadioButton(RadioButtonGroup parentGroup, float theHeight, float theBottomMargin, String theLabel, PApplet theParent, PGraphics pg, String callbackName) {
     h = theHeight;
     w = parentGroup.w;
+    /*
+    pg.textFont(INFO);
+    float labelW = pg.textWidth(theLabel);
+    while (labelW >= w) {
+      h += theHeight;
+      labelW -= w;
+    }
+    */
     x = parentGroup.x;
     y = parentGroup.getNextY();
+    m = theBottomMargin;
     parentGroup.addRadioButton(this);
 
     label = theLabel;
@@ -89,6 +127,8 @@ public class RadioButton {
   }
 
   void display(PGraphics g) {
+    g.textFont(INFO);
+    g.textAlign(LEFT, TOP);
     if (hover) {
       g.fill(PRIMARY);
     } else if (selected) {
@@ -96,15 +136,21 @@ public class RadioButton {
     } else {
       g.fill(WHITE);
     }
-    g.text(label, x, y + h);
+    g.text(label, x, y, w, h*2);
     if (selected) {
       g.fill(WHITE);
-    } else {
-       g.fill(DARK_GREY);
+    } else if (hover) {
+      g.fill(PRIMARY);
+    } 
+    if (hover || selected) {
+      g.pushStyle();
+      g.noStroke();
+      g.ellipseMode(LEFT);
+      g.ellipse(x-23, y-2, 16, 16);
+      //g.fill(255, 0, 0, 127);
+      //g.rect(x, y, w, h);
+      g.popStyle();
     }
-    //TODO: dot size, other form
-    g.ellipse(x-15,y,15,15);
-    //g.rect(x,y,w,h);
   }
 
   boolean isHover(float mx, float my) {

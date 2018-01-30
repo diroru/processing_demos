@@ -10,12 +10,16 @@ void loadData(boolean verbose) {
   for (int i = 0; i < countryData.getRowCount(); i++) {
     TableRow row = countryData.getRow(i);
     String iso3 = row.getString("alpha-3");
+    String iso2 = row.getString("alpha-2");
     String name = row.getString("country");
     String region = row.getString("region");
     String subRegion = row.getString("sub-region");
 
     //make new country, only local
-    Country theCountry = new Country(name, iso3, region, subRegion, this, canvas, graphLayout);
+    Country theCountry = new Country(name, iso3, iso2, region, subRegion, this, canvas, graphLayout);
+    if (!flags.containsKey(iso2)) {
+      flags.put(iso2, loadImage("Flags/country-flags-master/png100px/" + iso2.toLowerCase() + ".png"));
+    }
 
     //add to collection of countries
     countries.add(theCountry);
@@ -83,7 +87,7 @@ void loadData(boolean verbose) {
       } else if (!originName.equalsIgnoreCase(destinationName)) {
         try {
           Long flowVolume = tr.getLong(year + "");
-          if (flowVolume != null) {
+          //if (flowVolume != null) {
             ArrayList<MigrationFlow> flows = migrationFlows.get(year);
             /*
             if (flows == null) {
@@ -91,10 +95,13 @@ void loadData(boolean verbose) {
              migrationFlows.put(year, flows);
              }
              */
-            flows.add(new MigrationFlow(origin, destination, year, flowVolume));
+            MigrationFlow mf = new MigrationFlow(origin, destination, year, flowVolume); 
+            flows.add(mf);
+            origin.addEmigrationFlow(mf);
+            destination.addImmigrationFlow(mf);
             MIGRATION_FLOW_MIN = Math.min(flowVolume, MIGRATION_FLOW_MIN);
             MIGRATION_FLOW_MAX = Math.max(flowVolume, MIGRATION_FLOW_MAX);
-          }
+          //}
         } 
         catch (Exception e) {
           //e.printStackTrace();

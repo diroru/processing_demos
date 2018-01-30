@@ -19,7 +19,9 @@ public class YearSelector {
       g.fill(DARK_GREY);
     }
     g.textFont(INFO);
+    g.textAlign(LEFT, BOTTOM);
     g.text(year, myLayout.x, myLayout.y + myLayout.h);
+    g.fill(255,0,0,63);
     //g.rect(myLayout.x, myLayout.y, myLayout.w, myLayout.h);
   }
 

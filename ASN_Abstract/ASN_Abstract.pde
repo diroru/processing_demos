@@ -33,6 +33,7 @@ HashSet<String> countryNameSet;
 int YEAR_START = Integer.MAX_VALUE;
 int YEAR_END = Integer.MIN_VALUE;
 int MAX_FATALITIES_PER_YEAR = Integer.MIN_VALUE;
+int MAX_FATALITIES_PER_COUNTRY_PER_YEAR = Integer.MIN_VALUE;
 float MARGIN = 20;
 float GAP = 2;
 float CELL_SIZE = 6;
@@ -44,7 +45,7 @@ PVector mappedMouse = new PVector();
 LayoutInfo matrixLayout;
 PGraphics canvas;
 
-int DOME_SIZE = 1920;
+int DOME_SIZE = 960;
 int PREVIEW_WIDTH = 1536;
 int PREVIEW_HEIGHT = 768;
 int CANVAS_WIDTH = 2048;
@@ -67,6 +68,11 @@ int ANIMATION_DURATION = 3000;
 long lastTime;
 
 PFont headerFont, corpusFont, smallFont;
+int DELTA_Y = 0;
+int DELTA_Y_MIN;
+int DELTA_Y_MAX;
+
+PImage overlay;
 
 void settings() {
   size(DOME_SIZE, DOME_SIZE, P3D);
@@ -85,6 +91,8 @@ void setup() {
   initFonts();
   initData(); //see data.pde
   matrixLayout = layoutFromCellSizeRightAlign(canvas.width - MARGIN, canvas.height - BOTTOM_REGION_HEIGHT, CELL_SIZE, CELL_SIZE, GAP, GAP, getColumnCount(), getRowCount());
+  DELTA_Y_MAX = round(matrixLayout.h - (CELL_SIZE + GAP) * 19);
+  DELTA_Y_MIN = 0;
   setSortByName(SET_START_POS);
 
   //ArrayList<Integer> decades = new ArrayList<Integer>(Arrays.asList(1900, 1910, 1920, 1930, 1940, 1950, 1960, 1970, 1980, 1990, 2000, 2010));
@@ -94,6 +102,7 @@ void setup() {
   println(getRowCount());
   lastTime = millis();
   // frameRate(120);
+  overlay = loadImage("img/zenit_header_overlay.png");
 }
 
 void draw() {
@@ -116,28 +125,71 @@ void draw() {
   for (Country dc : displayableCountries) {
     dc.update(delta);
   }
-  
+  //
+  //canvas.pushMatrix();
+  //canvas.translate(0, DELTA_Y);
   canvas.noStroke();
+  canvas.beginShape(QUADS);
+  for (Country dc : displayableCountries) {
+    dc.displayEmpty(canvas);
+  }
+  canvas.endShape();
+
+  if (tooltipCountry == null) {
+    displayYears(50, 255);
+  } else {
+    displayHighlight();
+    displayYears(50, 127);
+    displayHighlightYear(50);
+  }
+
   canvas.beginShape(TRIANGLES);
   for (Country dc : displayableCountries) {
     dc.displayRegular(canvas);
   }
   canvas.endShape();
-  
+
   canvas.beginShape(QUADS);
   for (Country dc : displayableCountries) {
     dc.displayDetailed(canvas);
   }
   canvas.endShape();
-  
-  
-  displayLabels(canvas.height - BOTTOM_REGION_HEIGHT + MARGIN, displayableCountries);
-  displayYears(100);
+  //display decade divisor
+  canvas.stroke(255);
+  for (int year = 1; year <= YEAR_END-YEAR_START; year++) {
+    if ((year + YEAR_START) % 10 == 0) {
+      float x0 = matrixLayout.x;
+      float x1 = matrixLayout.x + matrixLayout.w;
+      //println(matrixLayout.getUnitHeight(YEAR_END - YEAR_START)); //same az CELL_SIZE
+      float y = matrixLayout.y + year * (matrixLayout.cellHeight  + matrixLayout.vGap) - matrixLayout.vGap*0.5  + DELTA_Y;
+      canvas.line(x0, y, -3, x1, y, -3);
+      /*
+      beginShape();
+       vertex(x0, y, 3);
+       vertex(x1, y, 3);
+       endShape();
+       */
+    }
+  }
+
+  //hide overlapping countries
+  canvas.fill(0);
+  canvas.noStroke();
+  canvas.rect(0, matrixLayout.y + matrixLayout.h, canvas.width, canvas.height - matrixLayout.y - matrixLayout.h);
+  if (tooltipCountry == null) {
+    displayLabels(canvas.height - BOTTOM_REGION_HEIGHT + MARGIN, displayableCountries, 255);
+  } else {
+    displayLabels(canvas.height - BOTTOM_REGION_HEIGHT + MARGIN, displayableCountries, 127, tooltipCountry);
+  }
+
   drawTooltip();
   canvas.fill(255, 0, 0, 127);
   canvas.ellipseMode(RADIUS);
-  canvas.ellipse(mappedMouse.x, mappedMouse.y, 10, 10);
+  canvas.ellipse(mappedMouse.x, mappedMouse.y, 5, 5);
   canvas.ellipse(mappedMouse.x + canvas.width, mappedMouse.y, 5, 5);
+
+  //canvas.popMatrix();
+  //
   canvas.endDraw();
   // } else {
   background(0);
@@ -149,6 +201,7 @@ void draw() {
     shape(domeQuad);
     resetShader();
     popMatrix();
+    image(overlay, 0, 0, width, height);  
     break;
   case CANVAS_MODE:
     background(255, 255, 0);
@@ -158,7 +211,11 @@ void draw() {
   // }
 }
 
-void displayLabels(float y, ArrayList<Country> displayableCountries ) {
+void displayLabels(float y, ArrayList<Country> displayableCountries, int alpha) {
+  displayLabels(y, displayableCountries, alpha, null);
+}
+
+void displayLabels(float y, ArrayList<Country> displayableCountries, int alpha, Country theTooltipCountry) {
   HashSet<String> writtenLetters = new HashSet<String>();
   //long t0 = millis();
   //TODO: optimize
@@ -176,7 +233,7 @@ void displayLabels(float y, ArrayList<Country> displayableCountries ) {
       String currentLetter = c.name.charAt(0) + "";
       if (!writtenLetters.contains(currentLetter)) {
         canvas.textFont(smallFont);
-        canvas.fill(WHITE);
+        canvas.fill(WHITE, alpha);
         canvas.text(currentLetter, c.currentX, y);
         writtenLetters.add(currentLetter);
         //println(currentLetter);
@@ -184,19 +241,57 @@ void displayLabels(float y, ArrayList<Country> displayableCountries ) {
       break;
     }
   }
+  if (theTooltipCountry != null) {
+    canvas.fill(WHITE);
+    float w = canvas.textWidth(theTooltipCountry.name);
+    canvas.rect(theTooltipCountry.currentX-3, y+6, w+6, 15);
+    canvas.fill(0);
+    canvas.text(theTooltipCountry.name, theTooltipCountry.currentX, y + 18);
+  }
   //println(millis() - t0);
 }
 
-void displayYears(int deltaX) {
+void displayYears(int deltaX, int alpha) {
   for (int year = YEAR_START; year <= YEAR_END; year++) {
     canvas.pushStyle();
     canvas.textFont(smallFont);
-    canvas.fill(WHITE);
+    canvas.fill(WHITE, alpha);
     canvas.textAlign(LEFT, TOP);
     if (year % 10 == 0) {
-      canvas.text(year+"", matrixLayout.x - deltaX, matrixLayout.getYNo(year-YEAR_START, YEAR_END-YEAR_START) - 2);
+      canvas.text(year+"", matrixLayout.x - deltaX, matrixLayout.getYNo(year-YEAR_START, YEAR_END-YEAR_START) - 2 + DELTA_Y);
     }
     canvas.popStyle();
+  }
+}
+
+void displayTotals(int deltaX) {
+  for (int year = YEAR_START; year <= YEAR_END; year++) {
+    canvas.pushStyle();
+    canvas.fill(NO_CRASHES);
+    //canvas.rect();
+    canvas.popStyle();
+  }
+}
+
+void displayHighlightYear(int deltaX) {
+  int year = tooltipCountry.year;
+  float x = matrixLayout.x - deltaX;
+  float y = matrixLayout.getYNo(year-YEAR_START, YEAR_END-YEAR_START) - 2 + DELTA_Y;
+  canvas.pushStyle();
+  canvas.textFont(smallFont);
+  canvas.fill(WHITE);
+  canvas.rect(x-2, y-3, 32, 14);
+  canvas.textAlign(LEFT, TOP);
+  canvas.fill(0);
+  canvas.text(year+"", x, y);
+  canvas.popStyle();
+}
+
+void displayHighlight() {
+  if (tooltipCountry != null) {
+    canvas.fill(127);
+    canvas.rect(matrixLayout.x, tooltipCountry.currentY - GAP + DELTA_Y, matrixLayout.w, tooltipCountry.currentH + 2*GAP );
+    canvas.rect(tooltipCountry.currentX - GAP, matrixLayout.y + DELTA_Y, tooltipCountry.currentW + 2*GAP, matrixLayout.h);
   }
 }
 
@@ -234,4 +329,15 @@ void keyPressed() {
 }
 
 void mouseMoved() {
+}
+
+void mouseWheel(MouseEvent event) {
+  float e = event.getCount();
+  //println(event.getAmount());
+  //println(event.getModifiers());
+  if (event.getModifiers() == MouseEvent.SHIFT) {
+    //println("shift");
+  }
+  //println(MouseEvent.);
+  DELTA_Y = round(constrain(DELTA_Y + e, DELTA_Y_MIN, DELTA_Y_MAX));
 }

@@ -114,25 +114,25 @@ public class Country implements Comparable {
      */
     if (displayDetailed) {
       g.fill(NO_CRASHES);
-      g.rect(currentX, currentY, currentW, currentH);
+      g.rect(currentX, currentY + DELTA_Y, currentW, currentH);
       g.fill(WHITE);
-      float w = getFatalityCount() / float(MAX_FATALITIES_PER_YEAR) * currentW;
+      float w = getFatalityCount() / float(MAX_FATALITIES_PER_COUNTRY_PER_YEAR) * currentW;
       g.rect(currentX, currentY, w, currentH);
     } else {
       g.noStroke();
       g.fill(c1);
       g.beginShape();
-      g.vertex(this.currentX, this.currentY);
-      g.vertex(this.currentX + this.currentW, this.currentY);
-      g.vertex(this.currentX, this.currentY + this.currentH);
+      g.vertex(this.currentX, this.currentY + DELTA_Y);
+      g.vertex(this.currentX + this.currentW, this.currentY + DELTA_Y);
+      g.vertex(this.currentX, this.currentY + this.currentH + DELTA_Y);
       g.endShape(CLOSE);
 
 
       g.fill(c0);
       g.beginShape();
-      g.vertex(this.currentX + this.currentW, this.currentY);
-      g.vertex(this.currentX + this.currentW, this.currentY + this.currentH);
-      g.vertex(this.currentX, this.currentY + this.currentH);
+      g.vertex(this.currentX + this.currentW, this.currentY + DELTA_Y);
+      g.vertex(this.currentX + this.currentW, this.currentY + this.currentH + DELTA_Y);
+      g.vertex(this.currentX, this.currentY + this.currentH + DELTA_Y);
       g.endShape(CLOSE);
     }
 
@@ -162,33 +162,46 @@ public class Country implements Comparable {
   }
 
   void displayRegular(PGraphics g) {
-    g.fill(c1);
-    g.vertex(this.currentX, this.currentY);
-    g.vertex(this.currentX + this.currentW, this.currentY);
-    g.vertex(this.currentX, this.currentY + this.currentH);
-    g.fill(c0);
-    g.vertex(this.currentX + this.currentW, this.currentY);
-    g.vertex(this.currentX + this.currentW, this.currentY + this.currentH);
-    g.vertex(this.currentX, this.currentY + this.currentH);
-    if (hover) {
-      //g.text(this.name, mappedMouse.x + 10, mappedMouse.y - 10);
+    if (data.size() > 0) {
+      g.fill(c1);
+      g.vertex(this.currentX, this.currentY + DELTA_Y);
+      g.vertex(this.currentX + this.currentW, this.currentY + DELTA_Y);
+      g.vertex(this.currentX, this.currentY + this.currentH + DELTA_Y);
+      g.fill(c0);
+      g.vertex(this.currentX + this.currentW, this.currentY + DELTA_Y);
+      g.vertex(this.currentX + this.currentW, this.currentY + this.currentH + DELTA_Y);
+      g.vertex(this.currentX, this.currentY + this.currentH + DELTA_Y);
+      if (hover) {
+        //g.text(this.name, mappedMouse.x + 10, mappedMouse.y - 10);
+      }
     }
   }
 
- void displayDetailed(PGraphics g) {
+  void displayEmpty(PGraphics g) {
+    if (data.size() == 0) {
+      g.fill(NO_CRASHES);
+      g.vertex(this.currentX, this.currentY + DELTA_Y);
+      g.vertex(this.currentX + this.currentW, this.currentY + DELTA_Y);
+      g.vertex(this.currentX + this.currentW, this.currentY + this.currentH + DELTA_Y);
+      g.vertex(this.currentX, this.currentY + this.currentH + DELTA_Y);
+    }
+  }
+
+  void displayDetailed(PGraphics g) {
 
     if (displayDetailed) {
       g.fill(NO_CRASHES);
-      g.vertex(currentX, currentY);
-      g.vertex(currentX + currentW, currentY);
-      g.vertex(currentX + currentW, currentY + currentH);
-      g.vertex(currentX, currentY + currentH);
+      g.vertex(currentX, currentY + DELTA_Y);
+      g.vertex(currentX + currentW, currentY + DELTA_Y);
+      g.vertex(currentX + currentW, currentY + currentH+  DELTA_Y);
+      g.vertex(currentX, currentY + currentH + DELTA_Y);
       g.fill(WHITE);
-      float w = getFatalityCount() / float(MAX_FATALITIES_PER_YEAR) * currentW;
-      g.vertex(currentX, currentY);
-      g.vertex(currentX + w, currentY);
-      g.vertex(currentX + w, currentY + currentH);
-      g.vertex(currentX, currentY + currentH);    }
+      float w = getFatalityCount() / float(MAX_FATALITIES_PER_COUNTRY_PER_YEAR) * currentW;
+      g.vertex(currentX, currentY + DELTA_Y);
+      g.vertex(currentX + w, currentY + DELTA_Y);
+      g.vertex(currentX + w, currentY + currentH + DELTA_Y);
+      g.vertex(currentX, currentY + currentH + DELTA_Y);
+    }
     if (hover) {
 
       //g.text(this.name, mappedMouse.x + 10, mappedMouse.y - 10);
@@ -303,7 +316,10 @@ public class Country implements Comparable {
   }
 
   public boolean isHover(float x, float y) {
-    return x >= currentX && x <= currentX + currentW && y >= currentY && y <= currentY + currentH;
+    if (data.size() == 0) {
+      return false;
+    }
+    return x >= currentX && x <= currentX + currentW && y >= currentY + DELTA_Y && y <= currentY + currentH + DELTA_Y;
     //return x >= currentX && x <= currentX + w;
   }
 

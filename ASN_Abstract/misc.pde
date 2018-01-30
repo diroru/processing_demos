@@ -26,6 +26,8 @@ void initCanvas() {
   canvas = createGraphics(CANVAS_WIDTH, CANVAS_HEIGHT, P3D);
   canvas.beginDraw();
   canvas.background(0);
+  //canvas.textMode(SHAPE);
+  canvas.ortho();
   canvas.endDraw();
 }
 

@@ -61,7 +61,8 @@ ArrayList<Country> makeDetailedLayout(LayoutInfo theLayout, int thePos, int dCou
       countriesInRow++;
     }
     x = theLayout.x;
-    y += theLayout.deltaY(vCount);
+    //y += theLayout.deltaY(vCount);
+    y += theLayout.cellHeight + theLayout.vGap;
   }
   //println("COUNT", hCount, vCount, count);
   return result;
@@ -107,7 +108,8 @@ ArrayList<Country> makeLayout(LayoutInfo theLayout, int thePos) {
       x += theLayout.deltaX(hCount);
     }
     x = theLayout.x;
-    y += theLayout.deltaY(vCount);
+    //y += theLayout.deltaY(vCount);
+    y += theLayout.cellHeight + theLayout.vGap;
   }
   //println("COUNT", hCount, vCount, count);
   return result;

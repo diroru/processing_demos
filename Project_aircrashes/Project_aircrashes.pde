@@ -11,7 +11,9 @@ Table unusualData;
 
 Timeline timeline;
 float TIME = 0;
-float TIME_INC = 0.0002; //used to be 0.00007
+float TIME_INC = 0.002; //used to be 0.00007
+float FLIGHT_TIME = 0;
+float FLIGHT_TIME_INC = 0.02;
 float SEEK_TIME = 1;
 float SEEK_INC = 0.005f;
 float SEEK_EPSILON = 0.001;
@@ -31,6 +33,7 @@ ArrayList<CrashDot> myDots = new ArrayList<CrashDot>();
 final int STATE_PLAY = 0;
 final int STATE_PAUSED = 1;
 final int STATE_SEEKING = 2;
+final int STATE_DISPLAY_FLIGHT = 3;
 int currentState = STATE_PAUSED;
 
 ArrayList<CrashFlight> myFlights = new ArrayList<CrashFlight>();
@@ -45,6 +48,8 @@ int MAX_OCCUPANTS = Integer.MIN_VALUE;
 
 HashSet<String> phaseCodes = new HashSet<String>();
 HashMap<String, Float> phaseProgress = new HashMap<String, Float>();
+HashMap<Datum, CrashFlight> flightsByDatum = new HashMap<Datum, CrashFlight>();
+CrashFlight currentFlight;
 
 void setup() {
   //size(1920, 1920, P3D);
@@ -56,12 +61,12 @@ void setup() {
   corpusFont = loadFont("SourceSansPro-Regular-44.vlw");
   corpusFontBold = loadFont("SourceSansPro-Bold-48.vlw");
 
-  initData();
-
   //textSize(24);
   timeline = new Timeline((1920 - 390)/2 * scaleFactor, 35 * scaleFactor, HALF_PI, 110 * scaleFactor, YEAR_START, YEAR_END, REPEAT_COUNT, loadFont("SourceSansPro-SemiBold-40.vlw"), 40* scaleFactor, this);
-  initFlights(timeline);
 
+  initData(timeline);
+  initFlights(timeline);
+  currentFlight = myFlights.get(0);
   initDots();
   hint(DISABLE_DEPTH_TEST);
 }
@@ -151,11 +156,34 @@ void draw() {
 
   switch(currentState) {
   case STATE_PLAY:
-    TIME += TIME_INC;
-    if (TIME > 1) {
-      TIME = 0;
-      currentState = STATE_PAUSED;
+    if (aboutFlightTime(TIME, currentFlight)) {
+      currentFlight.display(FLIGHT_TIME);
+      FLIGHT_TIME += FLIGHT_TIME_INC;
+      if (FLIGHT_TIME > 1) {
+        FLIGHT_TIME = 0;
+        currentFlight = currentFlight.nextFlight;
+        if (currentFlight == null) {
+          currentFlight = myFlights.get(0);
+        }
+      }
+    } else {
+
+      TIME += TIME_INC;
+      if (TIME > 1) {
+        TIME = 0;
+        FLIGHT_TIME = 0;
+        currentState = STATE_PAUSED;
+        currentFlight = myFlights.get(0);
+      }
     }
+    /*
+    if (currentFlight == null) {
+     currentFlight = getFlight(TIME);
+     } 
+     if (currentFlight != null) {
+     currentState = STATE_DISPLAY_FLIGHT;
+     }
+     */
     break;
   case STATE_SEEKING:
     TIME += SEEK_INC;
@@ -163,13 +191,29 @@ void draw() {
       currentState = STATE_PAUSED;
     }
     break;
+    /*
+  case STATE_DISPLAY_FLIGHT:
+     FLIGHT_TIME += FLIGHT_TIME_INC;
+     if (FLIGHT_TIME > 1) {
+     FLIGHT_TIME = 0;
+     currentState = STATE_PLAY;
+     } else {
+     currentFlight.display(FLIGHT_TIME);
+     }
+     break;
+     */
   }
+  println(TIME, FLIGHT_TIME);
+  /*
   for (CrashFlight cf : myFlights) {
-    cf.display(TIME);
-  }
+   cf.display(TIME);
+   }
+   */
+  /*
   ellipseMode(RADIUS);
-  fill(255, 0, 0, 127);
-  ellipse(width*0.5, height*0.5, 10, 10);
+   fill(255, 0, 0, 127);
+   ellipse(width*0.5, height*0.5, 10, 10);
+   */
   /*
   stroke(255, 0, 0);
    noFill();

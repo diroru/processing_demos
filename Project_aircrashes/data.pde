@@ -1,8 +1,8 @@
-void initData() {
+void initData(Timeline tl) {
   worstData = loadTable("180111_toProcess_worst.tsv", "header"); 
   unusualData = loadTable("180111_toProcess_unusual.tsv", "header");
   for (TableRow tr : worstData.rows()) {
-    Datum d = new Datum(tr);
+    Datum d = new Datum(tr, tl);
     phaseCodes.add(d.phaseCode);
     MIN_FATALITIES = min(d.fatalities, MIN_FATALITIES);
     MAX_FATALITIES = max(d.fatalities, MAX_FATALITIES);
@@ -14,7 +14,7 @@ void initData() {
     }
   }
   for (TableRow tr : unusualData.rows()) {
-    Datum d = new Datum(tr);
+    Datum d = new Datum(tr, tl);
     phaseCodes.add(d.phaseCode);
     MIN_FATALITIES = min(d.fatalities, MIN_FATALITIES);
     MAX_FATALITIES = max(d.fatalities, MAX_FATALITIES);
@@ -43,8 +43,16 @@ void initData() {
 }
 
 void initFlights(Timeline tl) {
+  CrashFlight previous = null;
   for (Datum d : data) {
-    myFlights.add(new CrashFlight(d, tl));
+    CrashFlight flight = new CrashFlight(d, tl);
+    flight.previousFlight = previous;
+    if (previous != null) {
+      previous.nextFlight = flight;
+    }
+    previous = flight;
+    myFlights.add(flight);
+    flightsByDatum.put(d, flight);
   }
 }
 
@@ -62,4 +70,17 @@ void initDots() {
       }
     }
   }
+}
+
+CrashFlight getFlight(float theTime) {
+  for (Datum d : data) {
+    if (abs(d.normMoment - theTime) < SEEK_EPSILON) {
+      return flightsByDatum.get(d);
+    }
+  }
+  return null;
+}
+
+boolean aboutFlightTime(float time, CrashFlight flight) {
+  return abs(flight.myDatum.normMoment - time) < SEEK_EPSILON;
 }

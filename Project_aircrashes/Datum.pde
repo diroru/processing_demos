@@ -7,8 +7,9 @@ class Datum implements Comparable {
   String phaseCode;
   int fatalities, occupants;
   boolean isUnusual;
+  float normMoment;
 
-  Datum(TableRow tr) {
+  Datum(TableRow tr, Timeline tl) {
     //month = tr.getInt("month");
     year = tr.getInt("year");
     date = tr.getString("date");
@@ -28,6 +29,7 @@ class Datum implements Comparable {
     int unusualFlag = tr.getInt("unusual_flag");
     isUnusual = unusualFlag > 0;
     //year = Integer.parseInt(date.split("/")[2]);
+    normMoment = getNormalizedMoment(this, tl);
   }
 
   @Override

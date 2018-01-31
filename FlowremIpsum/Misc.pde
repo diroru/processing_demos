@@ -61,7 +61,7 @@ void initShader() {
 }
 
 void updateShader() {
-  domeShader.set("aperture", APERTURE);
+  domeShader.set("aperture", APERTURE / 180f);
   domeShader.set("radiusBottom", CONE_RADIUS_BOTTOM);
   domeShader.set("radiusTop", CONE_RADIUS_TOP);
   domeShader.set("coneBottom", CONE_BOTTOM);
@@ -88,4 +88,45 @@ void initShape() {
   domeQuad.vertex(width * 0.5f, height * 0.5f, 0, 0, 0);
   domeQuad.vertex(-width * 0.5f, height * 0.5f, 0, 1, 0);
   domeQuad.endShape();
+}
+
+float getFittingFontSize(String input, PFont font, float targetWidth) {
+  float maxWidth = maxWidth(input, font);
+  return targetWidth / maxWidth * font.getDefaultSize(); 
+}
+
+ArrayList<String> getOptimalStrings(String input, PFont font) {
+  ArrayList<String> result = new ArrayList<String>();
+  float currentWidth = 0;
+  float maxWidth = maxWidth(input, font);
+  String[] temp = input.split(" ");
+  for (String s : temp) {
+    float w = textWidth(s + " ");
+    if (currentWidth + w <= maxWidth) {
+      if (result.size() == 0) {
+        result.add(s);
+      } else {
+        String previous = result.get(result.size()-1);
+        result.set(result.size()-1, previous + " " + s);
+      }
+      currentWidth += w;
+    } else {
+      result.add(s);
+      currentWidth = w;
+    }
+  }
+  popStyle();
+  return result;
+}
+
+float maxWidth(String input, PFont font) {
+  String[] temp = input.split(" ");
+
+  float maxWidth = 0;
+  pushStyle();
+  textFont(font);
+  for (String s : temp) {
+    maxWidth = max(maxWidth, textWidth(s));
+  }
+  return maxWidth;
 }

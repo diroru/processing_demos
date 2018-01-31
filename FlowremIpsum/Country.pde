@@ -1,4 +1,4 @@
-public class Country implements Comparable { //<>//
+public class Country implements Comparable { //<>// //<>//
   //attribute / field
   String name, iso3, iso2, region, subRegion;
   //gpi indices by year

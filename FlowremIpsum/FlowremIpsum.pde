@@ -1,4 +1,4 @@
-import java.util.*; //<>// //<>//
+import java.util.*; //<>// //<>// //<>//
 //import java.awt.event.*;
 //import javax.swing.event.*;
 //import java.awt.event.*;
@@ -82,7 +82,7 @@ float CONE_RADIUS_BOTTOM = 186;
 float CONE_RADIUS_TOP = 66;
 float CONE_HEIGHT = 238;
 float CONE_BOTTOM = 0;
-float CONE_ORIENTATION = PI/6f;
+float CONE_ORIENTATION = 250f;
 PShader domeShader;
 PShape domeQuad;
 
@@ -140,7 +140,7 @@ void setup() {
   //flowLayout = new LayoutInfo(panelWidth + 2 * MARGIN, MARGIN, graphWidth, graphHeight);
   float flowHeight = 350;
   flowLayout = new LayoutInfo(graphLayout.x, graphLayout.y - flowHeight - MARGIN, graphLayout.w, flowHeight);
-  countryInfoLayout = new LayoutInfo(MARGIN, 375, panelLayout.w, 300);
+  countryInfoLayout = new LayoutInfo(2, 375, panelLayout.w, 250);
 
 
   //pixelDensity(2);
@@ -354,8 +354,18 @@ void displayCountryInfo(PGraphics pg, Country activeCountry, LayoutInfo layout) 
     pg.textAlign(LEFT,BOTTOM);
     pg.textFont(HEADLINETITLE);
     pg.fill(PRIMARY);
+    /*
     pg.text(c.name, x, y, layout.w, HEADLINETITLE_SIZE);
     y+= MARGIN*2 + HEADLINETITLE_SIZE;
+    */
+    float fittingSize = min(getFittingFontSize(c.name,HEADLINETITLE,layout.w), HEADLINETITLE.getDefaultSize());
+    pg.textSize(fittingSize);
+    ArrayList<String> countryNameTokens = getOptimalStrings(c.name,HEADLINETITLE);
+    for (String s : countryNameTokens) {
+      pg.text(s, x, y);
+      y += fittingSize;
+    }
+    
     
     /*
     float titleWidthFull = pg.textWidth(c.name);
@@ -364,6 +374,7 @@ void displayCountryInfo(PGraphics pg, Country activeCountry, LayoutInfo layout) 
     y+= MARGIN*2 + titleHeight;
     */
     pg.textFont(HEADLINEALTSUBTITLE);
+    pg.textSize(HEADLINEALTSUBTITLE.getDefaultSize());
     pg.text("Global Peace Index: #" + c.getGPIRankString(currentYear), x, y);
     y+= 5 + HEADLINEALTSUBTITLE_SIZE;
     pg.text("Population: " + c.pop.get(currentYear), x, y);

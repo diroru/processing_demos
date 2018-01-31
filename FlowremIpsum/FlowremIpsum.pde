@@ -1,4 +1,4 @@
-import java.util.*; //<>//
+import java.util.*; //<>// //<>//
 //import java.awt.event.*;
 //import javax.swing.event.*;
 //import java.awt.event.*;
@@ -140,7 +140,7 @@ void setup() {
   //flowLayout = new LayoutInfo(panelWidth + 2 * MARGIN, MARGIN, graphWidth, graphHeight);
   float flowHeight = 350;
   flowLayout = new LayoutInfo(graphLayout.x, graphLayout.y - flowHeight - MARGIN, graphLayout.w, flowHeight);
-  countryInfoLayout = new LayoutInfo(MARGIN, 300, panelLayout.w, 300);
+  countryInfoLayout = new LayoutInfo(MARGIN, 375, panelLayout.w, 300);
 
 
   //pixelDensity(2);

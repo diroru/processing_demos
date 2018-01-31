@@ -178,11 +178,11 @@ void setup() {
 
 
   setCurrentYear(2013);
-  
+  initGUI();
 }
 
 void draw() {
-
+  updateShader();
   mappedMouse = mappedMouse(CURRENT_MODE);
   // The dome projection is centered at (0, 0), so the mouse coordinates
   // need to be offset by (width/2, height/2)
@@ -245,6 +245,7 @@ void draw() {
     fitImage(canvas);
     break;
   }
+  drawGUI();
 }
 
 void drawFlowGraphLegend(LayoutInfo graphLayout, LayoutInfo flowLayout, float margin, PGraphics pg) {
@@ -375,6 +376,9 @@ void keyPressed() {
   case 's':
     saveFrame("output/test.png");
     break;
+ case 'g':
+    drawGUI = !drawGUI;
+ break;
   case 'd':
     switch(CURRENT_MODE) {
     case FULLDOME_MODE:

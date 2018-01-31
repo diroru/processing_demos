@@ -1,5 +1,5 @@
 void initRadio() {
-  float radioButtonHeight = 20;
+  float radioButtonHeight = 15;
   float radioButtonHeLeft = MARGIN*2-10;
   float radioButtonStartY = 660;
   float radioButtonWidth = 130;
@@ -10,7 +10,7 @@ void initRadio() {
 
   RadioButtonGroup rb1 = new RadioButtonGroup(radioButtonHeLeft, radioButtonStartY + rb0.getHeight() + MARGIN, radioButtonWidth, this);
   new RadioButton(rb1, radioButtonHeight, "order by Population", this, canvas, "setByPopulation");
-  new RadioButton(rb1, radioButtonHeight*3, radioButtonHeight*0.5, "order by Global Peace Index Ranking", this, canvas, "setByGPI");
+  new RadioButton(rb1, radioButtonHeight*2, radioButtonHeight*0.5, "order by Global Peace Index Ranking", this, canvas, "setByGPI");
   new RadioButton(rb1, radioButtonHeight, "order by Name", this, canvas, "setByName", true);
   radio.add(rb1);
 

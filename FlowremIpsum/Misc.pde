@@ -61,7 +61,7 @@ void initShader() {
 }
 
 void updateShader() {
-  domeShader.set("aperture", APERTURE);
+  domeShader.set("aperture", APERTURE / 180f);
   domeShader.set("radiusBottom", CONE_RADIUS_BOTTOM);
   domeShader.set("radiusTop", CONE_RADIUS_TOP);
   domeShader.set("coneBottom", CONE_BOTTOM);

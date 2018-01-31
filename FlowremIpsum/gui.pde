@@ -14,11 +14,7 @@ void initGUI() {
   textFont(createFont("", 30));
   //cp5.addButton("button", 10, 100, 60, 80, 20).setId(1);
   //cp5.addButton("buttonValue", 4, 100, 90, 80, 20).setId(2);
-  float APERTURE = 1f;
-float CONE_RADIUS_BOTTOM = 186;
-float CONE_RADIUS_TOP = 66;
-float CONE_HEIGHT = 238;
-float CONE_ORIENTATION = PI/6f;
+ 
 
   cp5.addSlider("coneBottom", -300, 300).setValue(CONE_BOTTOM).setHeight(h).setWidth(w).setPosition(margin, y0);
   y0 += h + padding;
@@ -28,7 +24,7 @@ float CONE_ORIENTATION = PI/6f;
   y0 += h + padding;
   cp5.addSlider("coneRadiusBottom", 0, 1000).setValue(CONE_RADIUS_BOTTOM).setHeight(h).setWidth(w).setPosition(margin, y0);
   y0 += h + padding;
-  cp5.addSlider("aperture", 10, 360).setHeight(h).setValue(APERTURE * 180f).setWidth(w).setPosition(margin, y0);
+  cp5.addSlider("aperture", 10, 360).setValue(APERTURE).setHeight(h).setWidth(w).setPosition(margin, y0);
   y0 += h + padding;
   cp5.addSlider("coneOrientation", 0, 360).setValue(CONE_ORIENTATION).setHeight(h).setWidth(w).setPosition(margin, y0);
 
@@ -52,7 +48,7 @@ void coneRadiusBottom(float f) {
 }
 
 void aperture(float f) {
-  APERTURE = f / 180f;
+  APERTURE = f;
 }
 void coneOrientation(float f) {
   CONE_ORIENTATION = f;

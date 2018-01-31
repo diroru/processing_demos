@@ -6,7 +6,7 @@ import java.util.*; //<>//
 import controlP5.*;
 import java.lang.reflect.*;
 
-Table countryData, flowData, populationData;
+Table countryDataBase, countryDataExtended, flowData, populationData;
 
 //GENERAL CONSTANTS
 final int GPI_YEAR_START = 2008;
@@ -27,11 +27,11 @@ final int SORT_BY_GPI = 2; //needs active year!
 final int SORT_BY_CONTINENT_THEN_GPI = 3; //needs active year!
 final int SORT_BY_POPULATION = 4;
 final int SORT_BY_CONTINENT_THEN_POPULATION = 5;
-int currentSortingMethod = SORT_BY_GPI;
+int currentSortingMethod = SORT_BY_NAME;
 
 final int SHOW_ALL = 0;
 final int SHOW_TOP_THREE = 1;
-int currentShowMode = SHOW_TOP_THREE;
+int currentShowMode = SHOW_ALL;
 
 //float TIME = 0;
 //float TIME_INC = 0.05;
@@ -110,6 +110,8 @@ String[] POP_LABELS = {"1", "10", "100", "1k", "10k", "100k", "1mio", "10mio", "
 
 ArrayList<MigrationFlow> yearlyMigrationFlows;
 
+int GPI_LAST_RANK = 100000;
+
 void settings() {
   size(DOME_SIZE, DOME_SIZE, P3D); //for working on the laptop (single screen)
   pixelDensity(displayDensity()); //uncomment for retina rendering
@@ -175,7 +177,8 @@ void setup() {
   //canvas.hint(DISABLE_DEPTH_TEST);
 
 
-  setCurrentYear(2014);
+  setCurrentYear(2013);
+  
 }
 
 void draw() {
@@ -353,7 +356,7 @@ void displayCountryInfo(PGraphics pg, Country activeCountry, LayoutInfo layout) 
     pg.text(c.name,x,y,layout.w,HEADLINETITLE_SIZE);
     pg.textFont(HEADLINEALTSUBTITLE);
     y+= MARGIN*2 + HEADLINETITLE_SIZE;
-    pg.text("Global Peace Index: #", x, y);
+    pg.text("Global Peace Index: #" + c.getGPIRankString(currentYear), x, y);
     y+= 5 + HEADLINEALTSUBTITLE_SIZE;
     pg.text("Population: " + c.pop.get(currentYear), x, y);
     y+= 5 + HEADLINEALTSUBTITLE_SIZE;

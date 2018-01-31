@@ -20,7 +20,7 @@ float CONE_RADIUS_TOP = 66;
 float CONE_HEIGHT = 238;
 float CONE_ORIENTATION = PI/6f;
 
-  cp5.addSlider("coneBottom", -1000, 1000).setValue(CONE_BOTTOM).setHeight(h).setWidth(w).setPosition(margin, y0);
+  cp5.addSlider("coneBottom", -300, 300).setValue(CONE_BOTTOM).setHeight(h).setWidth(w).setPosition(margin, y0);
   y0 += h + padding;
   cp5.addSlider("coneHeight", 0, 1000).setValue(CONE_HEIGHT).setHeight(h).setWidth(w).setPosition(margin, y0);
   y0 += h + padding;
@@ -55,7 +55,7 @@ void aperture(float f) {
   APERTURE = f / 180f;
 }
 void coneOrientation(float f) {
-  CONE_ORIENTATION = radians(f);
+  CONE_ORIENTATION = f;
 }
 
 

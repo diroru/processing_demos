@@ -69,7 +69,7 @@ class MigrationFlow implements Comparable {
     pg.noStroke();
     pg.text(flow + "", min(origin.cx() + 10, destination.cx() + 10), yTop - 10);
     pg.textAlign(TOP, LEFT);
-    pg.fill(PRIMARY);
+    pg.fill(c);
     pg.textFont(INFOHEADLINE);
     pg.text("People moved from " + origin.name + " to " + destination.name, min(origin.cx() + 10, destination.cx() + 10), yTop + 25);
   }

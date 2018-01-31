@@ -34,6 +34,14 @@ int currentState = STATE_PAUSED;
 
 ArrayList<CrashFlight> myFlights = new ArrayList<CrashFlight>();
 
+color GREEN = #1ce58e;
+color RED = #e81a9a;
+
+int MIN_FATALITIES = Integer.MAX_VALUE;
+int MAX_FATALITIES = Integer.MIN_VALUE;
+int MIN_OCCUPANTS = Integer.MAX_VALUE;
+int MAX_OCCUPANTS = Integer.MIN_VALUE;
+
 void setup() {
   //size(1920, 1920, P3D);
   size(960, 960, P2D);

@@ -2,13 +2,23 @@ void initData() {
   worstData = loadTable("180111_toProcess_worst.tsv", "header"); 
   unusualData = loadTable("180111_toProcess_unusual.tsv", "header");
   for (TableRow tr : worstData.rows()) {
-    data.add(new Datum(tr));
+    Datum d = new Datum(tr);
+    if (!data.contains(d)) {
+      data.add(d);
+    }
+    
   }
   for (TableRow tr : unusualData.rows()) {
-    data.add(new Datum(tr));
+    Datum d = new Datum(tr);
+    if (!data.contains(d)) {
+      data.add(d);
+    }
   }
 
   Collections.sort(data);
+  println("LOADED ", data.size(), " DATA");
+  println("FATALITIES", MIN_FATALITIES, " – ", MAX_FATALITIES);
+  println("OCCUPANTS", MIN_OCCUPANTS, " – ", MAX_OCCUPANTS);
 }
 
 void initFlights(Timeline tl) {

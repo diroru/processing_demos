@@ -6,7 +6,8 @@ class Datum implements Comparable {
   Float[] depLatLng = new Float[2], dstLatLng = new Float[2];
   String phaseCode;
   int fatalities, occupants;
-  
+  boolean isUnusual;
+
   Datum(TableRow tr) {
     //month = tr.getInt("month");
     year = tr.getInt("year");
@@ -23,14 +24,21 @@ class Datum implements Comparable {
     phaseCode = tr.getString("phase_code");
     fatalities = tr.getInt("total_fatalities");
     occupants = tr.getInt("total_occupants");
+    MIN_FATALITIES = min(fatalities, MIN_FATALITIES);
+    MAX_FATALITIES = max(fatalities, MAX_FATALITIES);
+    MIN_OCCUPANTS = min(fatalities, MIN_OCCUPANTS);
+    MAX_OCCUPANTS = max(fatalities, MAX_OCCUPANTS);
+
+    int unusualFlag = tr.getInt("unusual_flag");
+    isUnusual = unusualFlag > 0;
     //year = Integer.parseInt(date.split("/")[2]);
   }
-  
+
   @Override
-  String toString() {
+    String toString() {
     return year + " | " + month + " | " + day;
   }
-  
+
   @Override
     public boolean equals(Object obj) {
     if (!(obj instanceof Datum)) {
@@ -51,7 +59,7 @@ class Datum implements Comparable {
     int dayComparison = this.day - other.day;
     int monthComparison = this.month - other.month;
     int yearComparison = this.year - other.year;
-    
+
     if (yearComparison != 0) return yearComparison;
     if (monthComparison != 0) return monthComparison;
     return dayComparison;

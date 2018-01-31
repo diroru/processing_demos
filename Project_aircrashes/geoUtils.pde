@@ -95,15 +95,93 @@ PVector getGeodeticAtNormDist(float lat0, float lng0, float lat1, float lng1, fl
 PVector sphericLerp(PVector v0, PVector v1, float f) {
   /*
   float angle =  PVector.angleBetween(v1, v0);
-  PVector cx = v1.copy();
-  PVector temp = v1.cross(v0);
-  PVector cy = temp.cross(v1).setMag(v1.mag());
-  float x = cx.x * cos(f * angle) + cy.x * sin(f * angle);
-  float y = cx.y * cos(f * angle) + cy.y * sin(f * angle);
-  float z = cx.z * cos(f * angle) + cy.z * sin(f * angle);
-  return new PVector(x,y,z);
-  */
+   PVector cx = v1.copy();
+   PVector temp = v1.cross(v0);
+   PVector cy = temp.cross(v1).setMag(v1.mag());
+   float x = cx.x * cos(f * angle) + cy.x * sin(f * angle);
+   float y = cx.y * cos(f * angle) + cy.y * sin(f * angle);
+   float z = cx.z * cos(f * angle) + cy.z * sin(f * angle);
+   return new PVector(x,y,z);
+   */
   return PVector.lerp(v0, v1, f);
+}
+
+void drawDashedGeodetic(PVector latLng0, PVector latLng1, int res, float dashLength, float gapLength) {
+  drawDashedGeodetic(latLng0.x, latLng0.y, latLng1.x, latLng1.y, res, dashLength, gapLength);
+}
+
+void drawDashedGeodetic(float lat0, float lng0, float lat1, float lng1, int res, float dashLength, float gapLength) {
+  ArrayList<PVector> gs = getGeodetic(lat0, lng0, lat1, lng1, res);
+  boolean dash = true;
+  boolean gap = false;
+  float len = 0;
+
+  PVector v0 = lngLatToXY(gs.get(0));
+  beginShape(LINES);
+
+  for (int i = 1; i < gs.size(); i++) {
+    PVector v = lngLatToXY(gs.get(i));
+    float delta = PVector.dist(v, v0);
+    len += delta;
+    if (dash) {
+      vertex(v0.x, v0.y);
+      vertex(v.x, v.y);
+      if (len >= dashLength) {
+        len = 0;
+        gap = true;
+        dash = false;
+      }
+    } else if (gap) {
+      if (len >= gapLength) {
+        len = 0;
+        gap = false;
+        dash = true;
+      }
+    }    
+
+    v0 = v.copy();
+  }
+  endShape();
+  /*
+  PVector v0 = lngLatToXY(gs.get(0));
+   beginShape();
+   boolean endShapeNeeded = true;
+   boolean beginShapeNeeded = false;
+   
+   for (int i = 1; i < gs.size(); i++) {
+   PVector v = lngLatToXY(gs.get(i));
+   float delta = PVector.dist(v, v0);
+   len += delta;
+   if (dash) {
+   vertex(v.x, v.y);
+   if (len >= dashLength) {
+   endShape();
+   endShapeNeeded = false;
+   beginShapeNeeded = true;
+   len = 0;
+   gap = true;
+   dash = false;
+   }
+   } else if (gap) {
+   if (len >= gapLength) {
+   if (beginShapeNeeded) {
+   beginShape();
+   endShapeNeeded = true;
+   beginShapeNeeded = false;
+   }
+   vertex(v.x, v.y);
+   len = 0;
+   gap = false;
+   dash = true;
+   }
+   }    
+   
+   v0 = v.copy();
+   }
+   if (endShapeNeeded) {
+   endShape();
+   }
+   */
 }
 
 //TODO!!!!

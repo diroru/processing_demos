@@ -1,7 +1,7 @@
 void initRadio() {
   float radioButtonHeight = 15;
   float radioButtonHeLeft = MARGIN*2-10;
-  float radioButtonStartY = 660;
+  float radioButtonStartY = 720;
   float radioButtonWidth = 130;
   RadioButtonGroup rb0 = new RadioButtonGroup(radioButtonHeLeft, radioButtonStartY, radioButtonWidth, this);
   new RadioButton(rb0, radioButtonHeight, "group by continent", this, canvas, "setContinental");
@@ -169,8 +169,8 @@ PVector mapMouse(PGraphics target, int mx, int my) {
 }
 
 void displayMouse() {
-  canvas.fill(255, 255, 0, 127);
   canvas.ellipseMode(RADIUS);
+  canvas.fill(SECONDARY,170);
   canvas.noStroke();
   canvas.ellipse(mappedMouse.x, mappedMouse.y, 5, 5);
   canvas.ellipse(mappedMouse.x + canvas.width, mappedMouse.y, 10, 5);

@@ -1,4 +1,4 @@
-import java.util.*; //<>// //<>// //<>// //<>//
+import java.util.*; //<>// //<>// //<>// //<>// //<>//
 //import java.awt.event.*;
 //import javax.swing.event.*;
 //import java.awt.event.*;
@@ -142,7 +142,7 @@ void setup() {
   //flowLayout = new LayoutInfo(panelWidth + 2 * MARGIN, MARGIN, graphWidth, graphHeight);
   float flowHeight = 350;
   flowLayout = new LayoutInfo(graphLayout.x, graphLayout.y - flowHeight - MARGIN, graphLayout.w, flowHeight);
-  countryInfoLayout = new LayoutInfo(2, 375, panelLayout.w, 250);
+  countryInfoLayout = new LayoutInfo(8, 400, panelLayout.w-40, 300);
 
   zenith = loadImage("title/zenith.png");
   legend = loadImage("title/legend2.png");
@@ -184,6 +184,8 @@ void setup() {
 
   setCurrentYear(2013);
   initGUI();
+  
+  noCursor();
 }
 
 void draw() {
@@ -363,19 +365,19 @@ void displayCountryInfo(PGraphics pg, Country activeCountry, LayoutInfo layout) 
     pg.fill(PRIMARY);
     /*
     pg.text(c.name, x, y, layout.w, HEADLINETITLE_SIZE);
-    y+= MARGIN*2 + HEADLINETITLE_SIZE;
-    */
-    
-    float fittingSize = min(getFittingFontSize(c.name,HEADLINETITLE,layout.w), HEADLINETITLE.getDefaultSize());
+     y+= MARGIN*2 + HEADLINETITLE_SIZE;
+     */
+
+    float fittingSize = min(getFittingFontSize(c.name, HEADLINETITLE, layout.w), HEADLINETITLE.getDefaultSize());
     y += fittingSize ;
     pg.textSize(fittingSize);
-    ArrayList<String> countryNameTokens = getOptimalStrings(c.name,HEADLINETITLE);
+    ArrayList<String> countryNameTokens = getOptimalStrings(c.name, HEADLINETITLE);
     for (String s : countryNameTokens) {
       pg.text(s, x, y);
       y += fittingSize;
     }
-    
-     /*
+
+    /*
     float titleWidthFull = pg.textWidth(c.name);
      float titleHeight = ceil(titleWidthFull / layout.w) * HEADLINETITLE_SIZE;
      pg.text(c.name,x,y-titleHeight + HEADLINETITLE_SIZE, layout.w, titleHeight);

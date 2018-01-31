@@ -1,4 +1,4 @@
-boolean drawGUI = true;
+boolean drawGUI = false;
 
 void initGUI() {
   cp5 = new ControlP5(this);
@@ -25,7 +25,7 @@ void initGUI() {
   y0 += h + padding;
   cp5.addSlider("aperture", 0, 360).setValue(APERTURE).setHeight(h).setWidth(w).setPosition(margin, y0);
   y0 += h + padding;
-  cp5.addSlider("coneOrientation", 0, 360).setValue(250).setHeight(h).setWidth(w).setPosition(margin, y0);
+  cp5.addSlider("coneOrientation", 0, 360).setValue(CONE_ORIENTATION).setHeight(h).setWidth(w).setPosition(margin, y0);
 
   cp5.setAutoDraw(false);
 }

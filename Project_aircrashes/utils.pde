@@ -1,5 +1,9 @@
 //TODO: font settings
 
+void drawArcTextCentered(String theText, PVector v) {  
+  drawArcTextCentered(theText, v.x, v.y); 
+}
+
 void drawArcTextCentered(String theText, float x0, float y0) {
   float theW = textWidth(theText);
   float rad = PVector.dist(new PVector(x0,y0),center());
@@ -8,6 +12,10 @@ void drawArcTextCentered(String theText, float x0, float y0) {
   v.sub(center());
   v.rotate(phi*0.5);
   v.add(center());
+  drawArcText(theText, v.x, v.y);
+}
+
+void drawArcText(String theText, PVector v) {
   drawArcText(theText, v.x, v.y);
 }
 
@@ -34,8 +42,28 @@ void drawArcText(String theText, float x0, float y0) {
   }
 }
 
+void drawTangentialText(String theText, PVector v) {
+  drawTangentialText(theText + "", v.x, v.y);
+}
+
 void drawTangentialText(char theText, float x, float y) {
   drawTangentialText(theText + "", x, y);
+}
+
+void drawTangentialText(String[] theTextTokens, color[] colors, float x, float y) {
+  float dx = x - width*0.5;
+  float dy = y - height*0.5;
+  float angle = atan2(dy,dx) - HALF_PI;
+  
+  pushMatrix();
+  translate(x,y);
+  rotate(angle);
+  for (int i = 0; i < theTextTokens.length; i++) {
+    fill(colors[i]);
+    text(theTextTokens[i], 0, 0);
+    translate(textWidth(theTextTokens[i]), 0);
+  }
+  popMatrix();
 }
 
 void drawTangentialText(String theText, float x, float y) {

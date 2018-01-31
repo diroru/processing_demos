@@ -8,6 +8,7 @@ class CrashFlight {
   float myStartMoment, myEndMoment;
   float minRadius = 3, maxRadius = 20;
   float rOcc, rFat;
+  float maxProgress;
 
   CrashFlight(Datum d, Timeline tl) {
     myDatum = d;
@@ -19,6 +20,7 @@ class CrashFlight {
     myEndMoment = constrain(myStartMoment + duration, 0, 1);
     rFat = map(sqrt(d.fatalities),sqrt(MIN_FATALITIES), sqrt(MAX_FATALITIES), minRadius, maxRadius);
     rOcc = map(sqrt(d.occupants),sqrt(MIN_OCCUPANTS), sqrt(MAX_OCCUPANTS), minRadius, maxRadius);
+    maxProgress = phaseProgress.get(d.phaseCode);
   }
 
   void update(float normTime) {
@@ -28,6 +30,11 @@ class CrashFlight {
 
     if (coordsValid && normTime > myStartMoment && normTime < myEndMoment) {
       float progress = norm(normTime, myStartMoment, myEndMoment);
+      boolean showStats = false;
+      if (progress >= maxProgress) {
+        showStats = true;
+        progress = maxProgress;
+      }
       PVector planePos = getGeodeticAtNormDist(dep, dst, progress);
       PVector planePosXY = lngLatToXY(planePos);
       noFill();
@@ -80,11 +87,15 @@ class CrashFlight {
       }
       */
       noStroke();
-      fill(GREEN,127);
+      fill(GREEN);
       ellipse(planePosXY.x, planePosXY.y, rOcc * scaleFactor, rOcc * scaleFactor);
-      fill(RED,127);
+      fill(RED);
       ellipse(planePosXY.x, planePosXY.y, rFat * scaleFactor, rFat * scaleFactor);
-
+      
+      if (showStats) {
+        
+      }
+      
     }
   }
 }

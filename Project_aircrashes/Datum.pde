@@ -24,10 +24,6 @@ class Datum implements Comparable {
     phaseCode = tr.getString("phase_code");
     fatalities = tr.getInt("total_fatalities");
     occupants = tr.getInt("total_occupants");
-    MIN_FATALITIES = min(fatalities, MIN_FATALITIES);
-    MAX_FATALITIES = max(fatalities, MAX_FATALITIES);
-    MIN_OCCUPANTS = min(fatalities, MIN_OCCUPANTS);
-    MAX_OCCUPANTS = max(fatalities, MAX_OCCUPANTS);
 
     int unusualFlag = tr.getInt("unusual_flag");
     isUnusual = unusualFlag > 0;

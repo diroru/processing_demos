@@ -5,6 +5,7 @@ boolean inDome = false;
 PImage background;
 float scaleFactor;
 PFont corpusFont;
+PFont corpusFontBold;
 Table worstData;
 Table unusualData;
 
@@ -42,17 +43,21 @@ int MAX_FATALITIES = Integer.MIN_VALUE;
 int MIN_OCCUPANTS = Integer.MAX_VALUE;
 int MAX_OCCUPANTS = Integer.MIN_VALUE;
 
+HashSet<String> phaseCodes = new HashSet<String>();
+HashMap<String, Float> phaseProgress = new HashMap<String, Float>();
+
 void setup() {
   //size(1920, 1920, P3D);
-  size(960, 960, P2D);
+  size(600, 600, P2D);
   pixelDensity(displayDensity());
   scaleFactor = width / 1920f;
   println(scaleFactor);
   background = loadImage("background_map.png");
   corpusFont = loadFont("SourceSansPro-Regular-44.vlw");
+  corpusFontBold = loadFont("SourceSansPro-Bold-48.vlw");
 
   initData();
-  
+
   //textSize(24);
   timeline = new Timeline((1920 - 390)/2 * scaleFactor, 35 * scaleFactor, HALF_PI, 110 * scaleFactor, YEAR_START, YEAR_END, REPEAT_COUNT, loadFont("SourceSansPro-SemiBold-40.vlw"), 40* scaleFactor, this);
   initFlights(timeline);
@@ -64,18 +69,74 @@ void setup() {
 void draw() {
 
   background(0);
-  image(background, width*(1 - SCALE)*0.5,height*(1 - SCALE)*0.5, width*SCALE, height*SCALE);
+  image(background, width*(1 - SCALE)*0.5, height*(1 - SCALE)*0.5, width*SCALE, height*SCALE);
 
 
   textFont(corpusFont);
-  String s = "100 worst and unusual Aircrashes   1933 - 2014";
- // fill(232,255,154,300);
- // drawTangentialText(s,  width-2*margin, height-2*margin);
-  //fill(28,229,142,300);
-  //fill (255);
-  //textSize(12);
- // drawArcTextCentered(s, width-1.8*margin, height-1.8*margin);
-  // s.rotate(phi);
+  String s = "100 worst and unusual Aircrashes   1933 – 2014";
+
+  fill(255);
+
+  textFont(corpusFontBold);
+  textSize(30*scaleFactor);
+  for (int i = 0; i < REPEAT_COUNT; i++) {
+    pushMatrix();
+    translate(width * 0.5, height * 0.5);
+    rotate((i * TWO_PI) / REPEAT_COUNT);
+    translate(-width * 0.5, -height * 0.5);
+    drawArcTextCentered(s, width-1770*scaleFactor, height-1200*scaleFactor);
+    popMatrix();
+  }
+
+  String s2= "  Fatalities             Total number of passanger4";
+  fill(255);
+  textFont(corpusFont);
+  textSize(30*scaleFactor);
+  for (int i = 0; i < REPEAT_COUNT; i++) {
+    pushMatrix();
+    translate(width * 0.5, height * 0.5);
+    rotate((i * TWO_PI) / REPEAT_COUNT);
+    translate(-width * 0.5, -height * 0.5);
+    drawArcTextCentered(s2, width-1810*scaleFactor, height-1228*scaleFactor);
+    popMatrix();
+  }
+
+
+
+  fill(28, 229, 142);
+  for (int i = 0; i < REPEAT_COUNT; i++) {
+    pushMatrix();
+    translate(width * 0.5, height * 0.5);
+    rotate((i * TWO_PI) / REPEAT_COUNT);
+    translate(-width * 0.5, -height * 0.5);
+    ellipse (width-1763*scaleFactor, height-1331*scaleFactor, 15*scaleFactor, 15*scaleFactor);
+    popMatrix();
+  }
+
+  fill(232, 26, 154);
+  for (int i = 0; i < REPEAT_COUNT; i++) {
+    pushMatrix();
+    translate(width * 0.5, height * 0.5);
+    rotate((i * TWO_PI) / REPEAT_COUNT);
+    translate(-width * 0.5, -height * 0.5);
+    ellipse (width-1654*scaleFactor, height-1507*scaleFactor, 15*scaleFactor, 15*scaleFactor);
+    popMatrix();
+  }     
+
+
+
+
+  //s.rotate(phi);
+
+  /*
+  String d = "Hello World!!!&#*";
+   fill(232,26,154);
+   drawArcTextCentered(d, mouseX, mouseY);
+   println((mouseX-width)/scaleFactor, (mouseY-height)/scaleFactor);
+   */
+  // fill(28,229,142,300);
+  // drawArcTextCentered(d, mouseX, mouseY);
+
   //text("Hello", 0, 48);
   timeline.display(TIME);
 
@@ -103,21 +164,21 @@ void draw() {
     }
     break;
   }
-  for (CrashFlight cf: myFlights) {
+  for (CrashFlight cf : myFlights) {
     cf.display(TIME);
   }
   ellipseMode(RADIUS);
-  fill(255,0,0,127);
-  ellipse(width*0.5, height*0.5, 10,10);
+  fill(255, 0, 0, 127);
+  ellipse(width*0.5, height*0.5, 10, 10);
   /*
   stroke(255, 0, 0);
-  noFill();
-  drawGeodetic(-QUARTER_PI, 0.1, QUARTER_PI, 2.1, 50);
-  noStroke();
-  fill(0, 0, 255);
-  drawPoint(-QUARTER_PI, 0.1);
-  drawPoint(QUARTER_PI, 2.1);
-  */
+   noFill();
+   drawGeodetic(-QUARTER_PI, 0.1, QUARTER_PI, 2.1, 50);
+   noStroke();
+   fill(0, 0, 255);
+   drawPoint(-QUARTER_PI, 0.1);
+   drawPoint(QUARTER_PI, 2.1);
+   */
   /*
   ellipseMode(RADIUS);
    fill(255,255,0,31);

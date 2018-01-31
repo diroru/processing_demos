@@ -5,6 +5,7 @@ boolean inDome = false;
 PImage background;
 float scaleFactor;
 PFont corpusFont;
+PFont corpusFontBold;
 Table worstData;
 Table unusualData;
 
@@ -34,17 +35,18 @@ int currentState = STATE_PAUSED;
 
 void setup() {
   //size(1920, 1920, P3D);
-  size(960, 960, P2D);
+  size(600, 600, P2D);
   pixelDensity(displayDensity());
   scaleFactor = width / 1920f;
   println(scaleFactor);
   background = loadImage("background_map.png");
   corpusFont = loadFont("SourceSansPro-Regular-44.vlw");
+  corpusFontBold = loadFont("SourceSansPro-Bold-48.vlw");
 
   initData();
 
   //textSize(24);
-  timeline = new Timeline((1920 - 390)/2 * scaleFactor, 35 * scaleFactor, HALF_PI, 110 * scaleFactor, YEAR_START, YEAR_END, REPEAT_COUNT, loadFont("SourceSansPro-SemiBold-40.vlw"), 40* scaleFactor, this);
+  timeline = new Timeline((1920 - 390)/2 * scaleFactor, 35 * scaleFactor, HALF_PI, 110 * scaleFactor, YEAR_START, YEAR_END, REPEAT_COUNT, loadFont("SourceSansPro-SemiBold-40.vlw"),40* scaleFactor, this);
 
   initDots();
   hint(DISABLE_DEPTH_TEST);
@@ -58,25 +60,80 @@ void draw() {
 
   textFont(corpusFont);
 
-<<<<<<< HEAD
-  
-  String s = "100 worst and unusual Aircrashes   1933 - 2014";
- // fill(232,255,154,300);
- // drawTangentialText(s,  width-2*margin, height-2*margin);
+
+  /*
+  String s = "--- 100 worst and unusual Aircrashes 1933 - 2014";
+  fill(255);
+   textSize(30*scaleFactor);
+   drawArcTextCentered(s, width-220*scaleFactor, height-537*scaleFactor);
+  //drawTangentialText(s,  width-100, height-100);
   //fill(28,229,142,300);
   //fill (255);
-  //textSize(12);
- // drawArcTextCentered(s, width-1.8*margin, height-1.8*margin);
-  // s.rotate(phi);
-=======
-  /*
-  String s = "Hello World!!!&#*";
-   fill(232,26,154,300);
-   drawTangentialText(s, mouseX, mouseY);
-   fill(28,229,142,300);
-   drawArcTextCentered(s, mouseX, mouseY);
-   */
->>>>>>> 4999d9a9f33346fec8f15dfcafceb944bb68c0b9
+ */
+    String s= " 100 worst and unusual Aircrashes 1933 - 2014";
+  fill(255);
+   
+   textFont(corpusFontBold);
+   textSize(30*scaleFactor);
+   for (int i = 0; i < REPEAT_COUNT; i++) {
+     pushMatrix();
+     translate(width * 0.5, height * 0.5);
+     rotate((i * TWO_PI) / REPEAT_COUNT);
+     translate(-width * 0.5, -height * 0.5);
+     drawArcTextCentered(s, width-1770*scaleFactor, height-1200*scaleFactor);
+     popMatrix();
+   }
+   
+      String s2= "  Fatalities             Total number of passanger4";
+      fill(255);
+      textFont(corpusFont);
+      textSize(30*scaleFactor);
+   for (int i = 0; i < REPEAT_COUNT; i++) {
+     pushMatrix();
+     translate(width * 0.5, height * 0.5);
+     rotate((i * TWO_PI) / REPEAT_COUNT);
+     translate(-width * 0.5, -height * 0.5);
+     drawArcTextCentered(s2, width-1810*scaleFactor, height-1228*scaleFactor);
+     popMatrix();
+   }
+     
+     
+  
+     fill(28,229,142);
+      for (int i = 0; i < REPEAT_COUNT; i++) {
+     pushMatrix();
+     translate(width * 0.5, height * 0.5);
+     rotate((i * TWO_PI) / REPEAT_COUNT);
+     translate(-width * 0.5, -height * 0.5);
+     ellipse (width-1763*scaleFactor,height-1331*scaleFactor,15*scaleFactor,15*scaleFactor);
+     popMatrix();
+   }
+   
+    fill(232,26,154);
+      for (int i = 0; i < REPEAT_COUNT; i++) {
+     pushMatrix();
+     translate(width * 0.5, height * 0.5);
+     rotate((i * TWO_PI) / REPEAT_COUNT);
+     translate(-width * 0.5, -height * 0.5);
+     ellipse (width-1654*scaleFactor,height-1507*scaleFactor,15*scaleFactor,15*scaleFactor);
+     popMatrix();
+   }     
+
+
+
+
+   //s.rotate(phi);
+
+  
+  String d = "Hello World!!!&#*";
+   fill(232,26,154);
+   drawArcTextCentered(d, mouseX, mouseY);
+   println((mouseX-width)/scaleFactor, (mouseY-height)/scaleFactor);
+    
+  // fill(28,229,142,300);
+  // drawArcTextCentered(d, mouseX, mouseY);
+   
+
   //text("Hello", 0, 48);
   timeline.display(TIME);
 

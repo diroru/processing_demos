@@ -354,9 +354,16 @@ void displayCountryInfo(PGraphics pg, Country activeCountry, LayoutInfo layout) 
     pg.textAlign(LEFT,BOTTOM);
     pg.textFont(HEADLINETITLE);
     pg.fill(PRIMARY);
-    pg.text(c.name,x,y,layout.w,HEADLINETITLE_SIZE);
-    pg.textFont(HEADLINEALTSUBTITLE);
+    pg.text(c.name, x, y, layout.w, HEADLINETITLE_SIZE);
     y+= MARGIN*2 + HEADLINETITLE_SIZE;
+    
+    /*
+    float titleWidthFull = pg.textWidth(c.name);
+    float titleHeight = ceil(titleWidthFull / layout.w) * HEADLINETITLE_SIZE;
+    pg.text(c.name,x,y-titleHeight + HEADLINETITLE_SIZE, layout.w, titleHeight);
+    y+= MARGIN*2 + titleHeight;
+    */
+    pg.textFont(HEADLINEALTSUBTITLE);
     pg.text("Global Peace Index: #" + c.getGPIRankString(currentYear), x, y);
     y+= 5 + HEADLINEALTSUBTITLE_SIZE;
     pg.text("Population: " + c.pop.get(currentYear), x, y);

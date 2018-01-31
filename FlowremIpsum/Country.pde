@@ -3,6 +3,7 @@ public class Country implements Comparable { //<>//
   String name, iso3, iso2, region, subRegion;
   //gpi indices by year
   HashMap<Integer, Float> gpi = new HashMap<Integer, Float>();
+  HashMap<Integer, Integer> gpiRanks = new HashMap<Integer, Integer>();
   //migration flows by year and by country iso3
   HashMap<Integer, HashMap<String, Long>> immigrationFlows = new HashMap<Integer, HashMap<String, Long>>();
   HashMap<Integer, HashMap<String, Long>> emigrationFlows = new HashMap<Integer, HashMap<String, Long>>();
@@ -45,13 +46,23 @@ public class Country implements Comparable { //<>//
     gpi.put(year, value);
   }
 
+  void setGPIRank(Integer year, Integer value) {
+    gpiRanks.put(year, value);
+  }
+
+
   Float getGPI(Integer year) {
     Float result = gpi.get(year);
-    /*
-    if (result == null) {
-     result = -1f;
-     }
-     */
+
+    if (result == 0) {
+      return -1f;
+    }
+
+    return result;
+  }
+
+  Integer getGPIRank(Integer year) {
+    Integer result = gpiRanks.get(year);
     return result;
   }
 
@@ -196,9 +207,15 @@ public class Country implements Comparable { //<>//
 
 
   void display(PGraphics g) {
-    //g.fill(255,0,0);
-    //g.fill(255,0,0);
-    //g.rect(this.currentX, this.currentY, this.currentW, this.currentH);
+    if (getGPIRank(activeYear) == GPI_LAST_RANK) {
+      displayOutlined(g);
+    } else {
+      displayFilled(g);
+    }
+  }
+
+  void displayFilled(PGraphics g) {
+    g.noStroke();
     g.fill(currentColor);
     if (hover || selected) {
       g.fill(PRIMARY);
@@ -227,13 +244,50 @@ public class Country implements Comparable { //<>//
       g.popMatrix();
       g.beginShape(QUADS);
     }
-    /*
-    if (hover) {
-     //  g.textSize(60);
-     g.fill(WHITE);
-     g.text(this.name, mappedMouse.x + 10, mappedMouse.y - 10);
-     }
-     */
+  }
+
+  String getGPIRankString(int year) {
+    Integer result = getGPIRank(year);
+    if (result == GPI_LAST_RANK) {
+      return "N/A";
+    }
+    return result + "";
+  }
+
+  void displayOutlined(PGraphics g) {
+    g.endShape();
+    g.beginShape(QUADS);
+    g.strokeWeight(1);
+    g.fill(0);
+    g.stroke(currentColor);
+    if (hover || selected) {
+      g.stroke(PRIMARY);
+    }
+    float z = -1;
+    g.vertex(this.currentX, this.currentY, z);
+    g.vertex(this.currentX + this.currentW, this.currentY, z);
+    g.vertex(this.currentX + this.currentW, this.currentY + this.currentH, z);
+    g.vertex(this.currentX, this.currentY + this.currentH, z);
+    //display country name
+    if (hover || selected) {
+      g.endShape();
+      g.textFont(INFO);
+      g.textAlign(BOTTOM, LEFT);
+      float m = 5; //margin
+      float nameY = currentY + currentH + m;
+      g.fill(PRIMARY);
+      if (currentY + currentH + nameWidth + m > myContainerLayout.y + myContainerLayout.h) {
+        g.fill(0);
+        nameY -= nameWidth + 2*m;
+      }
+      g.pushMatrix();
+      g.translate(currentX, nameY);
+      g.rotate(HALF_PI);
+      g.text(name, 0, 0);
+      g.popMatrix();
+      g.beginShape(QUADS);
+    }
+    g.endShape();
   }
 
   //COMPARISON
@@ -250,7 +304,15 @@ public class Country implements Comparable { //<>//
     public int compareTo(Object o) {
     Country otherCountry = (Country) o;
 
-    int gpiComparison = this.getGPI(activeYear).compareTo(otherCountry.getGPI(activeYear));
+    int gpiComparison = this.getGPIRank(activeYear).compareTo(otherCountry.getGPIRank(activeYear));
+    //int gpiComparison = this.getGPI(activeYear).compareTo(otherCountry.getGPI(activeYear));
+    /*
+    if (this.getGPI(currentYear) == -1 && otherCountry.getGPI(currentYear) == -1) {
+     gpiComparison = 0;
+     } else if (this.getGPI(currentYear) == -1 || this.getGPI(currentYear) == -1) {
+     gpiComparison = 0;
+     }
+     */
     //TODO!!!
     int regionComparison = this.region.compareTo(otherCountry.region);
     int nameComparison = this.name.compareTo(otherCountry.name);

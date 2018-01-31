@@ -5,18 +5,18 @@ void initRadio() {
   float radioButtonWidth = 130;
   RadioButtonGroup rb0 = new RadioButtonGroup(radioButtonHeLeft, radioButtonStartY, radioButtonWidth, this);
   new RadioButton(rb0, radioButtonHeight, "group by continent", this, canvas, "setContinental");
-  new RadioButton(rb0, radioButtonHeight, "show global", this, canvas, "setGlobal");
+  new RadioButton(rb0, radioButtonHeight, "show global", this, canvas, "setGlobal", true);
   radio.add(rb0);
 
   RadioButtonGroup rb1 = new RadioButtonGroup(radioButtonHeLeft, radioButtonStartY + rb0.getHeight() + MARGIN, radioButtonWidth, this);
   new RadioButton(rb1, radioButtonHeight, "order by Population", this, canvas, "setByPopulation");
   new RadioButton(rb1, radioButtonHeight*3, radioButtonHeight*0.5, "order by Global Peace Index Ranking", this, canvas, "setByGPI");
-  new RadioButton(rb1, radioButtonHeight, "order by Name", this, canvas, "setByName");
+  new RadioButton(rb1, radioButtonHeight, "order by Name", this, canvas, "setByName", true);
   radio.add(rb1);
 
   RadioButtonGroup rb2 = new RadioButtonGroup(radioButtonHeLeft, radioButtonStartY + rb0.getHeight() + rb1.getHeight() + MARGIN*2, radioButtonWidth, this);
   new RadioButton(rb2, radioButtonHeight*2, radioButtonHeight*0.5, "show top 3 immigration flows", this, canvas, "setShowTopThree");
-  new RadioButton(rb2, radioButtonHeight*2, radioButtonHeight*0.5, "show global immigration flows", this, canvas, "setShowAll");
+  new RadioButton(rb2, radioButtonHeight*2, radioButtonHeight*0.5, "show global immigration flows", this, canvas, "setShowAll", true);
   radio.add(rb2);
 }
 
@@ -177,10 +177,10 @@ void displayMouse() {
 }
 
 void setCurrentYear(int theNewYear) {
+  currentYear = theNewYear;
   yearlyMigrationFlows = migrationFlows.get(currentYear);
   println("setting year to", theNewYear, yearlyMigrationFlows.size());
 
   Collections.sort(yearlyMigrationFlows);
-  currentYear = theNewYear;
   makeLayout();
 }

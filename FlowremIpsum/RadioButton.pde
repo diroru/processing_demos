@@ -19,7 +19,7 @@ public class RadioButtonGroup {
   }
 
   void addRadioButton(RadioButton rb, boolean isSelected) {
-    if (buttons.size() == 0 || isSelected) {
+    if (isSelected) {
       selected = rb;
       rb.selected = true;
     }
@@ -94,11 +94,20 @@ public class RadioButton {
   Method callback;
   PApplet parent;
 
+  RadioButton(RadioButtonGroup parentGroup, float theHeight, String theLabel, PApplet theParent, PGraphics pg, String callbackName, boolean selected) {
+    this(parentGroup, theHeight, theHeight*0.5, theLabel, theParent, pg, callbackName, selected);
+  }
+
+
   RadioButton(RadioButtonGroup parentGroup, float theHeight, String theLabel, PApplet theParent, PGraphics pg, String callbackName) {
-    this(parentGroup, theHeight, theHeight*0.5, theLabel, theParent, pg, callbackName);
+    this(parentGroup, theHeight, theHeight*0.5, theLabel, theParent, pg, callbackName, false);
   }
 
   RadioButton(RadioButtonGroup parentGroup, float theHeight, float theBottomMargin, String theLabel, PApplet theParent, PGraphics pg, String callbackName) {
+    this( parentGroup, theHeight, theBottomMargin, theLabel, theParent, pg, callbackName,  false);
+  }
+
+  RadioButton(RadioButtonGroup parentGroup, float theHeight, float theBottomMargin, String theLabel, PApplet theParent, PGraphics pg, String callbackName, boolean selected) {
     h = theHeight;
     w = parentGroup.w;
     /*
@@ -112,7 +121,7 @@ public class RadioButton {
     x = parentGroup.x;
     y = parentGroup.getNextY();
     m = theBottomMargin;
-    parentGroup.addRadioButton(this);
+    parentGroup.addRadioButton(this, selected);
 
     label = theLabel;
     parent = theParent;

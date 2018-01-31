@@ -1,19 +1,27 @@
 void loadData(boolean verbose) {
   //load tables
-  countryData = loadTable("gpi_2008-2016_geocodes+continents_v4.csv", "header");
+  countryDataBase = loadTable("gpi_2008-2016_geocodes+continents_v4.csv", "header");
+  countryDataExtended = loadTable("gpi_2008-2017_with_Ranking.csv", "header");
   flowData = loadTable("GlobalMigration.tsv", "header, tsv");
   populationData = loadTable("API_SP.POP.TOTL_DS2_en_csv_v2.csv", "header");
 
   treatTableExceptions();
 
   //instantiate countries
-  for (int i = 0; i < countryData.getRowCount(); i++) {
-    TableRow row = countryData.getRow(i);
+  for (int i = 0; i < countryDataBase.getRowCount(); i++) {
+    TableRow row = countryDataBase.getRow(i);
     String iso3 = row.getString("alpha-3");
     String iso2 = row.getString("alpha-2");
     String name = row.getString("country");
     String region = row.getString("region");
     String subRegion = row.getString("sub-region");
+
+    TableRow extendedRow = countryDataExtended.findRow(name, "Country");
+    if (extendedRow == null) {
+      println(name, "not found");
+    }
+    //println(extendedRow);
+
 
     //make new country, only local
     Country theCountry = new Country(name, iso3, iso2, region, subRegion, this, canvas, graphLayout);
@@ -27,9 +35,20 @@ void loadData(boolean verbose) {
 
     //we add the gpi and population value for each year to country "theCountry"
     for (int year = GPI_YEAR_START; year <= GPI_YEAR_END; year++) {
-      String yearString = "score_" + year; //building the right column name
-      Float gpi = row.getFloat(yearString); //retrieving the value (a float number) for the given column (year)
-      theCountry.setGPI(year, gpi); //putting the value into the country
+      String yearString = year + " score"; //building the right column name
+      String rankString = year + " rank"; //building the right column name
+      Float gpi = extendedRow.getInt(yearString) / 1000.0; //retrieving the value (a float number) for the given column (year)
+      Integer gpiRank = extendedRow.getInt(rankString);
+      if (name.equals("Palestine")) {
+        println(year, gpi, gpiRank);
+      }
+      if (gpiRank == 0) {
+        theCountry.setGPI(year, GPI_LAST_RANK+0f); //putting the value into the country
+        theCountry.setGPIRank(year, GPI_LAST_RANK); //putting the value into the country
+      } else {
+        theCountry.setGPI(year, gpi); //putting the value into the country
+        theCountry.setGPIRank(year, gpiRank); //putting the value into the country
+      }
 
       //find country row by iso-3 code
       TableRow countryRow = populationData.findRow(theCountry.iso3, 1);
@@ -88,19 +107,19 @@ void loadData(boolean verbose) {
         try {
           Long flowVolume = tr.getLong(year + "");
           //if (flowVolume != null) {
-            ArrayList<MigrationFlow> flows = migrationFlows.get(year);
-            /*
+          ArrayList<MigrationFlow> flows = migrationFlows.get(year);
+          /*
             if (flows == null) {
-             flows = new ArrayList<MigrationFlow>();
-             migrationFlows.put(year, flows);
-             }
-             */
-            MigrationFlow mf = new MigrationFlow(origin, destination, year, flowVolume); 
-            flows.add(mf);
-            origin.addEmigrationFlow(mf);
-            destination.addImmigrationFlow(mf);
-            MIGRATION_FLOW_MIN = Math.min(flowVolume, MIGRATION_FLOW_MIN);
-            MIGRATION_FLOW_MAX = Math.max(flowVolume, MIGRATION_FLOW_MAX);
+           flows = new ArrayList<MigrationFlow>();
+           migrationFlows.put(year, flows);
+           }
+           */
+          MigrationFlow mf = new MigrationFlow(origin, destination, year, flowVolume); 
+          flows.add(mf);
+          origin.addEmigrationFlow(mf);
+          destination.addImmigrationFlow(mf);
+          MIGRATION_FLOW_MIN = Math.min(flowVolume, MIGRATION_FLOW_MIN);
+          MIGRATION_FLOW_MAX = Math.max(flowVolume, MIGRATION_FLOW_MAX);
           //}
         } 
         catch (Exception e) {

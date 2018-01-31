@@ -10,7 +10,7 @@ Table unusualData;
 
 Timeline timeline;
 float TIME = 0;
-float TIME_INC = 0.0007;
+float TIME_INC = 0.0002; //used to be 0.00007
 float SEEK_TIME = 1;
 float SEEK_INC = 0.005f;
 float SEEK_EPSILON = 0.001;
@@ -32,6 +32,8 @@ final int STATE_PAUSED = 1;
 final int STATE_SEEKING = 2;
 int currentState = STATE_PAUSED;
 
+ArrayList<CrashFlight> myFlights = new ArrayList<CrashFlight>();
+
 void setup() {
   //size(1920, 1920, P3D);
   size(960, 960, P2D);
@@ -42,9 +44,10 @@ void setup() {
   corpusFont = loadFont("SourceSansPro-Regular-44.vlw");
 
   initData();
-
+  
   //textSize(24);
   timeline = new Timeline((1920 - 390)/2 * scaleFactor, 35 * scaleFactor, HALF_PI, 110 * scaleFactor, YEAR_START, YEAR_END, REPEAT_COUNT, loadFont("SourceSansPro-SemiBold-40.vlw"), 40* scaleFactor, this);
+  initFlights(timeline);
 
   initDots();
   hint(DISABLE_DEPTH_TEST);
@@ -57,9 +60,6 @@ void draw() {
 
 
   textFont(corpusFont);
-
-<<<<<<< HEAD
-  
   String s = "100 worst and unusual Aircrashes   1933 - 2014";
  // fill(232,255,154,300);
  // drawTangentialText(s,  width-2*margin, height-2*margin);
@@ -68,15 +68,6 @@ void draw() {
   //textSize(12);
  // drawArcTextCentered(s, width-1.8*margin, height-1.8*margin);
   // s.rotate(phi);
-=======
-  /*
-  String s = "Hello World!!!&#*";
-   fill(232,26,154,300);
-   drawTangentialText(s, mouseX, mouseY);
-   fill(28,229,142,300);
-   drawArcTextCentered(s, mouseX, mouseY);
-   */
->>>>>>> 4999d9a9f33346fec8f15dfcafceb944bb68c0b9
   //text("Hello", 0, 48);
   timeline.display(TIME);
 
@@ -104,6 +95,13 @@ void draw() {
     }
     break;
   }
+  for (CrashFlight cf: myFlights) {
+    cf.display(TIME);
+  }
+  ellipseMode(RADIUS);
+  fill(255,0,0,127);
+  ellipse(width*0.5, height*0.5, 10,10);
+  /*
   stroke(255, 0, 0);
   noFill();
   drawGeodetic(-QUARTER_PI, 0.1, QUARTER_PI, 2.1, 50);
@@ -111,6 +109,7 @@ void draw() {
   fill(0, 0, 255);
   drawPoint(-QUARTER_PI, 0.1);
   drawPoint(QUARTER_PI, 2.1);
+  */
   /*
   ellipseMode(RADIUS);
    fill(255,255,0,31);

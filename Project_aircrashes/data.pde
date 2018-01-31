@@ -11,6 +11,12 @@ void initData() {
   Collections.sort(data);
 }
 
+void initFlights(Timeline tl) {
+  for (Datum d : data) {
+    myFlights.add(new CrashFlight(d, tl));
+  }
+}
+
 void initDots() {
   ArrayList<CrashDot> previousOnes = new ArrayList<CrashDot>();
   for (Datum d : data) {

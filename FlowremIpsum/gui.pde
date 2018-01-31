@@ -47,7 +47,7 @@ void coneRadiusBottom(float f) {
 }
 
 void aperture(float f) {
-  APERTURE = f / 180f;
+  APERTURE = f;
 }
 void coneOrientation(float f) {
   CONE_ORIENTATION = f;

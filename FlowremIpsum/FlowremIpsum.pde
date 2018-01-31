@@ -1,4 +1,4 @@
-import java.util.*; //<>// //<>// //<>//
+import java.util.*; //<>// //<>// //<>// //<>//
 //import java.awt.event.*;
 //import javax.swing.event.*;
 //import java.awt.event.*;
@@ -77,7 +77,7 @@ final int FULLDOME_MODE = 0;
 final int CANVAS_MODE = 1;
 int CURRENT_MODE = FULLDOME_MODE;
 
-float APERTURE = 1f;
+float APERTURE = 180f;
 float CONE_RADIUS_BOTTOM = 186;
 float CONE_RADIUS_TOP = 66;
 float CONE_HEIGHT = 238;
@@ -111,6 +111,8 @@ String[] POP_LABELS = {"1", "10", "100", "1k", "10k", "100k", "1mio", "10mio", "
 ArrayList<MigrationFlow> yearlyMigrationFlows;
 
 int GPI_LAST_RANK = 100000;
+PImage zenith;
+PImage legend;
 
 void settings() {
   size(DOME_SIZE, DOME_SIZE, P3D); //for working on the laptop (single screen)
@@ -141,6 +143,9 @@ void setup() {
   float flowHeight = 350;
   flowLayout = new LayoutInfo(graphLayout.x, graphLayout.y - flowHeight - MARGIN, graphLayout.w, flowHeight);
   countryInfoLayout = new LayoutInfo(2, 375, panelLayout.w, 250);
+
+  zenith = loadImage("title/zenith.png");
+  legend = loadImage("title/legend2.png");
 
 
   //pixelDensity(2);
@@ -189,6 +194,7 @@ void draw() {
   canvas.beginDraw();
   //draw countries
   canvas.background(0);
+  canvas.image(legend, -45, -37);
 
   drawFlowGraphLegend(graphLayout, flowLayout, MARGIN, canvas);
 
@@ -233,6 +239,7 @@ void draw() {
   switch(CURRENT_MODE) {
   case FULLDOME_MODE:
     background(0);
+    image(zenith, 0, 0, width, height);
     pushMatrix();
     translate(width*0.5, height*0.5);
     shader(domeShader);
@@ -351,14 +358,16 @@ void displayCountryInfo(PGraphics pg, Country activeCountry, LayoutInfo layout) 
       pg.image(flag, x, y, 25, 18);
     }
     y+= 20 + MARGIN;
-    pg.textAlign(LEFT,BOTTOM);
+    pg.textAlign(LEFT, BOTTOM);
     pg.textFont(HEADLINETITLE);
     pg.fill(PRIMARY);
     /*
     pg.text(c.name, x, y, layout.w, HEADLINETITLE_SIZE);
     y+= MARGIN*2 + HEADLINETITLE_SIZE;
     */
+    
     float fittingSize = min(getFittingFontSize(c.name,HEADLINETITLE,layout.w), HEADLINETITLE.getDefaultSize());
+    y += fittingSize ;
     pg.textSize(fittingSize);
     ArrayList<String> countryNameTokens = getOptimalStrings(c.name,HEADLINETITLE);
     for (String s : countryNameTokens) {
@@ -366,13 +375,12 @@ void displayCountryInfo(PGraphics pg, Country activeCountry, LayoutInfo layout) 
       y += fittingSize;
     }
     
-    
-    /*
+     /*
     float titleWidthFull = pg.textWidth(c.name);
-    float titleHeight = ceil(titleWidthFull / layout.w) * HEADLINETITLE_SIZE;
-    pg.text(c.name,x,y-titleHeight + HEADLINETITLE_SIZE, layout.w, titleHeight);
-    y+= MARGIN*2 + titleHeight;
-    */
+     float titleHeight = ceil(titleWidthFull / layout.w) * HEADLINETITLE_SIZE;
+     pg.text(c.name,x,y-titleHeight + HEADLINETITLE_SIZE, layout.w, titleHeight);
+     y+= MARGIN*2 + titleHeight;
+     */
     pg.textFont(HEADLINEALTSUBTITLE);
     pg.textSize(HEADLINEALTSUBTITLE.getDefaultSize());
     pg.text("Global Peace Index: #" + c.getGPIRankString(currentYear), x, y);
@@ -382,7 +390,6 @@ void displayCountryInfo(PGraphics pg, Country activeCountry, LayoutInfo layout) 
     pg.text("Immigration: " + c.totalImmigraionFlow.get(currentYear), x, y);
     y+= 5+ HEADLINEALTSUBTITLE_SIZE;
     pg.text("Emigration: " + c.totalEmigraionFlow.get(currentYear), x, y);
-
   }
 }
 
@@ -394,9 +401,9 @@ void keyPressed() {
   case 's':
     saveFrame("output/test.png");
     break;
- case 'g':
+  case 'g':
     drawGUI = !drawGUI;
- break;
+    break;
   case 'd':
     switch(CURRENT_MODE) {
     case FULLDOME_MODE:

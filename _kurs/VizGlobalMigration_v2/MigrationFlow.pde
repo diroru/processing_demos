@@ -46,6 +46,7 @@ class MigrationFlow implements Comparable {
       int c2 = this.destination.name.compareTo(mf.destination.name);
       if (c2 == 0) {
         return this.origin.name.compareTo(mf.origin.name);
+        
       }
       return c2;
     }

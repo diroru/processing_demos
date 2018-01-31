@@ -53,9 +53,13 @@ void initDots() {
   for (Datum d : data) {
     for (int i = 0; i < REPEAT_COUNT; i++) {
       //println(d);
-      CrashDot cd = new CrashDot(d, timeline, previousOnes, this, i); 
-      myDots.add(cd);
-      previousOnes.add(cd);
+      if (d.coordsValid()) { 
+        CrashDot cd = new CrashDot(d, timeline, previousOnes, this, i); 
+        myDots.add(cd);
+        previousOnes.add(cd);
+      } else {
+        println(d, "has invalid coordinates");
+      }
     }
   }
 }

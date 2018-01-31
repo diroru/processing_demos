@@ -48,7 +48,7 @@ HashMap<String, Float> phaseProgress = new HashMap<String, Float>();
 
 void setup() {
   //size(1920, 1920, P3D);
-  size(600, 600, P2D);
+  size(960, 960, P2D);
   pixelDensity(displayDensity());
   scaleFactor = width / 1920f;
   println(scaleFactor);

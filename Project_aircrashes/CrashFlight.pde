@@ -35,7 +35,8 @@ class CrashFlight {
 
   void display(float normTime) {
 
-    if (coordsValid && normTime > myStartMoment && normTime < myEndMoment) {
+    if (coordsValid && normTime >= myStartMoment && normTime <= myEndMoment) {
+      
       float progress = norm(normTime, myStartMoment, myEndMoment);
       boolean showStats = false;
       if (progress >= maxProgress) {
@@ -100,7 +101,7 @@ class CrashFlight {
       ellipse(planePosXY.x, planePosXY.y, rFat * scaleFactor, rFat * scaleFactor);
       
       if (showStats) {
-        
+        drawTangentialText(new String[]{myDatum.fatalities+ " / ",  myDatum.occupants + ""}, new color[]{RED, GREEN}, planePosXY.x, planePosXY.y);
       }
       
     }

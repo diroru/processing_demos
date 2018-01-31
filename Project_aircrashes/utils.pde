@@ -50,6 +50,22 @@ void drawTangentialText(char theText, float x, float y) {
   drawTangentialText(theText + "", x, y);
 }
 
+void drawTangentialText(String[] theTextTokens, color[] colors, float x, float y) {
+  float dx = x - width*0.5;
+  float dy = y - height*0.5;
+  float angle = atan2(dy,dx) - HALF_PI;
+  
+  pushMatrix();
+  translate(x,y);
+  rotate(angle);
+  for (int i = 0; i < theTextTokens.length; i++) {
+    fill(colors[i]);
+    text(theTextTokens[i], 0, 0);
+    translate(textWidth(theTextTokens[i]), 0);
+  }
+  popMatrix();
+}
+
 void drawTangentialText(String theText, float x, float y) {
   float dx = x - width*0.5;
   float dy = y - height*0.5;

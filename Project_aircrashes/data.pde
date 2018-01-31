@@ -31,13 +31,13 @@ void initData() {
   println("FATALITIES", MIN_FATALITIES, " – ", MAX_FATALITIES);
   println("OCCUPANTS", MIN_OCCUPANTS, " – ", MAX_OCCUPANTS);
   println("PHASE CODES", phaseCodes);
-  
+
   phaseProgress.put("APR", 0f); //approach
   phaseProgress.put("ICL", 0f); //initial climb
   phaseProgress.put("UNK", 0.5f); //unknown
   phaseProgress.put("TXI", 0f); //taxi
   phaseProgress.put("ENR", 0.5f); //en route
-  phaseProgress.put("En route", 0.5f); //en route
+  phaseProgress.put("En route ", 0.5f); //en route
   phaseProgress.put("TOF", 0f); //takeoff
   phaseProgress.put("LDG", 1f); //landing
 }

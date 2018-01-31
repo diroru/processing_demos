@@ -8,7 +8,7 @@ class CrashFlight {
   float myStartMoment, myEndMoment;
   float minRadius = 3, maxRadius = 20;
   float rOcc, rFat;
-  float maxProgress;
+  Float maxProgress;
 
   CrashFlight(Datum d, Timeline tl) {
     myDatum = d;
@@ -20,7 +20,14 @@ class CrashFlight {
     myEndMoment = constrain(myStartMoment + duration, 0, 1);
     rFat = map(sqrt(d.fatalities),sqrt(MIN_FATALITIES), sqrt(MAX_FATALITIES), minRadius, maxRadius);
     rOcc = map(sqrt(d.occupants),sqrt(MIN_OCCUPANTS), sqrt(MAX_OCCUPANTS), minRadius, maxRadius);
-    maxProgress = phaseProgress.get(d.phaseCode);
+    try {
+      maxProgress = phaseProgress.get(d.phaseCode);
+      //println(phaseProgress.get(d.phaseCode), d.phaseCode);
+    } catch (Exception e) {
+      e.printStackTrace();
+      maxProgress = 0.5;
+    }
+    
   }
 
   void update(float normTime) {

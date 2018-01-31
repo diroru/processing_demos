@@ -194,7 +194,7 @@ void draw() {
   canvas.beginDraw();
   //draw countries
   canvas.background(0);
-  canvas.image(legend, -45, 0);
+  canvas.image(legend, -45, -37);
 
   drawFlowGraphLegend(graphLayout, flowLayout, MARGIN, canvas);
 

@@ -54,7 +54,7 @@ CrashFlight currentFlight;
 
 void setup() {
   //size(1920, 1920, P3D);
-  size(960, 960, P2D);
+  size(600, 600, P2D);
   pixelDensity(displayDensity());
   scaleFactor = width / 1920f;
   println(scaleFactor);
@@ -98,7 +98,7 @@ void draw() {
     popMatrix();
   }
 
-  String s2= "  Fatalities             Total number of passanger4";
+  String s2= "  Fatalities             Total number of passangers";
   fill(255);
   textFont(corpusFont);
   textSize(30*scaleFactor);

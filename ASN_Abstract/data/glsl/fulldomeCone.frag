@@ -144,7 +144,7 @@ void main() {
   vec3 ray = latLonToXYZ(latLon);
   vec3 color = ray * 0.5 + vec3(0.5);
   //gl_FragColor = vec4(color, 1.0);
-  vec2 st = conicTexCoordinates(ray, coneBottom, radiusBottom, coneHeight, radiusTop, coneOrientation);
+  vec2 st = conicTexCoordinates(ray, coneBottom, radiusBottom, coneHeight, radiusTop, coneOrientation / 360.0);
   //gl_FragColor = vec4(st, 0.0, 1.0);
   gl_FragColor = texture(canvas, st);
   //vec3 color = vec3(textureCube(cubemap, ray));

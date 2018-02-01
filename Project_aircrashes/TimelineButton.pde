@@ -60,7 +60,7 @@ public class TimelineButton {
     float dx = mx - width *0.5;
     float dy = my - height *0.5;
     float r = sqrt(dx * dx + dy * dy);
-    float theta = atan2(dy, dx);
+    float theta = atan2(dy, dx) - ORIENTATION;
     return theta +PI +HALF_PI >= myAngle - myDeltaAngle && theta +PI +HALF_PI<= myAngle + myDeltaAngle && r >= myTimeline.innerRadius() && r <= myTimeline.outerRadius(); 
     //return false;
   }

@@ -42,6 +42,12 @@ void drawArcText(String theText, float x0, float y0) {
   }
 }
 
+void drawTangentialTextPolar(String theText, float theta, float radius) {
+  float x = width * 0.5 + cos(theta) * radius;
+  float y = height * 0.5 + sin(theta) * radius;
+  drawTangentialText(theText + "", x, y);
+}
+
 void drawTangentialText(String theText, PVector v) {
   drawTangentialText(theText + "", v.x, v.y);
 }
@@ -51,6 +57,10 @@ void drawTangentialText(char theText, float x, float y) {
 }
 
 void drawTangentialText(String[] theTextTokens, color[] colors, float x, float y) {
+  drawTangentialText(theTextTokens, colors, 255,  x, y);
+}
+
+void drawTangentialText(String[] theTextTokens, color[] colors, float alpha, float x, float y) {
   float dx = x - width*0.5;
   float dy = y - height*0.5;
   float angle = atan2(dy,dx) - HALF_PI;
@@ -59,11 +69,17 @@ void drawTangentialText(String[] theTextTokens, color[] colors, float x, float y
   translate(x,y);
   rotate(angle);
   for (int i = 0; i < theTextTokens.length; i++) {
-    fill(colors[i]);
+    fill(colors[i], alpha);
     text(theTextTokens[i], 0, 0);
     translate(textWidth(theTextTokens[i]), 0);
   }
   popMatrix();
+}
+
+void drawTangentialTextPolar(String[] theTextTokens, color[] colors, float alpha, float theta, float radius) {
+  float x = width*0.5 + cos(theta) * radius;
+  float y = height*0.5 + sin(theta) * radius;
+  drawTangentialText(theTextTokens, colors, alpha, x, y);
 }
 
 void drawTangentialText(String theText, float x, float y) {

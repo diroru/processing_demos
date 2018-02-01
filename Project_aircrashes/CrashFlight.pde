@@ -39,7 +39,13 @@ class CrashFlight {
     //if (coordsValid && normTime >= myStartMoment && normTime <= myEndMoment) {
 
     //float progress = norm(normTime, myStartMoment, myEndMoment);
-    float progress = normTime;
+    float fadeIn = 0.2;
+    float fadeOut = 0.8;
+    float progress = map(normTime, fadeIn, fadeOut, 0, 1);
+    float alpha = map(normTime, 0, fadeIn, 0, 255);
+    if (normTime >= fadeOut) {
+      alpha = map(normTime, fadeOut, 1, 255, 0);
+    }
     boolean showStats = false;
     if (progress >= maxProgress) {
       showStats = true;
@@ -56,7 +62,7 @@ class CrashFlight {
     //stroke(255, 0, 0);
     //drawGeodetic(dep, dst, geodeticRes);
     //
-    stroke(255);
+    stroke(255, alpha);
     if (myDatum.isUnusual) {
       drawDashedGeodetic(dep, dst, geodeticRes, 0.5 * scaleFactor, 7 * scaleFactor);
     } else {
@@ -71,17 +77,58 @@ class CrashFlight {
     PVector depXY = lngLatToXY(dep);
     PVector dstXY = lngLatToXY(dst);
     noStroke();
-    fill(255);
+    fill(255, alpha);
     pushStyle();
     textSize(18 * scaleFactor);
     //drawArcTextCentered(myDatum.depCountry, depXY);
     //drawArcTextCentered(myDatum.dstCountry, dstXY);
-    textAlign(CENTER, TOP);
-    drawTangentialText(myDatum.depCountry, depXY);
+    //textAlign(CENTER, TOP);
+    //drawTangentialText(myDatum.depCountry, depXY);
+    float depAngle = atan2(depXY.y - height * 0.5, depXY.x - width * 0.5);
+    float dstAngle = atan2(dstXY.y - height * 0.5, dstXY.x - width * 0.5);
+    float planeAngle = atan2(planePosXY.y - height * 0.5, planePosXY.x - width * 0.5);
+
+    float depRadius = PVector.dist(depXY, new PVector(width*0.5, height*0.5));
+    float dstRadius = PVector.dist(dstXY, new PVector(width*0.5, height*0.5));
+    float planeRadius = PVector.dist(planePosXY, new PVector(width*0.5, height*0.5)) - 15 * scaleFactor;
+    
+    int firstH = RIGHT;
+    int secondH = LEFT;
+    int firstV = BOTTOM;
+    int secondV = TOP;
+    float dAngle = radians(1);
+    float dRadius = 5 * scaleFactor;
+
+    if (depAngle < dstAngle) {
+      firstH = LEFT;
+      secondH = RIGHT;
+      depAngle -= dAngle;
+      dstAngle += dAngle;
+    } else {
+      depAngle += dAngle;
+      dstAngle -= dAngle;
+    }
+
+    if (depRadius > dstRadius) {
+      firstV = TOP;
+      secondV = BOTTOM;
+      depRadius += dRadius;
+      dstRadius -= dRadius;
+    } else {
+      depRadius -= dRadius;
+      dstRadius += dRadius;
+    }
+    textAlign(firstH, firstV);
+    drawTangentialTextPolar(myDatum.depShort, depAngle, depRadius);
+    textAlign(secondH, secondV);
+    drawTangentialTextPolar(myDatum.dstShort, dstAngle, dstRadius);
+
+    //drawTangentialText(myDatum.depShort, depXY);
     //textAlign(CENTER, BOTTOM);
-    drawTangentialText(myDatum.dstCountry, dstXY);
+    //drawTangentialText(myDatum.dstCountry, dstXY);
+    //drawTangentialText(myDatum.dstShort, dstXY);
     ellipseMode(RADIUS);
-    fill(255);
+    fill(255, alpha);
     noStroke();
     ellipse(depXY.x, depXY.y, 5*scaleFactor, 5*scaleFactor);
     ellipse(dstXY.x, dstXY.y, 5*scaleFactor, 5*scaleFactor);
@@ -97,13 +144,19 @@ class CrashFlight {
      }
      */
     noStroke();
-    fill(GREEN);
+    fill(GREEN, alpha);
     ellipse(planePosXY.x, planePosXY.y, rOcc * scaleFactor, rOcc * scaleFactor);
-    fill(RED);
+    fill(RED, alpha);
     ellipse(planePosXY.x, planePosXY.y, rFat * scaleFactor, rFat * scaleFactor);
-
+    
     if (showStats) {
-      drawTangentialText(new String[]{myDatum.fatalities+ " / ", myDatum.occupants + ""}, new color[]{RED, GREEN}, planePosXY.x, planePosXY.y);
+      pushStyle();
+      textAlign(CENTER, BOTTOM);
+      textFont(corpusFontBold);
+      textSize(30 * scaleFactor);
+      drawTangentialTextPolar(new String[]{myDatum.fatalities+ "/", myDatum.occupants + ""}, new color[]{color(RED), color(GREEN)}, alpha, planeAngle, planeRadius);
+      //drawTangentialText(new String[]{myDatum.fatalities+ " / ", myDatum.occupants + ""}, new color[]{color(RED), color(GREEN)}, alpha, planePosXY.x, planePosXY.y);
+      popStyle();
     }
 
     //}

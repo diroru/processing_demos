@@ -11,9 +11,9 @@ Table unusualData;
 
 Timeline timeline;
 float TIME = 0;
-float TIME_INC = 0.002; //used to be 0.00007
+float TIME_INC = 0.001; //used to be 0.00007
 float FLIGHT_TIME = 0;
-float FLIGHT_TIME_INC = 0.005;
+float FLIGHT_TIME_INC = 0.003;
 float SEEK_TIME = 1;
 float SEEK_INC = 0.005f;
 float SEEK_EPSILON = 0.001;
@@ -22,10 +22,11 @@ float GLOW_DURATION = 0.01;
 int YEAR_START = 1930;
 int YEAR_END = 2015;
 int REPEAT_COUNT = 2;
-float SCALE = 0.75; //0.8125;
+float SCALE = 0.76; //0.8125; //map scaling
 
 float PHI1 = radians(12);
 float LAMBDA0 = radians(25);
+float ORIENTATION = PI * 0.4; 
 
 ArrayList<Datum> data = new ArrayList<Datum>();
 ArrayList<CrashDot> myDots = new ArrayList<CrashDot>();
@@ -74,6 +75,10 @@ void setup() {
 void draw() {
 
   background(0);
+ // pushMatrix();
+  translate(width*0.5, height*0.5);
+  rotate(ORIENTATION);
+  translate(-width*0.5, -height*0.5);
   image(background, width*(1 - SCALE)*0.5, height*(1 - SCALE)*0.5, width*SCALE, height*SCALE);
 
 
@@ -203,7 +208,7 @@ void draw() {
      break;
      */
   }
-  println(TIME, FLIGHT_TIME);
+  //println(TIME, FLIGHT_TIME);
   /*
   for (CrashFlight cf : myFlights) {
    cf.display(TIME);

@@ -6,7 +6,7 @@ class CrashFlight {
   boolean coordsValid;
   Timeline myTimeline;
   float myStartMoment, myEndMoment;
-  float minRadius = 3, maxRadius = 20;
+  float minRadius = 1, maxRadius = 50;
   float rOcc, rFat;
   Float maxProgress;
   CrashFlight previousFlight = null, nextFlight = null;
@@ -19,8 +19,11 @@ class CrashFlight {
     myTimeline = tl;
     myStartMoment = getNormalizedMoment(d, tl);
     myEndMoment = constrain(myStartMoment + duration, 0, 1);
-    rFat = map(sqrt(d.fatalities), sqrt(MIN_FATALITIES), sqrt(MAX_FATALITIES), minRadius, maxRadius);
-    rOcc = map(sqrt(d.occupants), sqrt(MIN_OCCUPANTS), sqrt(MAX_OCCUPANTS), minRadius, maxRadius);
+ //   rFat = map(sqrt(d.fatalities), sqrt(MIN_FATALITIES), sqrt(MAX_FATALITIES), minRadius, maxRadius);
+  //  rOcc = map(sqrt(d.occupants), sqrt(MIN_OCCUPANTS), sqrt(MAX_OCCUPANTS), minRadius, maxRadius);
+    rFat = map(sqrt(d.fatalities), sqrt(0), sqrt(MAX_OCCUPANTS), minRadius, maxRadius);
+    rOcc = map(sqrt(d.occupants), sqrt(0), sqrt(MAX_OCCUPANTS), minRadius, maxRadius);
+
     try {
       maxProgress = phaseProgress.get(d.phaseCode);
       //println(phaseProgress.get(d.phaseCode), d.phaseCode);

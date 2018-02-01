@@ -44,9 +44,9 @@ class MigrationFlow implements Comparable {
   }
 
   void displayAsTop(PGraphics pg, LayoutInfo theLayout, Country activeCountry, int No) {
-    color c = SECONDARY;
+    color c = PRIMARY;
     if (activeCountry != null && activeCountry.name.equals(origin.name)) {
-      c = PRIMARY;
+      c = SECONDARY;
     }
     float flowNorm = getNormFlow(flow);
     float yTop = theLayout.y + theLayout.h - map(flowNorm, 0, 1, 0, theLayout.h);

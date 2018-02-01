@@ -6,7 +6,7 @@ class CrashFlight {
   boolean coordsValid;
   Timeline myTimeline;
   float myStartMoment, myEndMoment;
-  float minRadius = 3, maxRadius = 20;
+  float minRadius = 1, maxRadius = 50;
   float rOcc, rFat;
   Float maxProgress;
   CrashFlight previousFlight = null, nextFlight = null;
@@ -19,8 +19,11 @@ class CrashFlight {
     myTimeline = tl;
     myStartMoment = getNormalizedMoment(d, tl);
     myEndMoment = constrain(myStartMoment + duration, 0, 1);
-    rFat = map(sqrt(d.fatalities), sqrt(MIN_FATALITIES), sqrt(MAX_FATALITIES), minRadius, maxRadius);
-    rOcc = map(sqrt(d.occupants), sqrt(MIN_OCCUPANTS), sqrt(MAX_OCCUPANTS), minRadius, maxRadius);
+ //   rFat = map(sqrt(d.fatalities), sqrt(MIN_FATALITIES), sqrt(MAX_FATALITIES), minRadius, maxRadius);
+  //  rOcc = map(sqrt(d.occupants), sqrt(MIN_OCCUPANTS), sqrt(MAX_OCCUPANTS), minRadius, maxRadius);
+    rFat = map(sqrt(d.fatalities), sqrt(0), sqrt(MAX_OCCUPANTS), minRadius, maxRadius);
+    rOcc = map(sqrt(d.occupants), sqrt(0), sqrt(MAX_OCCUPANTS), minRadius, maxRadius);
+
     try {
       maxProgress = phaseProgress.get(d.phaseCode);
       //println(phaseProgress.get(d.phaseCode), d.phaseCode);
@@ -46,6 +49,7 @@ class CrashFlight {
     if (normTime >= fadeOut) {
       alpha = map(normTime, fadeOut, 1, 255, 0);
     }
+    alpha = constrain(alpha, 0, 255);
     boolean showStats = false;
     if (progress >= maxProgress) {
       showStats = true;
@@ -144,9 +148,9 @@ class CrashFlight {
      }
      */
     noStroke();
-    fill(GREEN, alpha);
+    fill(GREEN, alpha*0.4);
     ellipse(planePosXY.x, planePosXY.y, rOcc * scaleFactor, rOcc * scaleFactor);
-    fill(RED, alpha);
+    fill(RED, alpha*0.4);
     ellipse(planePosXY.x, planePosXY.y, rFat * scaleFactor, rFat * scaleFactor);
     
     if (showStats) {

@@ -49,6 +49,7 @@ class CrashFlight {
     if (normTime >= fadeOut) {
       alpha = map(normTime, fadeOut, 1, 255, 0);
     }
+    alpha = constrain(alpha, 0, 255);
     boolean showStats = false;
     if (progress >= maxProgress) {
       showStats = true;
@@ -147,9 +148,9 @@ class CrashFlight {
      }
      */
     noStroke();
-    fill(GREEN, alpha);
+    fill(GREEN, alpha*0.4);
     ellipse(planePosXY.x, planePosXY.y, rOcc * scaleFactor, rOcc * scaleFactor);
-    fill(RED, alpha);
+    fill(RED, alpha*0.4);
     ellipse(planePosXY.x, planePosXY.y, rFat * scaleFactor, rFat * scaleFactor);
     
     if (showStats) {

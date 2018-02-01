@@ -13,13 +13,17 @@ float fittingScaleFactor(PImage src, PImage target) {
 
 void initShader() {
   domeShader = loadShader("glsl/fulldomeCone.frag", "glsl/fulldomeCone.vert");
-  domeShader.set("aperture", APERTURE);
+  domeShader.set("canvas", canvas);
+  updateShader();
+}
+
+void updateShader() {
+  domeShader.set("aperture", APERTURE / 180f);
   domeShader.set("radiusBottom", CONE_RADIUS_BOTTOM);
   domeShader.set("radiusTop", CONE_RADIUS_TOP);
   domeShader.set("coneBottom", CONE_BOTTOM);
   domeShader.set("coneHeight", CONE_HEIGHT);
   domeShader.set("coneOrientation", CONE_ORIENTATION);
-  domeShader.set("canvas", canvas);
 }
 
 void initCanvas() {

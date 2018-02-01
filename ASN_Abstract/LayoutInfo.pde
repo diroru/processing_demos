@@ -39,7 +39,8 @@ class LayoutInfo {
   }
   
   float getYNo(int no, int count) {
-    return y + deltaY(count) * no + vGap;
+    float result = y + deltaY(count) * no;
+    return result;
   }
 }
 

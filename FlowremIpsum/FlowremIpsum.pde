@@ -142,7 +142,7 @@ void setup() {
   //flowLayout = new LayoutInfo(panelWidth + 2 * MARGIN, MARGIN, graphWidth, graphHeight);
   float flowHeight = 350;
   flowLayout = new LayoutInfo(graphLayout.x, graphLayout.y - flowHeight - MARGIN, graphLayout.w, flowHeight);
-  countryInfoLayout = new LayoutInfo(8, 400, panelLayout.w-40, 300);
+  countryInfoLayout = new LayoutInfo(8, 450, panelLayout.w-40, 300);
 
   zenith = loadImage("title/zenith.png");
   legend = loadImage("title/legend2.png");
@@ -196,7 +196,7 @@ void draw() {
   canvas.beginDraw();
   //draw countries
   canvas.background(0);
-  canvas.image(legend, -45, -37);
+  canvas.image(legend, -45, -11);
 
   drawFlowGraphLegend(graphLayout, flowLayout, MARGIN, canvas);
 

@@ -1,5 +1,5 @@
 color PRIMARY= #00FFD6;
-color SECONDARY= #FF8000;
+color SECONDARY= #FAB065;
 color INDEX1= #BBBBBB;
 color INDEX2= #BBBBBB;
 color INDEX3= #818181;

@@ -48,7 +48,9 @@ void initData() { //<>// //<>//
   for (String cn : countryNameSet) {
     maxFatalatiesByCountry.put(cn, 0);
   }
-  for (ArrayList<Country> countriesByYears : getCountriesByYears().values()) {
+  for (int year : getCountriesByYears().keySet()) {
+  //for (ArrayList<Country> countriesByYears : getCountriesByYears().values()) {
+    ArrayList<Country> countriesByYears = getCountriesByYears().get(year);
     int fatailitesPerYear = 0;
     for (Country c : countriesByYears) {
       fatailitesPerYear += c.getFatalityCount();
@@ -57,6 +59,8 @@ void initData() { //<>// //<>//
       maxFatalatiesByCountry.put(c.name, max(maxFatalatiesByCountry.get(c.name), c.getFatalityCount()));
     }
     MAX_FATALITIES_PER_YEAR = max(MAX_FATALITIES_PER_YEAR, fatailitesPerYear);
+    println(year, fatailitesPerYear);
+    fatalitiesByYear.put(year, fatailitesPerYear);
   }
   for (Integer f : maxFatalatiesByCountry.values()) {
     MAX_FATALITIES_PER_COUNTRY_PER_YEAR = max(MAX_FATALITIES_PER_COUNTRY_PER_YEAR, f);

@@ -11,14 +11,15 @@ final int FULLDOME_MODE = 0;
 final int CANVAS_MODE = 1;
 int CURRENT_MODE = FULLDOME_MODE;
 
-float APERTURE = 1f;
+float APERTURE = 180f;
 float CONE_RADIUS_BOTTOM = 186;
 float CONE_RADIUS_TOP = 66;
 float CONE_HEIGHT = 238;
 float CONE_BOTTOM = 0;
-float CONE_ORIENTATION = 0;
+float CONE_ORIENTATION = 250f;
 PShader domeShader;
 PShape domeQuad;
+float SCROLL_FACTOR = 5;
 
 Table dataTable;
 ArrayList<String> countryNames;
@@ -29,6 +30,7 @@ HashMap<String, Integer> fatalitiesByCountry = new HashMap<String, Integer>();
 //a crude database listing all countries, first by name, then by year
 TreeMap<String, TreeMap<Integer, Country>> dataBase = new TreeMap<String, TreeMap<Integer, Country>>();
 HashSet<String> countryNameSet;
+HashMap<Integer, Integer> fatalitiesByYear = new HashMap<Integer, Integer>();
 
 int YEAR_START = Integer.MAX_VALUE;
 int YEAR_END = Integer.MIN_VALUE;
@@ -69,8 +71,8 @@ long lastTime;
 
 PFont headerFont, corpusFont, smallFont;
 int DELTA_Y = 0;
-int DELTA_Y_MIN;
-int DELTA_Y_MAX;
+float DELTA_Y_MIN;
+float DELTA_Y_MAX;
 
 PImage overlay;
 
@@ -92,7 +94,7 @@ void setup() {
   initData(); //see data.pde
   matrixLayout = layoutFromCellSizeRightAlign(canvas.width - MARGIN, canvas.height - BOTTOM_REGION_HEIGHT, CELL_SIZE, CELL_SIZE, GAP, GAP, getColumnCount(), getRowCount());
   DELTA_Y_MAX = round(matrixLayout.h - (CELL_SIZE + GAP) * 19);
-  DELTA_Y_MIN = 0;
+  DELTA_Y_MIN = - CELL_SIZE - GAP;
   setSortByName(SET_START_POS);
 
   //ArrayList<Integer> decades = new ArrayList<Integer>(Arrays.asList(1900, 1910, 1920, 1930, 1940, 1950, 1960, 1970, 1980, 1990, 2000, 2010));
@@ -106,6 +108,7 @@ void setup() {
 }
 
 void draw() {
+  updateShader();
   mappedMouse = mappedMouse(CURRENT_MODE);
   long now = millis();
   long delta = now - lastTime;
@@ -171,23 +174,29 @@ void draw() {
        */
     }
   }
+  
+  canvas.noStroke();
+  float labelY = canvas.height - BOTTOM_REGION_HEIGHT + MARGIN;
+  float totalX = matrixLayout.x -170;
+  displayTotals(canvas, totalX, labelY, 100);
 
   //hide overlapping countries
   canvas.fill(0);
   canvas.noStroke();
   canvas.rect(0, matrixLayout.y + matrixLayout.h, canvas.width, canvas.height - matrixLayout.y - matrixLayout.h);
   if (tooltipCountry == null) {
-    displayLabels(canvas.height - BOTTOM_REGION_HEIGHT + MARGIN, displayableCountries, 255);
+    displayLabels(labelY, displayableCountries, 255);
   } else {
-    displayLabels(canvas.height - BOTTOM_REGION_HEIGHT + MARGIN, displayableCountries, 127, tooltipCountry);
+    displayLabels(labelY, displayableCountries, 127, tooltipCountry);
   }
+  canvas.text("GLOBAL", totalX, labelY);
 
   drawTooltip();
   canvas.fill(255, 0, 0, 127);
   canvas.ellipseMode(RADIUS);
   canvas.ellipse(mappedMouse.x, mappedMouse.y, 5, 5);
   canvas.ellipse(mappedMouse.x + canvas.width, mappedMouse.y, 5, 5);
-
+  
   //canvas.popMatrix();
   //
   canvas.endDraw();
@@ -264,12 +273,16 @@ void displayYears(int deltaX, int alpha) {
   }
 }
 
-void displayTotals(int deltaX) {
+void displayTotals(PGraphics g, float x, float y, float w) {
   for (int year = YEAR_START; year <= YEAR_END; year++) {
-    canvas.pushStyle();
-    canvas.fill(NO_CRASHES);
-    //canvas.rect();
-    canvas.popStyle();
+    g.pushStyle();
+    g.fill(NO_CRASHES);
+    g.rect(x, matrixLayout.getYNo(year-YEAR_START, YEAR_END-YEAR_START) + DELTA_Y, w, matrixLayout.getUnitHeight(YEAR_END-YEAR_START));
+    float wTotal = map(fatalitiesByYear.get(year),0,MAX_FATALITIES_PER_YEAR, 0, w);
+    g.fill(WHITE);
+    g.rect(x, matrixLayout.getYNo(year-YEAR_START, YEAR_END-YEAR_START) + DELTA_Y, wTotal, matrixLayout.getUnitHeight(YEAR_END-YEAR_START));
+
+    g.popStyle();
   }
 }
 
@@ -339,5 +352,5 @@ void mouseWheel(MouseEvent event) {
     //println("shift");
   }
   //println(MouseEvent.);
-  DELTA_Y = round(constrain(DELTA_Y + e, DELTA_Y_MIN, DELTA_Y_MAX));
+  DELTA_Y = round(constrain(DELTA_Y + e * SCROLL_FACTOR, DELTA_Y_MIN, DELTA_Y_MAX));
 }

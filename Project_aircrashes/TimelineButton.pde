@@ -16,7 +16,7 @@ public class TimelineButton {
     pushStyle();
     noFill();
     if (mouseOver) {
-      stroke(255, 255, 255,100);
+      stroke(255, 255, 255, 100);
     } else {
       stroke(255);
     }
@@ -30,6 +30,26 @@ public class TimelineButton {
     }
     myTimeline.drawArcAround(myAngle + HALF_PI, myDeltaAngle);
     popStyle();
+    
+    PVector pos = myTimeline.pointAtAngle(myAngle + HALF_PI + radians(0.2));
+    pushMatrix();
+    translate(pos.x, pos.y);
+    rotate(myAngle);
+    rectMode(CENTER);
+    fill(0);
+    float s = 15 * scaleFactor;
+    float dy = 5 * scaleFactor;
+    switch(currentState) {
+      case STATE_PAUSED:
+      triangle(0, -s* sqrt(3) * 0.5 + dy, s, 0 + dy, 0, s * sqrt(3) * 0.5 + dy);
+      break;
+      default:
+      rect(0,dy,s*0.4,s);
+      rect(s*0.6,dy,s*0.4,s);
+      break;
+    }
+    
+    popMatrix();
   }
 
   float getWidth() {

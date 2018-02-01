@@ -13,7 +13,7 @@ Timeline timeline;
 float TIME = 0;
 float TIME_INC = 0.002; //used to be 0.00007
 float FLIGHT_TIME = 0;
-float FLIGHT_TIME_INC = 0.02;
+float FLIGHT_TIME_INC = 0.005;
 float SEEK_TIME = 1;
 float SEEK_INC = 0.005f;
 float SEEK_EPSILON = 0.001;
@@ -22,7 +22,7 @@ float GLOW_DURATION = 0.01;
 int YEAR_START = 1930;
 int YEAR_END = 2015;
 int REPEAT_COUNT = 2;
-float SCALE = 0.8125;
+float SCALE = 0.75; //0.8125;
 
 float PHI1 = radians(12);
 float LAMBDA0 = radians(25);

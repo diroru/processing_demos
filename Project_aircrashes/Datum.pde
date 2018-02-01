@@ -3,6 +3,7 @@ class Datum implements Comparable {
   String date;
   Integer id;
   String depCountry, dstCountry;
+  String depShort, dstShort;
   Float[] depLatLng = new Float[2], dstLatLng = new Float[2];
   String phaseCode;
   int fatalities, occupants;

@@ -174,6 +174,10 @@ class Timeline {
     strokeWeight(myHeight + myPadding * 2);
     arc(width*0.5, height*0.5, (myRadius - myHeight*0.5) + 2, (myRadius - myHeight*0.5) + 2, phi0-deltaPhi*0.5, phi0+deltaPhi*0.5);
   }
+  
+  PVector pointAtAngle(float phi) {
+    return new PVector(width*0.5 + cos(phi) * (myRadius - myHeight*0.5) , height*0.5 + sin(phi) * (myRadius - myHeight*0.5));
+  }
 
   float innerRadius() {
     return myRadius - 0.8 * (myHeight + myPadding * 2);

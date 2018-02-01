@@ -1,6 +1,6 @@
 void initData(Timeline tl) {
-  worstData = loadTable("180111_toProcess_worst.tsv", "header"); 
-  unusualData = loadTable("180111_toProcess_unusual.tsv", "header");
+  worstData = loadTable("180131_toProcess_worst.tsv", "header"); 
+  unusualData = loadTable("180131_toProcess_unusual.tsv", "header");
   for (TableRow tr : worstData.rows()) {
     Datum d = new Datum(tr, tl);
     phaseCodes.add(d.phaseCode);

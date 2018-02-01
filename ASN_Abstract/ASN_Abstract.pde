@@ -75,9 +75,9 @@ int DELTA_Y_MAX;
 PImage overlay;
 
 void settings() {
-  size(DOME_SIZE, DOME_SIZE, P3D);
+  //size(DOME_SIZE, DOME_SIZE, P3D);
   //pixelDensity(displayDensity());
-  //fullScreen(P3D, SPAN);
+  fullScreen(P3D, SPAN);
 }
 
 void setup() {

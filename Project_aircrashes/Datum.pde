@@ -3,6 +3,7 @@ class Datum implements Comparable {
   String date;
   Integer id;
   String depCountry, dstCountry;
+  String depShort, dstShort;
   Float[] depLatLng = new Float[2], dstLatLng = new Float[2];
   String phaseCode;
   int fatalities, occupants;
@@ -25,6 +26,8 @@ class Datum implements Comparable {
     phaseCode = tr.getString("phase_code");
     fatalities = tr.getInt("total_fatalities");
     occupants = tr.getInt("total_occupants");
+    depShort = tr.getString("departure_airport_short");
+    dstShort = tr.getString("destination_airport_short");
 
     int unusualFlag = tr.getInt("unusual_flag");
     isUnusual = unusualFlag > 0;

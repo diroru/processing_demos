@@ -1,14 +1,14 @@
 //TODO: font settings
 
 void drawArcTextCentered(String theText, PVector v) {  
-  drawArcTextCentered(theText, v.x, v.y); 
+  drawArcTextCentered(theText, v.x, v.y);
 }
 
 void drawArcTextCentered(String theText, float x0, float y0) {
   float theW = textWidth(theText);
-  float rad = PVector.dist(new PVector(x0,y0),center());
+  float rad = PVector.dist(new PVector(x0, y0), center());
   float phi = getPhiFromSides(theW, rad);
-  PVector v = new PVector(x0,y0);
+  PVector v = new PVector(x0, y0);
   v.sub(center());
   v.rotate(phi*0.5);
   v.add(center());
@@ -29,11 +29,11 @@ void drawArcText(String theText, float x0, float y0) {
   for (int i = 0; i < letters.length; i++) {
     char letter = letters[i];
     drawTangentialText(letter, x, y);
-    
+
     float characterWidth = textWidth(letter);
     //applying sine theorem
     float theta = 2f * asin(characterWidth / radius * 0.5f);
-    PVector nextCoords = new PVector(x,y);
+    PVector nextCoords = new PVector(x, y);
     nextCoords.add(new PVector(-width*0.5, -height*0.5));
     nextCoords.rotate(-theta);
     nextCoords.add(new PVector(width*0.5, height*0.5));
@@ -57,16 +57,16 @@ void drawTangentialText(char theText, float x, float y) {
 }
 
 void drawTangentialText(String[] theTextTokens, color[] colors, float x, float y) {
-  drawTangentialText(theTextTokens, colors, 255,  x, y);
+  drawTangentialText(theTextTokens, colors, 255, x, y);
 }
 
 void drawTangentialText(String[] theTextTokens, color[] colors, float alpha, float x, float y) {
   float dx = x - width*0.5;
   float dy = y - height*0.5;
-  float angle = atan2(dy,dx) - HALF_PI;
-  
+  float angle = atan2(dy, dx) - HALF_PI;
+
   pushMatrix();
-  translate(x,y);
+  translate(x, y);
   rotate(angle);
   for (int i = 0; i < theTextTokens.length; i++) {
     fill(colors[i], alpha);
@@ -85,10 +85,10 @@ void drawTangentialTextPolar(String[] theTextTokens, color[] colors, float alpha
 void drawTangentialText(String theText, float x, float y) {
   float dx = x - width*0.5;
   float dy = y - height*0.5;
-  float angle = atan2(dy,dx) - HALF_PI;
-  
+  float angle = atan2(dy, dx) - HALF_PI;
+
   pushMatrix();
-  translate(x,y);
+  translate(x, y);
   rotate(angle);
   text(theText, 0, 0);
   popMatrix();
@@ -121,4 +121,6 @@ int signum(float f) {
 void setActiveFlight(CrashFlight theFlight) {
   activeFlight = theFlight;
   activeFlight.finished = false;
+  activeFlight.pausable = false;
+  activeFlight.displayAll = false;
 }

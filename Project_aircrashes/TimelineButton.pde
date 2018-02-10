@@ -30,7 +30,7 @@ public class TimelineButton {
     }
     myTimeline.drawArcAround(myAngle + HALF_PI, myDeltaAngle);
     popStyle();
-    
+
     PVector pos = myTimeline.pointAtAngle(myAngle + HALF_PI + radians(0.2));
     pushMatrix();
     translate(pos.x, pos.y);
@@ -40,15 +40,15 @@ public class TimelineButton {
     float s = 15 * scaleFactor;
     float dy = 5 * scaleFactor;
     switch(currentState) {
-      case STATE_PAUSED:
+    case STATE_PAUSED:
       triangle(0, -s* sqrt(3) * 0.5 + dy, s, 0 + dy, 0, s * sqrt(3) * 0.5 + dy);
       break;
-      default:
-      rect(0,dy,s*0.4,s);
-      rect(s*0.6,dy,s*0.4,s);
+    default:
+      rect(0, dy, s*0.4, s);
+      rect(s*0.6, dy, s*0.4, s);
       break;
     }
-    
+
     popMatrix();
   }
 
@@ -77,12 +77,21 @@ public class TimelineButton {
         switch(currentState) {
         case STATE_PLAY:
           currentState = STATE_PAUSED;
+          println("STATE_PLAY > STATE_PAUSED");
           break;
         case STATE_PAUSED:
-          currentState = STATE_PLAY;
+          if (activeFlight == null) {
+            currentState = STATE_PLAY;
+            println("STATE_PAUSED > STATE_PLAY");
+          } else {
+            currentState = STATE_DISPLAY_FLIGHT;
+            println("STATE_PAUSED > STATE_DISPLAY_FLIGHT");
+          }
+
           break;
         case STATE_SEEK:
           currentState = STATE_PLAY;
+          println("STATE_SEEK > STATE_PLAY");
           break;
         }
       }

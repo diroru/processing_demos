@@ -8,9 +8,13 @@ class CrashFlight {
   float myStartMoment, myEndMoment;
   float minRadius = 1, maxRadius = 50;
   float rOcc, rFat;
-  Float maxProgress;
+  Float progressTime;
   CrashFlight previousFlight = null, nextFlight = null;
-  boolean finished = false;
+  boolean finished = false, displayAll = false, pausable = false;
+  float myTotalDuration;
+  float FADE_IN_TIME = 0.2;
+  float FADE_OUT_TIME = 0.2;
+  float DISPLAY_TIME = 1.0;
 
   CrashFlight(Datum d, Timeline tl) {
     myDatum = d;
@@ -26,13 +30,14 @@ class CrashFlight {
     rOcc = map(sqrt(d.occupants), sqrt(0), sqrt(MAX_OCCUPANTS), minRadius, maxRadius);
 
     try {
-      maxProgress = phaseProgress.get(d.phaseCode);
+      progressTime = phaseProgress.get(d.phaseCode);
       //println(phaseProgress.get(d.phaseCode), d.phaseCode);
     } 
     catch (Exception e) {
       e.printStackTrace();
-      maxProgress = 0.5;
+      progressTime = 0.5;
     }
+    myTotalDuration = FADE_IN_TIME + progressTime + DISPLAY_TIME + FADE_OUT_TIME;
   }
 
   void update(float normTime) {
@@ -43,22 +48,22 @@ class CrashFlight {
     //if (coordsValid && normTime >= myStartMoment && normTime <= myEndMoment) {
 
     //float progress = norm(normTime, myStartMoment, myEndMoment);
-    float fadeIn = 0.2;
-    float fadeOut = 0.8;
-    float progress = constrain(map(normTime, fadeIn, fadeOut, 0, 1),0,1);
-    float alpha = map(normTime, 0, fadeIn, 0, 255);
-    if (normTime >= fadeOut) {
-      alpha = map(normTime, fadeOut, 1, 255, 0);
+    float alpha = map(normTime, 0, FADE_IN_TIME, 0, 255);
+    if (normTime >= myTotalDuration - FADE_OUT_TIME) {
+      alpha = map(normTime, myTotalDuration - FADE_OUT_TIME, myTotalDuration, 255, 0);
     }
     alpha = constrain(alpha, 0, 255);
-    boolean showStats = false;
-    if (progress >= maxProgress) {
-      showStats = true;
-      progress = maxProgress;
+    //boolean showStats = false;
+    if (normTime >= myTotalDuration - FADE_OUT_TIME - DISPLAY_TIME) {
+      displayAll = true;
     }
-    if (normTime >= 1) {
+    if (normTime >= myTotalDuration - FADE_OUT_TIME - DISPLAY_TIME * 0.2) {
+      pausable = true;
+    }
+    if (normTime >= myTotalDuration) {
       finished = true;
     }
+    float progress = constrain(normTime - FADE_IN_TIME, 0, progressTime);
     //println("progress", progress);
     PVector planePos = getGeodeticAtNormDist(dep, dst, progress);
     PVector planePosXY = lngLatToXY(planePos);
@@ -158,7 +163,7 @@ class CrashFlight {
     fill(RED, alpha*0.4);
     ellipse(planePosXY.x, planePosXY.y, rFat * scaleFactor, rFat * scaleFactor);
     
-    if (showStats) {
+    if (displayAll) {
       pushStyle();
       textAlign(CENTER, BOTTOM);
       textFont(corpusFontBold);

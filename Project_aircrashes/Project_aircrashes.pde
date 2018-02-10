@@ -68,7 +68,7 @@ void setup() {
 
   initData(timeline);
   initFlights(timeline);
-  //activeFlight = myFlights.get(0);
+  activeFlight = myFlights.get(0);
   //activeFlight = myFlights.get(49);
   initDots();
   hint(DISABLE_DEPTH_TEST);
@@ -136,8 +136,6 @@ void draw() {
   }     
 
 
-
-
   //s.rotate(phi);
 
   /*
@@ -168,128 +166,57 @@ void draw() {
       int i = 0;
       while (i < myFlights.size() && !flightFound) {
         CrashFlight cf = myFlights.get(i);
-        if (aboutFlightTime(TIME, cf)) {
+        if (cf.myDatum.normMoment > TIME) {
           setActiveFlight(cf);
-          currentState = STATE_DISPLAY_FLIGHT;
-          println("PLAY > STATE_DISPLAY_FLIGHT");
           flightFound = true;
         }
         i++;
       }
     }
-    if (!flightFound) {
+    if (aboutFlightTime(TIME, activeFlight)) {
+      FLIGHT_TIME = 0;
+      currentState = STATE_DISPLAY_FLIGHT;
+      println("PLAY > STATE_DISPLAY_FLIGHT");
+    } else {
       TIME += TIME_INC;
     }
     break;
   case STATE_SEEK:
     TIME += SEEK_INC;
+    FLIGHT_TIME = 0;
     if (abs(SEEK_TIME - TIME) < SEEK_EPSILON) {
       currentState = STATE_DISPLAY_FLIGHT_THEN_PAUSE;
       println("STATE_SEEK > STATE_DISPLAY_FLIGHT_THEN_PAUSE");
     }
     break;
   case STATE_DISPLAY_FLIGHT:
-      FLIGHT_TIME += FLIGHT_TIME_INC;
-      activeFlight.display(FLIGHT_TIME);
-      if (activeFlight.finished) {
-        activeFlight = null;
-        currentState = STATE_PLAY;
-        println("STATE_DISPLAY_FLIGHT > STATE_PLAY");
-        TIME += TIME_INC + SEEK_EPSILON;
-        FLIGHT_TIME = 0;
-      }
+    FLIGHT_TIME += FLIGHT_TIME_INC;
+    activeFlight.display(FLIGHT_TIME);
+    if (activeFlight.finished) {
+      activeFlight = null;
+      currentState = STATE_PLAY;
+      println("STATE_DISPLAY_FLIGHT > STATE_PLAY");
+      TIME += TIME_INC;
+      FLIGHT_TIME = 0;
+    }
     break;
   case STATE_DISPLAY_FLIGHT_THEN_PAUSE:
-      //TODO: »freeze« display
-      FLIGHT_TIME += FLIGHT_TIME_INC;
-      activeFlight.display(FLIGHT_TIME);
-      if (activeFlight.finished) {
-        activeFlight = null;
-        currentState = STATE_PAUSED;
-        println("STATE_DISPLAY_FLIGHT_THEN_PAUSE > STATE_PAUSED");
-      }
+    //TODO: »freeze« display
+    FLIGHT_TIME += FLIGHT_TIME_INC;
+    activeFlight.display(FLIGHT_TIME);
+    if (activeFlight.pausable) {
+      //activeFlight = null;
+      currentState = STATE_PAUSED;
+      println("STATE_DISPLAY_FLIGHT_THEN_PAUSE > STATE_PAUSED");
+    }
     break;
   case STATE_PAUSED:
+    if (activeFlight != null) {
+      activeFlight.display(FLIGHT_TIME);
+    }
     break;
   }
-
-  /*
-  switch(currentState) {
-   case STATE_PLAY:
-   if (aboutFlightTime(TIME, activeFlight)) {
-   activeFlight.display(FLIGHT_TIME);
-   FLIGHT_TIME += FLIGHT_TIME_INC;
-   if (FLIGHT_TIME > 1) {
-   FLIGHT_TIME = 0;
-   activeFlight = activeFlight.nextFlight;
-   if (activeFlight == null) {
-   activeFlight = myFlights.get(0);
-   }
-   }
-   } else {
-   
-   TIME += TIME_INC;
-   if (TIME > 1) {
-   TIME = 0;
-   FLIGHT_TIME = 0;
-   currentState = STATE_PAUSED;
-   activeFlight = myFlights.get(0);
-   }
-   }
-  /*
-   if (activeFlight == null) {
-   activeFlight = getFlight(TIME);
-   } 
-   if (activeFlight != null) {
-   currentState = STATE_DISPLAY_FLIGHT;
-   }
-   */
-  /*
-    break;
-   case STATE_SEEKING:
-   TIME += SEEK_INC;
-   if (abs(SEEK_TIME - TIME) < SEEK_EPSILON) {
-   currentState = STATE_PAUSED;
-   }
-   break;
-   */
-  /*
-  case STATE_DISPLAY_FLIGHT:
-   FLIGHT_TIME += FLIGHT_TIME_INC;
-   if (FLIGHT_TIME > 1) {
-   FLIGHT_TIME = 0;
-   currentState = STATE_PLAY;
-   } else {
-   activeFlight.display(FLIGHT_TIME);
-   }
-   break;
-   */
 }
-//println(TIME, FLIGHT_TIME);
-/*
-  for (CrashFlight cf : myFlights) {
- cf.display(TIME);
- }
- */
-/*
-  ellipseMode(RADIUS);
- fill(255, 0, 0, 127);
- ellipse(width*0.5, height*0.5, 10, 10);
- */
-/*
-  stroke(255, 0, 0);
- noFill();
- drawGeodetic(-QUARTER_PI, 0.1, QUARTER_PI, 2.1, 50);
- noStroke();
- fill(0, 0, 255);
- drawPoint(-QUARTER_PI, 0.1);
- drawPoint(QUARTER_PI, 2.1);
- */
-/*
-  ellipseMode(RADIUS);
- fill(255,255,0,31);
- ellipse(width*0.5,height*0.5,width*0.5,height*0.5);
- */
 
 void keyPressed() {
 }

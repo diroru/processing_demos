@@ -1,4 +1,4 @@
-public class CrashDot {  //<>//
+public class CrashDot {  //<>// //<>//
   Datum myDatum;
   Timeline myTimeline;
   float myRadius = 3.7 * scaleFactor;
@@ -38,7 +38,10 @@ public class CrashDot {  //<>//
   }
 
   boolean mouseOver(float mx, float my) {
-    return abs(myPos.x - mx) <= myRadius && abs(myPos.y - my) <= myRadius;
+    PVector rm = new PVector(mx - width*0.5, my - height*0.5);
+    rm.rotate(-ORIENTATION);
+    rm.add(width*0.5, height*0.5);
+    return abs(myPos.x - rm.x) <= myRadius && abs(myPos.y - rm.y) <= myRadius;
   }
 
   boolean overlaps(CrashDot other) {
@@ -75,6 +78,10 @@ public class CrashDot {  //<>//
     switch(e.getAction()) {
     case MouseEvent.MOVE:
       mouseOver = mouseOver(mouseX, mouseY);
+      if (mouseOver)  {
+        println("MOUSE OVER", myDatum);
+      }
+      //println(mouseX, mouseY);
       break;
     case MouseEvent.CLICK:
       //println("CLICK", e);
@@ -83,7 +90,8 @@ public class CrashDot {  //<>//
         SEEK_TIME = myNormTime;
         SEEK_INC = (SEEK_TIME - TIME) / SEEK_DURATION;
         //SEEK_INC = signum(SEEK_TIME - TIME) * abs(SEEK_INC);
-        currentState = STATE_SEEKING;
+        currentState = STATE_SEEK;
+        setActiveFlight(getFlightByDatum(myDatum));
       }
       break;
     }

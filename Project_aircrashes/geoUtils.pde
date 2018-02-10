@@ -75,7 +75,7 @@ ArrayList<PVector> getGeodetic(float lat0, float lng0, float lat1, float lng1, i
     float inc = i / float(res-1);
     //println(inc);
     //PVector v = PVector.lerp(v0, v1, inc);
-    PVector v = sphericLerp(v0, v1, inc);
+    PVector v = sphericInterpolation(v0, v1, inc);
     result.add(xyzToLatLng(v));
   }
   //result.add(new PVector(lat1,lng1));
@@ -89,10 +89,16 @@ PVector getGeodeticAtNormDist(float lat0, float lng0, float lat1, float lng1, fl
   PVector v0 = latlngToXYZ(new PVector(lat0, lng0));
   PVector v1 = latlngToXYZ(new PVector(lat1, lng1));
   //return xyzToLatLng(PVector.lerp(v0, v1, norm));
-  return xyzToLatLng(sphericLerp(v0, v1, norm));
+  return xyzToLatLng(sphericInterpolation(v0, v1, norm));
 }
 
-PVector sphericLerp(PVector v0, PVector v1, float f) {
+PVector sphericInterpolation(PVector a, PVector b, float f) {
+  //TODO: cross is 0
+  //TODO: a and b of different lengths
+  PVector axis = a.cross(b);
+  float theta = PVector.angleBetween(a, b);
+  return rotateAroundAxis(a, axis, theta * f);
+
   /*
   float angle =  PVector.angleBetween(v1, v0);
    PVector cx = v1.copy();
@@ -103,8 +109,25 @@ PVector sphericLerp(PVector v0, PVector v1, float f) {
    float z = cx.z * cos(f * angle) + cy.z * sin(f * angle);
    return new PVector(x,y,z);
    */
-  return PVector.lerp(v0, v1, f);
+  //return PVector.lerp(v0, v1, f);
 }
+
+PVector rotateAroundAxis(PVector v, PVector axis, float theta) {
+  PVector a = axis.copy();
+  a.normalize();
+  PVector result = v.copy();
+  float ct = cos(theta);
+  float st = sin(theta);
+  PMatrix m = new PMatrix3D(
+    ct + a.x * a.x * (1 - ct), a.x * a.y * (1 - ct) - a.z * st, a.x * a.z * (1 - ct) +  a.y * st, 0, 
+    a.y * a.x * (1 - ct) + a.z * st, ct + a.y * a.y * (1 - ct), a.y * a.z * (1 - ct) - a.x * st, 0, 
+    a.z * a.x * (1 - ct) - a.y * st, a.z * a.y * (1 - ct) + a.x * st, ct + a.z * a.z * (1 - ct), 0, 
+    0, 0, 0, 1
+    );
+  m.mult(result, result);
+  return result;
+}
+
 
 void drawDashedGeodetic(PVector latLng0, PVector latLng1, int res, float dashLength, float gapLength) {
   drawDashedGeodetic(latLng0.x, latLng0.y, latLng1.x, latLng1.y, res, dashLength, gapLength);

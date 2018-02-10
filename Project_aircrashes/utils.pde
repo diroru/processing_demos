@@ -117,3 +117,8 @@ int signum(float f) {
   }
   return -1;
 }
+
+void setActiveFlight(CrashFlight theFlight) {
+  activeFlight = theFlight;
+  activeFlight.finished = false;
+}

@@ -25,7 +25,7 @@ public class TimelineButton {
       break;
     case STATE_PAUSED:
       break;
-    case STATE_SEEKING:
+    case STATE_SEEK:
       break;
     }
     myTimeline.drawArcAround(myAngle + HALF_PI, myDeltaAngle);
@@ -81,7 +81,7 @@ public class TimelineButton {
         case STATE_PAUSED:
           currentState = STATE_PLAY;
           break;
-        case STATE_SEEKING:
+        case STATE_SEEK:
           currentState = STATE_PLAY;
           break;
         }

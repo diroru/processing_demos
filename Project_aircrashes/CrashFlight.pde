@@ -10,6 +10,7 @@ class CrashFlight {
   float rOcc, rFat;
   Float maxProgress;
   CrashFlight previousFlight = null, nextFlight = null;
+  boolean finished = false;
 
   CrashFlight(Datum d, Timeline tl) {
     myDatum = d;
@@ -44,7 +45,7 @@ class CrashFlight {
     //float progress = norm(normTime, myStartMoment, myEndMoment);
     float fadeIn = 0.2;
     float fadeOut = 0.8;
-    float progress = map(normTime, fadeIn, fadeOut, 0, 1);
+    float progress = constrain(map(normTime, fadeIn, fadeOut, 0, 1),0,1);
     float alpha = map(normTime, 0, fadeIn, 0, 255);
     if (normTime >= fadeOut) {
       alpha = map(normTime, fadeOut, 1, 255, 0);
@@ -55,6 +56,10 @@ class CrashFlight {
       showStats = true;
       progress = maxProgress;
     }
+    if (normTime >= 1) {
+      finished = true;
+    }
+    //println("progress", progress);
     PVector planePos = getGeodeticAtNormDist(dep, dst, progress);
     PVector planePosXY = lngLatToXY(planePos);
     noFill();

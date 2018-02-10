@@ -84,3 +84,12 @@ CrashFlight getFlight(float theTime) {
 boolean aboutFlightTime(float time, CrashFlight flight) {
   return abs(flight.myDatum.normMoment - time) < SEEK_EPSILON;
 }
+
+CrashFlight getFlightByDatum(Datum d) {
+  for (CrashFlight cf : myFlights) {
+    if (cf.myDatum.equals(d)) {
+      return cf;
+    }
+  }
+  return null;
+}

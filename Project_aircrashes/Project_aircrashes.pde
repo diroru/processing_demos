@@ -1,3 +1,6 @@
+import de.looksgood.ani.*;
+import de.looksgood.ani.easing.*;
+
 import java.util.*;
 
 //.rotate([-25, -12])
@@ -26,7 +29,7 @@ float SCALE = 0.76; //0.8125; //map scaling
 
 //float PHI1 = radians(12);
 //float LAMBDA0 = radians(25);
-float ORIENTATION = 0f; 
+float ORIENTATION = HALF_PI; 
 
 ArrayList<Datum> data = new ArrayList<Datum>();
 ArrayList<CrashDot> myDots = new ArrayList<CrashDot>();
@@ -55,14 +58,19 @@ CrashFlight activeFlight;
 PShape map, quad;
 PGraphics mapContainer;
 PShader shader;
-float deltaLat = PI, deltaLon = 0, mapScale = 2.5;
+float deltaLat = PI, deltaLon = -PI, mapScale = 2.5;
+float TARGET_SIZE;
+float MIN_MAP_SCALE = 0.3;
 
 void setup() {
   //size(1920, 1920, P3D);
   size(1000, 1000, P2D);
+  Ani.init(this);
+  Ani.setDefaultEasing(Ani.QUART_OUT);
   pixelDensity(displayDensity());
   scaleFactor = width / 1920f;
   println(scaleFactor);
+  TARGET_SIZE = 1200 * scaleFactor;
   background = loadImage("background_map.png");
   corpusFont = loadFont("SourceSansPro-Regular-44.vlw");
   corpusFontBold = loadFont("SourceSansPro-Bold-48.vlw");
@@ -80,7 +88,8 @@ void setup() {
 
   initData(timeline);
   initFlights(timeline);
-  activeFlight = myFlights.get(0);
+  //activeFlight = myFlights.get(0);
+  setActiveFlight(myFlights.get(0));
   //activeFlight = myFlights.get(49);
   initDots();
   hint(DISABLE_DEPTH_TEST);
@@ -93,7 +102,6 @@ void draw() {
   translate(width*0.5, height*0.5);
   rotate(ORIENTATION);
   translate(-width*0.5, -height*0.5);
-  updateShader();
   updateShader();
   shader(shader);
   shape(quad);

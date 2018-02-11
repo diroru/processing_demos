@@ -1,3 +1,8 @@
+float[] getProjectionParams(Datum d) {
+  return getProjectionParams(radians(d.depLatLng[0]), radians(d.depLatLng[1]), radians(d.dstLatLng[0]), radians(d.dstLatLng[1]), TARGET_SIZE);
+}
+
+
 float[] getProjectionParams(PVector latLon0, PVector latLon1,  float targetSize) {
   return getProjectionParams(latLon0.x, latLon0.y, latLon1.x, latLon1.y, targetSize);
 }
@@ -16,6 +21,11 @@ float[] getProjectionParams(float lat0, float lon0, float lat1, float lon1, floa
   println(degrees(lon0), " > ", degrees(ll.y), " > ", degrees(lon1));
   println("****");
   */
+  if (Float.isNaN(theDeltaLat) || Float.isNaN(theDeltaLon)) {
+    theDeltaLat = 0f;
+    theDeltaLon = 0f;
+    mapScale = 2.5;
+  }
   return new float[]{theDeltaLat, theDeltaLon, theSize};
 }
 
@@ -111,7 +121,9 @@ PVector rotateAroundAxis(PVector v, PVector axis, float theta) {
 }
 
 PVector xyzToLatLon(PVector xyz) {
-  float lat = asin(xyz.z);
+  //float lat = asin(xyz.z);
+  xyz.normalize();
+  float lat = atan2(xyz.z, sqrt(xyz.y * xyz.y + xyz.x * xyz.x));
   float lon = atan2(xyz.y, xyz.x);
   return new PVector(lat, lon);
 }

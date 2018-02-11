@@ -65,8 +65,8 @@ class CrashFlight {
     }
     float progress = constrain(normTime - FADE_IN_TIME, 0, progressTime);
     //println("progress", progress);
-    PVector planePos = getGeodeticAtNormDist(dep, dst, progress);
-    PVector planePosXY = lngLatToXY(planePos);
+    PVector planePosLatLon = getLatLonAtNormDist(dep, dst, progress);
+    PVector planePosXY = getGeodeticPoint(planePosLatLon);
     noFill();
     strokeWeight(1 * scaleFactor);
 
@@ -85,11 +85,11 @@ class CrashFlight {
 
 
     strokeWeight(4 * scaleFactor);
-    drawGeodetic(dep, planePos, geodeticRes);
+    drawGeodetic(dep, planePosLatLon);
 
 
-    PVector depXY = lngLatToXY(dep);
-    PVector dstXY = lngLatToXY(dst);
+    PVector depXY = getGeodeticPoint(dep);
+    PVector dstXY = getGeodeticPoint(dst);
     noStroke();
     fill(255, alpha);
     pushStyle();

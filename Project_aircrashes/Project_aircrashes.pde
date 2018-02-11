@@ -24,9 +24,9 @@ int YEAR_END = 2015;
 int REPEAT_COUNT = 2;
 float SCALE = 0.76; //0.8125; //map scaling
 
-float PHI1 = radians(12);
-float LAMBDA0 = radians(25);
-float ORIENTATION = PI * 0.4; 
+//float PHI1 = radians(12);
+//float LAMBDA0 = radians(25);
+float ORIENTATION = 0f; 
 
 ArrayList<Datum> data = new ArrayList<Datum>();
 ArrayList<CrashDot> myDots = new ArrayList<CrashDot>();
@@ -52,6 +52,10 @@ HashSet<String> phaseCodes = new HashSet<String>();
 HashMap<String, Float> phaseProgress = new HashMap<String, Float>();
 HashMap<Datum, CrashFlight> flightsByDatum = new HashMap<Datum, CrashFlight>();
 CrashFlight activeFlight;
+PShape map, quad;
+PGraphics mapContainer;
+PShader shader;
+float deltaLat = PI, deltaLon = 0, mapScale = 2.5;
 
 void setup() {
   //size(1920, 1920, P3D);
@@ -62,6 +66,14 @@ void setup() {
   background = loadImage("background_map.png");
   corpusFont = loadFont("SourceSansPro-Regular-44.vlw");
   corpusFontBold = loadFont("SourceSansPro-Bold-48.vlw");
+  map = loadShape("EquirectangularMap.svg");
+  mapContainer = createGraphics(4096, 2048, P2D);
+  //mapContainer = createGraphics(1024,512,P2D);
+  redrawMap();
+  initShape();
+  shader = loadShader("glsl/azimuthal.frag", "glsl/azimuthal.vert");
+  shader.set("mapTexture", mapContainer);
+  updateShader();
 
   //textSize(24);
   timeline = new Timeline((1920 - 390)/2 * scaleFactor, 35 * scaleFactor, HALF_PI, 110 * scaleFactor, YEAR_START, YEAR_END, REPEAT_COUNT, loadFont("SourceSansPro-SemiBold-40.vlw"), 40* scaleFactor, this);
@@ -75,15 +87,65 @@ void setup() {
 }
 
 void draw() {
+  background(255, 0, 0);
 
-  background(0);
   // pushMatrix();
   translate(width*0.5, height*0.5);
   rotate(ORIENTATION);
   translate(-width*0.5, -height*0.5);
-  image(background, width*(1 - SCALE)*0.5, height*(1 - SCALE)*0.5, width*SCALE, height*SCALE);
+  updateShader();
+  updateShader();
+  shader(shader);
+  shape(quad);
+  resetShader();
+  drawMask(400*scaleFactor);
+
+  drawLegend();
+  timeline.display(TIME);
+  for (CrashDot cd : myDots) {
+    cd.display();
+  }
+
+  updateState();
+}
+
+//just prevents clutter
+void stuff() {
+  // image(background, width*(1 - SCALE)*0.5, height*(1 - SCALE)*0.5, width*SCALE, height*SCALE);
 
 
+
+  //s.rotate(phi);
+
+  /*
+  String d = "Hello World!!!&#*";
+   fill(232,26,154);
+   drawArcTextCentered(d, mouseX, mouseY);
+   println((mouseX-width)/scaleFactor, (mouseY-height)/scaleFactor);
+   */
+  // fill(28,229,142,300);
+  // drawArcTextCentered(d, mouseX, mouseY);
+
+  //text("Hello", 0, 48);
+
+  /*
+  for (Datum d : data) {
+   timeline.drawDate(d, 5 * scaleFactor, 40 * scaleFactor);
+   }
+   */
+}
+
+void drawMask(float s) {
+  pushStyle();
+  noFill();
+  stroke(0);
+  strokeWeight(s);
+  ellipseMode(CORNER);
+  ellipse(0, 0, width, height);
+  popStyle();
+}
+
+void drawLegend() {
   textFont(corpusFont);
   String s = "100 worst and unusual Aircrashes   1933 – 2014";
 
@@ -133,32 +195,10 @@ void draw() {
     translate(-width * 0.5, -height * 0.5);
     ellipse (width-1654*scaleFactor, height-1507*scaleFactor, 15*scaleFactor, 15*scaleFactor);
     popMatrix();
-  }     
-
-
-  //s.rotate(phi);
-
-  /*
-  String d = "Hello World!!!&#*";
-   fill(232,26,154);
-   drawArcTextCentered(d, mouseX, mouseY);
-   println((mouseX-width)/scaleFactor, (mouseY-height)/scaleFactor);
-   */
-  // fill(28,229,142,300);
-  // drawArcTextCentered(d, mouseX, mouseY);
-
-  //text("Hello", 0, 48);
-  timeline.display(TIME);
-
-  /*
-  for (Datum d : data) {
-   timeline.drawDate(d, 5 * scaleFactor, 40 * scaleFactor);
-   }
-   */
-  for (CrashDot cd : myDots) {
-    cd.display();
   }
+}
 
+void updateState() {
   switch(currentState) {
   case STATE_PLAY:
     boolean flightFound = false;
@@ -216,6 +256,43 @@ void draw() {
     }
     break;
   }
+}
+
+void updateShader() {
+  shader.set("deltaLat", deltaLat);
+  shader.set("deltaLon", deltaLon);
+  shader.set("scale", mapScale);
+}
+
+void redrawMap() {
+  mapContainer.beginDraw();
+  mapContainer.background(0);
+
+  map.disableStyle();
+  mapContainer.stroke(93);
+  //mapContainer.strokeJoin(ROUND);
+  //mapContainer.strokeCap(PROJECT);
+
+  //mapContainer.strokeWeight(1f * sqrt(mapScale));
+  mapContainer.strokeWeight(0.5f);
+  mapContainer.fill(61);
+
+  float s = 0.964;
+  mapContainer.shape(map, 0, 0, mapContainer.width, mapContainer.height*s);
+  mapContainer.endDraw();
+}
+
+void initShape() {
+  quad = createShape();
+  quad.beginShape();
+  quad.fill(255, 255, 0);
+  quad.textureMode(NORMAL);
+  quad.noStroke();
+  quad.vertex(0, 0, 0, 0, 0);
+  quad.vertex(width, 0, 0, 1, 0);
+  quad.vertex(width, height, 0, 1, 1);
+  quad.vertex(0, height, 0, 0, 1);
+  quad.endShape();
 }
 
 void keyPressed() {

@@ -78,9 +78,11 @@ public class CrashDot {  //<>// //<>//
     switch(e.getAction()) {
     case MouseEvent.MOVE:
       mouseOver = mouseOver(mouseX, mouseY);
+      /*
       if (mouseOver)  {
         println("MOUSE OVER", myDatum);
       }
+      */
       //println(mouseX, mouseY);
       break;
     case MouseEvent.CLICK:

@@ -123,4 +123,18 @@ void setActiveFlight(CrashFlight theFlight) {
   activeFlight.finished = false;
   activeFlight.pausable = false;
   activeFlight.displayAll = false;
+  float[] nextProjecitonParams = getProjectionParams(activeFlight.myDatum);
+  /*
+  deltaLat = nextProjecitonParams[0];
+  deltaLon = nextProjecitonParams[1];
+  mapScale = max(nextProjecitonParams[2], MIN_MAP_SCALE);
+  */
+  println("animating", degrees(deltaLat), " > ", degrees(nextProjecitonParams[0]));
+  println("animating", degrees(deltaLon), " > ", degrees(nextProjecitonParams[1]));
+  println("animating", mapScale, " > ", max(nextProjecitonParams[2], MIN_MAP_SCALE));
+  println("-----");
+  Ani.to(this, 5.0, "deltaLat", nextProjecitonParams[0]);
+  Ani.to(this, 5.0, "deltaLon", nextProjecitonParams[1]);
+  Ani.to(this, 5.0, "mapScale", max(nextProjecitonParams[2], MIN_MAP_SCALE));
+
 }

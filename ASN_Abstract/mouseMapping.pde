@@ -34,11 +34,18 @@ PVector getConicMappedMouse(float mx, float my, float dmy, float canvasWidth, fl
   PVector normalizedMouse = new PVector(norm(mx, 0, windowWidth), norm(my, 0, windowHeight));
   PVector latLon = domeXYToLatLon(normalizedMouse, APERTURE * PI / 180f);
   PVector ray = latLonToXYZ(latLon);
-  PVector st = conicTexCoordinates(ray, CONE_BOTTOM, CONE_RADIUS_BOTTOM, CONE_HEIGHT, CONE_RADIUS_TOP, CONE_ORIENTATION);
+  PVector st = conicTexCoordinates(ray, CONE_BOTTOM, CONE_RADIUS_BOTTOM, CONE_HEIGHT, CONE_RADIUS_TOP, CONE_ORIENTATION / 360f);
   if (st == null) {
     return new PVector(-1, -1);
   }
-  return new PVector(st.x * canvasWidth, st.y * (canvasHeight - dmy *  canvasToWindowRatio(canvasWidth, canvasHeight, width, height)));
+  PVector result = new PVector(st.x * canvasWidth, st.y * canvasHeight);
+  if (result.x < 0) {
+    result.x += canvasWidth;
+  }
+  if (result.x > canvasWidth) {
+    result.x -= canvasWidth;
+  }
+  return result;
 }
 
 ///

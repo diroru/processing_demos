@@ -85,6 +85,7 @@ void settings() {
 void setup() {
   //size(1200, 600, P2D);
   //initial default camera, i.e. interface to interact with the renderer.
+  noCursor();
   surface.setResizable(true);
   //we enable the sixth side, sothat we see what is happenning
   initShape();

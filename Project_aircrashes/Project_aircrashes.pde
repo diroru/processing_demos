@@ -55,7 +55,8 @@ CrashFlight activeFlight;
 
 void setup() {
   //size(1920, 1920, P3D);
-  size(1000, 1000, P2D);
+  //size(1000, 1000, P2D);
+  fullScreen(P2D, SPAN);
   pixelDensity(displayDensity());
   scaleFactor = width / 1920f;
   println(scaleFactor);

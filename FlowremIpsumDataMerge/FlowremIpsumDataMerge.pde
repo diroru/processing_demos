@@ -28,6 +28,8 @@ void setup() {
   println("countries: ", countryNames);
 
   //TODO: define excludes
+  //building new database
+  //going through all rows
   for (TableRow tr : sourceData.rows()) {
     Integer year = tr.getInt("Year");
     String toCountry = tr.getString(countryLabel);
@@ -79,14 +81,14 @@ void setup() {
         }
         count = floor(float(i - lastYear) / (nextYear - lastYear) * (nextCount - lastCount) + lastCount) + 0L;
       } else {
-        // print("* ");
+        print("* ");
         lastCount = count;
         lastYear = i;
       }
       row.setLong(i + "", count);
-      //println(i, count);
+      println(i, count);
     }
-    println(c++);
+    //println(c++);
   }
   saveTable(outputData, "data/output.tsv", "tsv");
   saveStrings("data/countries.txt", countryNames.toArray(new String[countryNames.size()]));

@@ -12,14 +12,7 @@ public class Country implements Comparable { //<>// //<>//
   HashMap<Integer, Long> totalEmigraionFlow = new HashMap<Integer, Long>();
   //population by year
   HashMap<Integer, Long> pop = new HashMap<Integer, Long>();
-  /*
-  float startX = 0f, endX = 0f, currentX = 0f;
-   float startY = 0f, endY = 0f, currentY = 0f;
-   float startW = 0f, endW = 0f, currentW = 0f;
-   float startH = 0f, endH = 0f, currentH = 0f;
-   */
   float myX = 0f, myY = 0f, myWidth = 0f, myHeight = 0f; 
-  //int startColor = #000000, endColor = #000000, currentColor = #000000;
   float myRed = 0, myGreen = 0, myBlue = 0, myAlpha = 255;
   int activeYear = GPI_YEAR_END;
   boolean hover = false;
@@ -130,60 +123,6 @@ public class Country implements Comparable { //<>// //<>//
     //return "*";
   }
 
-  //TODO:
-  //void setX(), getX() etc.
-  /*
-  void setStartX(float x) {
-   startX = x;
-   }
-   void setStartY(float y) {
-   startY = y;
-   }
-   */
-  /*
-  void setEndPos(float x, float y, int duration) {
-   endY = y;
-   endX = x;
-   startX = currentX;
-   startY = currentY;
-   animationStart = millis();
-   animationEnd = animationStart + duration;
-   lastTime = animationStart;
-   }
-   */
-  /*
-  void setEndLayout(float x, float y, float w, float h, int theColor, int duration) {
-   endW = w;
-   endH = h;
-   endX = x;
-   endY = y;
-   endColor = theColor;
-   
-   startX = currentX;
-   startY = currentY;
-   startW = currentW;
-   startH = currentH;
-   startColor = currentColor;
-   
-   animationStart = millis();
-   animationEnd = animationStart + duration;
-   lastTime = animationStart;
-   }
-   */
-  /*
-  void setEndY(float y, int duration) {
-   endY = y;
-   }
-   */
-  /*
-  void setCurrentX(float x) {
-   currentX = x;
-   }
-   
-   void setCurrentY(float y) {
-   currentY = y;
-   }
-   */
   void setColor(color theColor) {
     //currentColor = theColor;
     myRed = red(theColor);
@@ -191,32 +130,6 @@ public class Country implements Comparable { //<>// //<>//
     myBlue = blue(theColor);
     myAlpha = alpha(theColor);
   }
-  /*
-  void update(long delta) {
-   long now = lastTime + delta;
-   now = Math.min(animationEnd, now);
-   if (now == animationEnd || animationStart == animationEnd) {
-   currentX = endX;
-   currentY = endY;
-   currentW = endW;
-   currentH = endH;
-   currentColor = endColor;
-   } else {
-   currentX = map(now, animationStart, animationEnd, startX, endX);
-   currentY = map(now, animationStart, animationEnd, startY, endY);
-   currentW = map(now, animationStart, animationEnd, startW, endW);
-   currentH = map(now, animationStart, animationEnd, startH, endH);
-   currentColor = lerpColor(startColor, endColor, norm(now, animationStart, animationEnd));
-   }
-  /*
-   if (time == 1) {
-   startX = endX;
-   startY = endY;
-   }
-   */
-  //  lastTime = now;
-  //}
-
 
   void display(PGraphics g) {
     //if (!name.equals("Palestine")) {

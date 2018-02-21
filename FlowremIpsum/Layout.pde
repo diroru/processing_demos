@@ -25,7 +25,15 @@ void makeLayout(float x0, float y0, float layoutWidth, float layoutHeight, float
     //theCountry.setX(x);
     //we set the layout values for each country
     //setting start position
-    theCountry.setEndLayout(x,y,countryWidth,countryHeight,theColor,theDuration);
+    //theCountry.setEndLayout(x,y,countryWidth,countryHeight,theColor,theDuration);
+    Ani.to(theCountry,ANI_DURATION,"myX",x);
+    Ani.to(theCountry,ANI_DURATION,"myY",y);
+    Ani.to(theCountry,ANI_DURATION,"myHeight",countryHeight);
+    Ani.to(theCountry,ANI_DURATION,"myWidth",countryWidth);
+    Ani.to(theCountry,ANI_DURATION,"myRed",red(theColor));
+    Ani.to(theCountry,ANI_DURATION,"myGreen",green(theColor));
+    Ani.to(theCountry,ANI_DURATION,"myBlue",blue(theColor));
+    Ani.to(theCountry,ANI_DURATION,"myAlpha",alpha(theColor));
     /*
     theCountry.setEndPos(x, y, theDuration);
     theCountry.w = countryWidth;

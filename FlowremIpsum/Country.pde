@@ -12,11 +12,8 @@ public class Country implements Comparable { //<>// //<>//
   HashMap<Integer, Long> totalEmigraionFlow = new HashMap<Integer, Long>();
   //population by year
   HashMap<Integer, Long> pop = new HashMap<Integer, Long>();
-  float startX = 0f, endX = 0f, currentX = 0f;
-  float startY = 0f, endY = 0f, currentY = 0f;
-  float startW = 0f, endW = 0f, currentW = 0f;
-  float startH = 0f, endH = 0f, currentH = 0f;
-  int startColor = #000000, endColor = #000000, currentColor = #000000;
+  float myX = 0f, myY = 0f, myWidth = 0f, myHeight = 0f; 
+  float myRed = 0, myGreen = 0, myBlue = 0, myAlpha = 255;
   int activeYear = GPI_YEAR_END;
   boolean hover = false;
   boolean selected = false;
@@ -112,11 +109,12 @@ public class Country implements Comparable { //<>// //<>//
 
   //used by migration flow
   float cx() {
-    return currentX + currentW * 0.5;
+    return myX + myWidth * 0.5;
   }
 
   float cy() {
-    return currentY - 10;
+    float distToFlowLine = 10;
+    return myY - distToFlowLine;
   }
 
   @Override
@@ -125,125 +123,61 @@ public class Country implements Comparable { //<>// //<>//
     //return "*";
   }
 
-  //TODO:
-  //void setX(), getX() etc.
-  /*
-  void setStartX(float x) {
-   startX = x;
-   }
-   void setStartY(float y) {
-   startY = y;
-   }
-   */
-  void setEndPos(float x, float y, int duration) {
-    endY = y;
-    endX = x;
-    startX = currentX;
-    startY = currentY;
-    animationStart = millis();
-    animationEnd = animationStart + duration;
-    lastTime = animationStart;
-  }
-
-  void setEndLayout(float x, float y, float w, float h, int theColor, int duration) {
-    endW = w;
-    endH = h;
-    endX = x;
-    endY = y;
-    endColor = theColor;
-
-    startX = currentX;
-    startY = currentY;
-    startW = currentW;
-    startH = currentH;
-    startColor = currentColor;
-
-    animationStart = millis();
-    animationEnd = animationStart + duration;
-    lastTime = animationStart;
-  }
-  /*
-  void setEndY(float y, int duration) {
-   endY = y;
-   }
-   */
-  /*
-  void setCurrentX(float x) {
-   currentX = x;
-   }
-   
-   void setCurrentY(float y) {
-   currentY = y;
-   }
-   */
   void setColor(color theColor) {
-    currentColor = theColor;
+    //currentColor = theColor;
+    myRed = red(theColor);
+    myGreen = green(theColor);
+    myBlue = blue(theColor);
+    myAlpha = alpha(theColor);
   }
-
-  void update(long delta) {
-    long now = lastTime + delta;
-    now = Math.min(animationEnd, now);
-    if (now == animationEnd || animationStart == animationEnd) {
-      currentX = endX;
-      currentY = endY;
-      currentW = endW;
-      currentH = endH;
-      currentColor = endColor;
-    } else {
-      currentX = map(now, animationStart, animationEnd, startX, endX);
-      currentY = map(now, animationStart, animationEnd, startY, endY);
-      currentW = map(now, animationStart, animationEnd, startW, endW);
-      currentH = map(now, animationStart, animationEnd, startH, endH);
-      currentColor = lerpColor(startColor, endColor, norm(now, animationStart, animationEnd));
-    }
-    /*
-    if (time == 1) {
-     startX = endX;
-     startY = endY;
-     }
-     */
-    lastTime = now;
-  }
-
 
   void display(PGraphics g) {
-    if (getGPIRank(activeYear) == GPI_LAST_RANK) {
-      displayOutlined(g);
-    } else {
-      displayFilled(g);
-    }
+    //if (!name.equals("Palestine")) {
+      if (getGPIRank(activeYear) == GPI_LAST_RANK) {
+        displayOutlined(g);
+      } else {
+        displayFilled(g);
+      }
+    //}
   }
 
   void displayFilled(PGraphics g) {
+    
+    if (name.equals("Palestine") || name.equals("Syria")) {
+      println(name, myX, myY, myWidth, myHeight);
+    }
+    g.endShape();
+    g.beginShape(QUADS);
     g.noStroke();
-    g.fill(currentColor);
+    g.fill(myRed, myGreen, myBlue, myAlpha);
     if (hover || selected) {
       g.fill(PRIMARY);
     }
     float z = -1;
-    g.vertex(this.currentX, this.currentY, z);
-    g.vertex(this.currentX + this.currentW, this.currentY, z);
-    g.vertex(this.currentX + this.currentW, this.currentY + this.currentH, z);
-    g.vertex(this.currentX, this.currentY + this.currentH, z);
+    g.vertex(this.myX, this.myY, z);
+    g.vertex(this.myX + this.myWidth, this.myY, z);
+    g.vertex(this.myX + this.myWidth, this.myY + this.myHeight, z);
+    g.vertex(this.myX, this.myY + this.myHeight, z);
     //display country name
     if (hover || selected) {
       g.endShape();
       g.textFont(INFO);
       g.textAlign(BOTTOM, LEFT);
       float m = 5; //margin
-      float nameY = currentY + currentH + m;
+      float nameY = myY + myHeight + m;
       g.fill(PRIMARY);
-      if (currentY + currentH + nameWidth + m > myContainerLayout.y + myContainerLayout.h) {
+      if (myY + myHeight + nameWidth + m > myContainerLayout.y + myContainerLayout.h) {
         g.fill(0);
         nameY -= nameWidth + 2*m;
       }
       g.pushMatrix();
-      g.translate(currentX, nameY);
+      g.translate(myX, nameY);
       g.rotate(HALF_PI);
       g.text(name, 0, 0);
       g.popMatrix();
       g.beginShape(QUADS);
     }
+    g.endShape();
   }
 
   String getGPIRankString(int year) {
@@ -255,33 +189,36 @@ public class Country implements Comparable { //<>// //<>//
   }
 
   void displayOutlined(PGraphics g) {
+    if (name.equals("Palestine")) {
+      println(name, myX, myY, myWidth, myHeight);
+    }
     g.endShape();
     g.beginShape(QUADS);
     g.strokeWeight(1);
     g.fill(0);
-    g.stroke(currentColor);
+    g.fill(myRed, myGreen, myBlue, myAlpha);
     if (hover || selected) {
       g.stroke(PRIMARY);
     }
     float z = -1;
-    g.vertex(this.currentX, this.currentY, z);
-    g.vertex(this.currentX + this.currentW, this.currentY, z);
-    g.vertex(this.currentX + this.currentW, this.currentY + this.currentH, z);
-    g.vertex(this.currentX, this.currentY + this.currentH, z);
+    g.vertex(this.myX, this.myWidth, z);
+    g.vertex(this.myX + this.myWidth, this.myY, z);
+    g.vertex(this.myX + this.myWidth, this.myY + this.myHeight, z);
+    g.vertex(this.myX, this.myY + this.myHeight, z);
     //display country name
     if (hover || selected) {
       g.endShape();
       g.textFont(INFO);
       g.textAlign(BOTTOM, LEFT);
       float m = 5; //margin
-      float nameY = currentY + currentH + m;
+      float nameY = myY + myHeight + m;
       g.fill(PRIMARY);
-      if (currentY + currentH + nameWidth + m > myContainerLayout.y + myContainerLayout.h) {
+      if (myY + myHeight + nameWidth + m > myContainerLayout.y + myContainerLayout.h) {
         g.fill(0);
         nameY -= nameWidth + 2*m;
       }
       g.pushMatrix();
-      g.translate(currentX, nameY);
+      g.translate(myX, nameY);
       g.rotate(HALF_PI);
       g.text(name, 0, 0);
       g.popMatrix();
@@ -346,7 +283,7 @@ public class Country implements Comparable { //<>// //<>//
 
   //shows countrynames hovering on a bar / without a bar
   public boolean isHover(float x, float y) {
-    return x >= currentX && x <= currentX + currentW && y >= currentY && y <= currentY + currentH;
+    return x >= myX && x <= myX + myWidth && y >= myY && y <= myY + myHeight;
     //return x >= currentX && x <= currentX + currentW;
   }
 

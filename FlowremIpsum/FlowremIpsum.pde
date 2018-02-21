@@ -1,10 +1,13 @@
-import java.util.*; //<>// //<>// //<>// //<>// //<>//
+import de.looksgood.ani.*; //<>//
+import de.looksgood.ani.easing.*;
+import java.util.*; //<>// //<>// //<>// //<>//
 //import java.awt.event.*;
 //import javax.swing.event.*;
 //import java.awt.event.*;
 //import codeanticode.planetarium.*;
 import controlP5.*;
 import java.lang.reflect.*;
+
 
 Table countryDataBase, countryDataExtended, flowData, populationData;
 
@@ -36,6 +39,7 @@ int currentShowMode = SHOW_ALL;
 //float TIME = 0;
 //float TIME_INC = 0.05;
 int DEFAULT_DURATION = 500; //in millis;
+float ANI_DURATION = 2; //in secods
 long lastTime;
 
 //Layout globals
@@ -101,8 +105,8 @@ ArrayList<RadioButtonGroup> radio = new ArrayList<RadioButtonGroup>();
 
 boolean domeDisplay = true;
 int DOME_SIZE = 960;
-int PREVIEW_WIDTH = 1920;
-int PREVIEW_HEIGHT = 960;
+int PREVIEW_WIDTH = 1888;
+int PREVIEW_HEIGHT = 944;
 int CANVAS_WIDTH = 2048;
 int CANVAS_HEIGHT = 1024;
 
@@ -126,7 +130,8 @@ void setup() {
   initShape();
   initShader();
   initFonts();
-
+  Ani.init(this);
+  Ani.setDefaultEasing(Ani.CUBIC_IN_OUT);
   //mesh.toggleShape();
   //mesh.toggleGrid();
   float panelWidth = 200;
@@ -205,10 +210,12 @@ void draw() {
 
   long delta = millis() - lastTime;
   canvas.beginShape(QUADS);
+  /*
   for (Country theCountry : countries) {
     //println(theCountry.name);
     theCountry.update(delta);
   }
+  */
   Country activeCountry = null;
   for (Country theCountry : countries) {
     theCountry.display(canvas);

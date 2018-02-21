@@ -2,8 +2,8 @@ void loadData(boolean verbose) {
   //load tables
   countryDataBase = loadTable("gpi_2008-2016_geocodes+continents_v4.csv", "header");
   countryDataExtended = loadTable("gpi_2008-2017_with_Ranking.csv", "header");
-  flowData = loadTable("GlobalMigration.tsv", "header, tsv");
-  populationData = loadTable("API_SP.POP.TOTL_DS2_en_csv_v2.csv", "header");
+  flowData = loadTable("migrationData.tsv", "header, tsv");
+  populationData = loadTable("country_populations_names.tsv", "header, tsv");
 
   treatTableExceptions();
 
@@ -15,6 +15,7 @@ void loadData(boolean verbose) {
     String name = row.getString("country");
     String region = row.getString("region");
     String subRegion = row.getString("sub-region");
+    String lookupName = populationData.findRow(iso3, "alpha-3").getString("name_lookup"); 
 
     TableRow extendedRow = countryDataExtended.findRow(name, "Country");
     if (extendedRow == null) {

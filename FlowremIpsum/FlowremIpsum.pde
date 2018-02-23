@@ -55,6 +55,7 @@ Long MIGRATION_FLOW_LOWER_LIMIT = 100L;
 ArrayList<Country> countries = new ArrayList<Country>();
 //Map of countries, labelled by names
 HashMap<String, Country> countriesByName = new HashMap<String, Country>();
+HashMap<String, Country> countriesByLookupName = new HashMap<String, Country>();
 
 HashMap<Integer, ArrayList<MigrationFlow>> migrationFlows = new HashMap<Integer, ArrayList<MigrationFlow>>();
 HashMap<String, PImage> flags = new HashMap<String, PImage>();
@@ -156,7 +157,7 @@ void setup() {
   //pixelDensity(2);
   canvas.ellipseMode(CORNER);
   //canvas.textSize(20);
-  loadData(false);
+  loadData(true);
   initRadio();
   //Example of animating between two layouts
   //first sort by one criterium, then set start layout

@@ -1,6 +1,6 @@
 public class Country implements Comparable { //<>// //<>//
   //attribute / field
-  String name, iso3, iso2, region, subRegion;
+  String name, lookupName, iso3, iso2, region, subRegion;
   //gpi indices by year
   HashMap<Integer, Float> gpi = new HashMap<Integer, Float>();
   HashMap<Integer, Integer> gpiRanks = new HashMap<Integer, Integer>();
@@ -25,8 +25,9 @@ public class Country implements Comparable { //<>// //<>//
   LayoutInfo myContainerLayout;
 
   //constructor method
-  Country(String theName, String theIso3, String theIso2, String theRegion, String theSubRegion, PApplet parent, PGraphics canvas, LayoutInfo theContainerLayout) {
+  Country(String theName, String theLookupName, String theIso3, String theIso2, String theRegion, String theSubRegion, PApplet parent, PGraphics canvas, LayoutInfo theContainerLayout) {
     name = theName;
+    lookupName = theLookupName;
     iso3 = theIso3;
     iso2 = theIso2;
     region = theRegion;
@@ -143,9 +144,9 @@ public class Country implements Comparable { //<>// //<>//
 
   void displayFilled(PGraphics g) {
     
-    if (name.equals("Palestine") || name.equals("Syria")) {
-      println(name, myX, myY, myWidth, myHeight);
-    }
+    //if (name.equals("Palestine") || name.equals("Syria")) {
+      //println(name, myX, myY, myWidth, myHeight);
+    //}
     g.endShape();
     g.beginShape(QUADS);
     g.noStroke();
@@ -189,9 +190,9 @@ public class Country implements Comparable { //<>// //<>//
   }
 
   void displayOutlined(PGraphics g) {
-    if (name.equals("Palestine")) {
-      println(name, myX, myY, myWidth, myHeight);
-    }
+    //if (name.equals("Palestine")) {
+      //println(name, myX, myY, myWidth, myHeight);
+    //}
     g.endShape();
     g.beginShape(QUADS);
     g.strokeWeight(1);

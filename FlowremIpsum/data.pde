@@ -17,6 +17,10 @@ void loadData(boolean verbose) {
     String subRegion = row.getString("sub-region");
     String lookupName = populationData.findRow(iso3, "alpha-3").getString("name_lookup"); 
 
+    if (lookupName.equals("")) {
+      println("lookup name not found!!!!", name, lookupName, iso3);
+    }
+
     TableRow extendedRow = countryDataExtended.findRow(name, "Country");
     if (extendedRow == null) {
       println(name, "not found");
@@ -25,7 +29,7 @@ void loadData(boolean verbose) {
 
 
     //make new country, only local
-    Country theCountry = new Country(name, iso3, iso2, region, subRegion, this, canvas, graphLayout);
+    Country theCountry = new Country(name, lookupName, iso3, iso2, region, subRegion, this, canvas, graphLayout);
     if (!flags.containsKey(iso2)) {
       flags.put(iso2, loadImage("Flags/country-flags-master/png100px/" + iso2.toLowerCase() + ".png"));
     }
@@ -33,6 +37,8 @@ void loadData(boolean verbose) {
     //add to collection of countries
     countries.add(theCountry);
     countriesByName.put(name, theCountry);
+    countriesByLookupName.put(lookupName, theCountry);
+
 
     //we add the gpi and population value for each year to country "theCountry"
     for (int year = GPI_YEAR_START; year <= GPI_YEAR_END; year++) {
@@ -40,9 +46,9 @@ void loadData(boolean verbose) {
       String rankString = year + " rank"; //building the right column name
       Float gpi = extendedRow.getInt(yearString) / 1000.0; //retrieving the value (a float number) for the given column (year)
       Integer gpiRank = extendedRow.getInt(rankString);
-      if (name.equals("Palestine")) {
-        println(year, gpi, gpiRank);
-      }
+      //if (name.equals("Palestine")) {
+      //  println(year, gpi, gpiRank);
+      //}
       if (gpiRank == 0) {
         theCountry.setGPI(year, GPI_LAST_RANK+0f); //putting the value into the country
         theCountry.setGPIRank(year, GPI_LAST_RANK); //putting the value into the country
@@ -52,7 +58,7 @@ void loadData(boolean verbose) {
       }
 
       //find country row by iso-3 code
-      TableRow countryRow = populationData.findRow(theCountry.iso3, 1);
+      TableRow countryRow = populationData.findRow(theCountry.iso3, "alpha-3");
       if (countryRow == null) {
         if (verbose) println(theCountry.name, "not FOUND!!!");
       } else {
@@ -60,6 +66,7 @@ void loadData(boolean verbose) {
         theCountry.setPOP(year, pop);
         POPULATION_MIN = Math.min(pop, POPULATION_MIN);
         POPULATION_MAX = Math.max(pop, POPULATION_MAX);
+        //if (verbose) println(theCountry.name, pop);
       }
     }
   }
@@ -72,67 +79,71 @@ void loadData(boolean verbose) {
   for (TableRow tr : flowData.rows()) {
     //int from = max(GPI_YEAR_START, MIGRATION_YEAR_START);
     //int to = min(GPI_YEAR_END, MIGRATION_YEAR_END);
-    for (int year = from; year <= to; year++) {
-      String originName = tr.getString("from");
-      String destinationName = tr.getString("to");
-      Country origin = countriesByName.get(originName);
-      Country destination = countriesByName.get(destinationName);
-      if (origin == null) {
-        String originTemp = originName + "";
-        //println("ORIGIN NOT FOUND (1ST ATTEMPT)", originName, "->", destinationName);
-        originName = countryLookupTable.get(originName);
-        origin = countriesByName.get(originName);
-        if (origin == null) {
-          if (!missingCountries.contains(originTemp)) {
-            if (verbose) println("ORIGIN STILL NOT FOUND: ", originTemp, "->", destinationName);
-          }
-        }
-      }
-      if (destination == null) {
-        String destinationTemp = originName + "";
-        //println("DESTINATION NOT FOUND (1ST ATTEMPT)", originName, "->", destinationName);
-        destinationName = countryLookupTable.get(destinationName);
-        destination = countriesByName.get(destinationName);
-        if (destination == null) {
-          if (!missingCountries.contains(destinationTemp)) {
-            if (verbose) println("DESTINATION STILL NOT FOUND: ", originName, "->", destinationTemp);
-          }
-        }
-      }
+    String originLookupName = tr.getString("from");
+    String destinationLookupName = tr.getString("to");
 
-      if (origin == null) {
-        //println("ORIGIN NOT FOUND", originName);
-      } else if (destination == null) {
-        //println("DESTINATION NOT FOUND", destinationName);
-      } else if (!originName.equalsIgnoreCase(destinationName)) {
+    for (int year = from; year <= to; year++) {
+      Country origin = countriesByLookupName.get(originLookupName);
+      Country destination = countriesByLookupName.get(destinationLookupName);
+      if (origin != null && destination != null) {
         try {
           Long flowVolume = tr.getLong(year + "");
-          //if (flowVolume != null) {
-          ArrayList<MigrationFlow> flows = migrationFlows.get(year);
-          /*
-            if (flows == null) {
-           flows = new ArrayList<MigrationFlow>();
-           migrationFlows.put(year, flows);
-           }
-           */
-          MigrationFlow mf = new MigrationFlow(origin, destination, year, flowVolume); 
-          flows.add(mf);
-          origin.addEmigrationFlow(mf);
-          destination.addImmigrationFlow(mf);
-          MIGRATION_FLOW_MIN = Math.min(flowVolume, MIGRATION_FLOW_MIN);
-          MIGRATION_FLOW_MAX = Math.max(flowVolume, MIGRATION_FLOW_MAX);
-          //}
+          //TODO: treat negative values
+          if (flowVolume > 0) {
+            ArrayList<MigrationFlow> flows = migrationFlows.get(year);
+            MigrationFlow mf = new MigrationFlow(origin, destination, year, flowVolume); 
+            flows.add(mf);
+            origin.addEmigrationFlow(mf);
+            destination.addImmigrationFlow(mf);
+            MIGRATION_FLOW_MIN = Math.min(flowVolume, MIGRATION_FLOW_MIN);
+            MIGRATION_FLOW_MAX = Math.max(flowVolume, MIGRATION_FLOW_MAX);
+          }
         } 
         catch (Exception e) {
-          //e.printStackTrace();
+          if (verbose) {
+            e.printStackTrace();
+          } 
         }
-      }
+      }  /*else if (origin == null && verbose) {
+        //println("ORIGIN NOT FOUND", originLookupName);
+      } else if (verbose) {
+        //println("DESTINATION NOT FOUND", destinationLookupName);
+      }*/
     }
   }
   for (Integer y : migrationFlows.keySet()) {
-    println(y, migrationFlows.get(y).size());
+    println("flow count: ", y, migrationFlows.get(y).size());
   }
+  println("migration flow min:", MIGRATION_FLOW_MIN);
+  println("migration flow max:", MIGRATION_FLOW_MAX);
 }
+
+/*
+void stuff(boolean verbose) {
+ if (origin == null) {
+ String originTemp = originName + "";
+ //println("ORIGIN NOT FOUND (1ST ATTEMPT)", originName, "->", destinationName);
+ originName = countryLookupTable.get(originName);
+ origin = countriesByName.get(originName);
+ if (origin == null) {
+ if (!missingCountries.contains(originTemp)) {
+ if (verbose) println("ORIGIN STILL NOT FOUND: ", originTemp, "->", destinationName);
+ }
+ }
+ }
+ if (destination == null) {
+ String destinationTemp = originName + "";
+ //println("DESTINATION NOT FOUND (1ST ATTEMPT)", originName, "->", destinationName);
+ destinationName = countryLookupTable.get(destinationName);
+ destination = countriesByName.get(destinationName);
+ if (destination == null) {
+ if (!missingCountries.contains(destinationTemp)) {
+ if (verbose) println("DESTINATION STILL NOT FOUND: ", originName, "->", destinationTemp);
+ }
+ }
+ }
+ }
+ */
 
 void treatTableExceptions() {
   countryLookupTable.put("United States of America", "United States");

@@ -43,7 +43,7 @@ void setup() {
             d = new Datum(fromCountry, toCountry);
             data.put(f, d);
           }
-          d.addData(year, migrantCount);
+          d.addStockData(year, migrantCount);
           //println(fromCountry, toCountry, year, migrantCount);
         }
       } 
@@ -59,7 +59,7 @@ void setup() {
   outputData.addColumn("from");
   outputData.addColumn("to");
   //outputData.addColumn("migrant_count");
-  for (int i = yearStart; i <= yearEnd; i++) {
+  for (int i = yearStart + 1; i <= yearEnd; i++) {
     outputData.addColumn(i + "");
   }
   int c = 0;
@@ -69,25 +69,32 @@ void setup() {
     row.setString("to", d.flow.to);
 
     int lastYear = yearStart;
-    Long lastCount = d.getData(lastYear);
+    Long lastCount = d.getStockData(lastYear);
+    HashMap<Integer, Long> stockByYears = new HashMap<Integer, Long>();
     for (int i = yearStart; i <= yearEnd; i++) {
-      Long count = d.getData(i);
+      Long count = d.getStockData(i);
       int nextYear = i;
       if (count == 0L) {
         Long nextCount = count;
         while (nextCount == 0 && nextYear <= yearEnd) {
           nextYear++;
-          nextCount = d.getData(nextYear);
+          nextCount = d.getStockData(nextYear);
         }
         count = floor(float(i - lastYear) / (nextYear - lastYear) * (nextCount - lastCount) + lastCount) + 0L;
       } else {
-        print("* ");
         lastCount = count;
         lastYear = i;
       }
-      row.setLong(i + "", count);
-      println(i, count);
+      stockByYears.put(i, count);
     }
+    //TODO: treat negative values!
+    for (int i = yearStart+1; i <= yearEnd; i++) {
+      Long stock0 = stockByYears.get(i-1);
+      Long stock1 = stockByYears.get(i);
+      Long flow = stock1 - stock0;
+      row.setLong(i + "", flow);      
+    }
+    
     //println(c++);
   }
   saveTable(outputData, "data/output.tsv", "tsv");
@@ -122,24 +129,24 @@ class Flow {
 
 class Datum {
   Flow flow;
-  HashMap<Integer, Long> migrantCount = new HashMap<Integer, Long>();
+  HashMap<Integer, Long> migrantStockCount = new HashMap<Integer, Long>();
 
   Datum(String from, String to) {
     this.flow = new Flow(from, to);
   }
 
-  void addData(int year, Long count) {
-    migrantCount.put(year, count);
+  void addStockData(int year, Long count) {
+    migrantStockCount.put(year, count);
   }
 
-  Long getData(Integer year) {
+  Long getStockData(Integer year) {
     Long result = 0L;
-    if (migrantCount.get(year) != null) {
-      result = migrantCount.get(year);
+    if (migrantStockCount.get(year) != null) {
+      result = migrantStockCount.get(year);
     }
     return result;
   }
-
+  
   @Override
     boolean equals(Object o) {
     Datum other = (Datum)o;
@@ -154,8 +161,8 @@ class Datum {
   @Override
     String toString() {
     String result = flow.toString();
-    for (Integer y : migrantCount.keySet()) {
-      result += y + ": " + migrantCount.get(y) + "\n";
+    for (Integer y : migrantStockCount.keySet()) {
+      result += y + ": " + migrantStockCount.get(y) + "\n";
     }
     result += "--------\n";
     return result;

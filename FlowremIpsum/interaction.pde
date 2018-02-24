@@ -184,3 +184,55 @@ void setCurrentYear(int theNewYear) {
   Collections.sort(yearlyMigrationFlows);
   makeLayout();
 }
+
+void mouseMoved() {
+  hoverCountry = null;
+  for (Country c : countries) {
+    c.hover(mappedMouse.x, mappedMouse.y);
+    if (c.isHover()) {
+      //println(c);
+      hoverCountry = c;
+    }
+  }
+
+  for(YearSelector ys : yearSelectors) {
+    ys.hover(mappedMouse.x, mappedMouse.y);
+  }
+
+  for (RadioButtonGroup rbg : radio) {
+    for (RadioButton rb : rbg.buttons) {
+      rb.hover(mappedMouse.x, mappedMouse.y);
+    }
+  }
+}
+
+void mousePressed() {
+  //check if interacting with UI
+  boolean guiInteraction = false;
+  for (RadioButtonGroup rbg : radio) {
+    for (RadioButton rb : rbg.buttons) {
+      if (rb.isHover()) {
+        rbg.setSelectedButton(rb);
+        rb.trigger();
+        guiInteraction = true;
+      }
+    }
+  }
+
+  for (YearSelector ys : yearSelectors) {
+    if (ys.isHover()) {
+      ys.trigger();
+      guiInteraction = true;
+    }
+  }
+
+  if(!guiInteraction) {
+    activeCountry = null;
+    for (Country c : countries) {
+      if (c.isHover()) {
+        println(c);
+        activeCountry = c;
+      }
+    }
+  }
+}

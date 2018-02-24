@@ -1,17 +1,17 @@
 public class YearSelector {
   int year;
-  boolean hover = false;
+  boolean _hover = false;
   LayoutInfo myLayout;
 
   YearSelector(int theYear, LayoutInfo theLayout, PApplet parent) {
     year = theYear;
-    parent.registerMethod("mouseEvent", this);
+    //parent.registerMethod("mouseEvent", this);
     myLayout = theLayout;
   }
 
   void display(PGraphics g) {
-    
-    if (hover) {
+
+    if (isHover()) {
       g.fill(PRIMARY);
     } else if (year == currentYear){
       g.fill(WHITE);
@@ -25,10 +25,19 @@ public class YearSelector {
     //g.rect(myLayout.x, myLayout.y, myLayout.w, myLayout.h);
   }
 
-  boolean isHover(float x, float y) {
-    return x >= myLayout.x && x <= myLayout.x + myLayout.w && y >= myLayout.y && y <= myLayout.y + myLayout.h;
+  void hover(float x, float y) {
+    _hover = x >= myLayout.x && x <= myLayout.x + myLayout.w && y >= myLayout.y && y <= myLayout.y + myLayout.h;
   }
 
+  boolean isHover() {
+    return _hover;
+  }
+
+  void trigger() {
+    setCurrentYear(year);
+  }
+
+  /*
   void mouseEvent(MouseEvent e) {
     switch(e.getAction()) {
     case MouseEvent.MOVE:
@@ -38,9 +47,9 @@ public class YearSelector {
       if(hover) {
         //println("CLICK from year", year);
         setCurrentYear(year);
-        deactivateCountryFlag = false;
       }
       break;
     }
   }
+  */
 }

@@ -15,7 +15,7 @@ public class Country implements Comparable { //<>// //<>// //<>//
   float myX = 0f, myY = 0f, myWidth = 0f, myHeight = 0f;
   float myRed = 0, myGreen = 0, myBlue = 0, myAlpha = 255;
   int activeYear = GPI_YEAR_END;
-  boolean hover = false;
+  boolean _hover = false;
   boolean _selected = false;
 
   int sortingMethod = SORT_BY_CONTINENT_THEN_NAME;
@@ -32,7 +32,7 @@ public class Country implements Comparable { //<>// //<>// //<>//
     iso2 = theIso2;
     region = theRegion;
     subRegion = theSubRegion;
-    parent.registerMethod("mouseEvent", this);
+    //parent.registerMethod("mouseEvent", this);
     canvas.beginDraw();
     canvas.textFont(INFO);
     nameWidth = canvas.textWidth(name);
@@ -210,7 +210,7 @@ public class Country implements Comparable { //<>// //<>// //<>//
     g.vertex(this.myX + this.myWidth, this.myY + this.myHeight, z);
     g.vertex(this.myX, this.myY + this.myHeight, z);
     //display country name
-    if (hover ||  isSelected()) {
+    if (isHover() ||  isSelected()) {
       g.endShape();
       g.textFont(INFO);
       g.textAlign(BOTTOM, LEFT);
@@ -240,7 +240,7 @@ public class Country implements Comparable { //<>// //<>// //<>//
     Country c = ((Country) obj);
     return c.iso3.equals(this.iso3);
   }
-  
+
   @Override
   public int hashCode() {
      return Objects.hash(name, lookupName, iso3, iso2, region, subRegion);
@@ -291,9 +291,13 @@ public class Country implements Comparable { //<>// //<>// //<>//
   }
 
   //shows countrynames hovering on a bar / without a bar
-  public boolean isHover(float x, float y) {
-    return x >= myX && x <= myX + myWidth && y >= myY && y <= myY + myHeight;
+  public void hover(float x, float y) {
+    _hover = x >= myX && x <= myX + myWidth && y >= myY && y <= myY + myHeight;
     //return x >= currentX && x <= currentX + currentW;
+  }
+
+  boolean isHover() {
+    return _hover;
   }
 
   Long getImmigration(int theYear) {
@@ -303,55 +307,12 @@ public class Country implements Comparable { //<>// //<>// //<>//
   Long getEmigration(int theYear) {
     return totalEmigraionFlow.get(theYear);
   }
-  
+
   void setSelected(boolean s) {
     _selected = s;
   }
-  
+
   boolean isSelected() {
     return _selected;
-  }
-
-
-  void mouseEvent(MouseEvent e) {
-    //println("mouseEvent: " + e);
-    switch(e.getAction()) {
-    case MouseEvent.MOVE:
-      hover = isHover(mappedMouse.x, mappedMouse.y);
-      if (hover) {
-        hoverCountry = this;
-      } else {
-        if (this.equals(hoverCountry)) {
-          hoverCountry = null;
-        }
-      }
-      /*
-      if (hover) {
-        hoverCountries.add(this);
-      } else {
-        hoverCountries.remove(this);
-      }
-      */
-      break;
-    case MouseEvent.CLICK:
-      //println("CLICK", e);
-      if (hover) {
-        if (activeCountry != null) {
-          activeCountry.setSelected(false);
-        }
-        
-        activeCountry = this;
-        setSelected(true);
-        deactivateCountryFlag = false;
-      } else {
-        
-        if (this.equals(activeCountry)) {
-          //activeCountry = null;
-          //setSelected(false);
-          deactivateCountryFlag = true;
-        }
-      }
-      break;
-    }
   }
 }

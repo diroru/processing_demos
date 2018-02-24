@@ -3,15 +3,16 @@ public class RadioButtonGroup {
   float x, y, w;
 
   ArrayList<RadioButton> buttons = new ArrayList<RadioButton>();
-  RadioButton selected = null;
+  RadioButton selectedButton = null;
   RadioButton lastButton = null;
   PApplet parent;
+  boolean _hover = false;
 
   RadioButtonGroup(float theX, float theY, float theW, PApplet parent) {
     x = theX;
-    y = theY;  
+    y = theY;
     w = theW;
-    parent.registerMethod("mouseEvent", this);
+    //parent.registerMethod("mouseEvent", this);
   }
 
   void addRadioButton(RadioButton rb) {
@@ -20,19 +21,30 @@ public class RadioButtonGroup {
 
   void addRadioButton(RadioButton rb, boolean isSelected) {
     if (isSelected) {
-      selected = rb;
-      rb.selected = true;
+      setSelectedButton(rb);
     }
     buttons.add(rb);
     lastButton = rb;
+  }
+
+  void setSelectedButton(RadioButton rb) {
+    if (selectedButton != null) {
+      selectedButton.setSelected(false);
+    }
+    selectedButton = rb;
+    rb.setSelected(true);
   }
 
   float getNextY() {
     return y + getHeight();
   }
 
-  boolean isHover(float mx, float my) {
-    return mx >= x && mx <= x + w && my >= y && my <= y + getHeight();
+  void hover(float mx, float my) {
+    _hover = mx >= x && mx <= x + w && my >= y && my <= y + getHeight();
+  }
+
+  boolean isHover() {
+    return _hover;
   }
 
   float getHeight() {
@@ -55,7 +67,7 @@ public class RadioButtonGroup {
     g.vertex(x-strokeW, y0, -1);
     g.vertex(x-strokeW, y1, -1);
     g.endShape();
-    
+
     g.ellipseMode(CENTER);
     g.noStroke();
     g.fill(DARK_GREY);
@@ -67,6 +79,7 @@ public class RadioButtonGroup {
     }
   }
 
+  /*
   void mouseEvent(MouseEvent e) {
     //println("mouseEvent: " + e);
     switch(e.getAction()) {
@@ -78,22 +91,23 @@ public class RadioButtonGroup {
           if (rb.isHover(mappedMouse.x, mappedMouse.y)) {
             rb.selected = true;
             selected = rb;
-            deactivateCountryFlag = false;
+            // deactivateCountryFlag = false;
           }
         }
       }
       break;
     }
   }
+  */
 }
 
 public class RadioButton {
   float x, y, w, h, m;
-  boolean selected = false;
-  boolean hover = false;
+  boolean _selected = false;
   String label;
   Method callback;
   PApplet parent;
+  boolean _hover = false;
 
   RadioButton(RadioButtonGroup parentGroup, float theHeight, String theLabel, PApplet theParent, PGraphics pg, String callbackName, boolean selected) {
     this(parentGroup, theHeight, theHeight*0.5, theLabel, theParent, pg, callbackName, selected);
@@ -126,11 +140,11 @@ public class RadioButton {
 
     label = theLabel;
     parent = theParent;
-    parent.registerMethod("mouseEvent", this);
+    //parent.registerMethod("mouseEvent", this);
     try {
       //callback = FlowremIpsum.class.getMethod(callbackName);
       callback = parent.getClass().getMethod(callbackName);
-    } 
+    }
     catch (Exception e) {
       e.printStackTrace();
     }
@@ -139,20 +153,20 @@ public class RadioButton {
   void display(PGraphics g) {
     g.textFont(INFO);
     g.textAlign(LEFT, TOP);
-    if (hover) {
+    if (isHover()) {
       g.fill(PRIMARY);
-    } else if (selected) {
+    } else if (isSelected()) {
       g.fill(WHITE);
     } else {
       g.fill(WHITE);
     }
     g.text(label, x, y, w, h*2);
-    if (selected) {
+    if (isSelected()) {
       g.fill(WHITE);
-    } else if (hover) {
+    } else if (isHover()) {
       g.fill(PRIMARY);
-    } 
-    if (hover || selected) {
+    }
+    if (isHover() || isSelected()) {
       g.pushStyle();
       g.noStroke();
       g.ellipseMode(LEFT);
@@ -163,11 +177,33 @@ public class RadioButton {
     }
   }
 
-  boolean isHover(float mx, float my) {
+  void hover(float mx, float my) {
     //return ((mx >= x && mx <= x + w) || (mx >= x + canvas.width && mx <= x + w + canvas.width)) && (my >= y && my <= y + h);
-    return mx >= x && mx <= x + w && my >= y && my <= y + h;
+    _hover = mx >= x && mx <= x + w && my >= y && my <= y + h;
   }
 
+  boolean isHover() {
+    return _hover;
+  }
+
+  void trigger() {
+    try {
+      callback.invoke(parent);
+      // deactivateCountryFlag = false;
+    }
+    catch (Exception ex) {
+    }
+  }
+
+  boolean isSelected() {
+    return _selected;
+  }
+
+  void setSelected(boolean s) {
+    _selected = s;
+  }
+
+  /*
   void mouseEvent(MouseEvent e) {
     //println("mouseEvent: " + e);
     switch(e.getAction()) {
@@ -178,12 +214,13 @@ public class RadioButton {
       if (hover) {
         try {
           callback.invoke(parent);
-          deactivateCountryFlag = false;
-        } 
+          // deactivateCountryFlag = false;
+        }
         catch (Exception ex) {
         }
       }
       break;
     }
   }
+  */
 }

@@ -66,7 +66,7 @@ ArrayList<String> missingCountries = new ArrayList<String>();
 
 int currentYear = 2013;
 
-HashSet<Country> hoverCountries = new HashSet<Country>();
+//HashSet<Country> hoverCountries = new HashSet<Country>();
 ArrayList<YearSelector> yearSelectors = new ArrayList<YearSelector>();
 
 int MARGIN = 20;
@@ -126,8 +126,6 @@ void settings() {
   pixelDensity(displayDensity()); //uncomment for retina rendering
   //fullScreen( P3D, SPAN); //for presenting in the dome (double screen)
 }
-
-boolean deactivateCountryFlag = false;
 
 void setup() {
 
@@ -265,13 +263,6 @@ void draw() {
     break;
   }
   drawGUI();
-  if (deactivateCountryFlag) {
-    if (activeCountry != null) {
-      activeCountry.setSelected(false);
-    }
-    activeCountry = null;
-    deactivateCountryFlag = false;
-  }
 }
 
 void drawFlowGraphLegend(LayoutInfo graphLayout, LayoutInfo flowLayout, float margin, PGraphics pg) {
@@ -365,11 +356,14 @@ void displayFlows(PGraphics pg, Country activeCountry) {
 }
 
 void displayCountryInfo(PGraphics pg, Country activeCountry, LayoutInfo layout) {
-  if (activeCountry != null || hoverCountries.size() > 0) {
+  //if (activeCountry != null || hoverCountries.size() > 0) {
+  if (activeCountry != null) {
     Country c = activeCountry;
+    /*
     if (c == null) {
       c = hoverCountries.iterator().next();
     }
+    */
     float x = layout.x;
     float y = layout.y;
     PImage flag = flags.get(c.iso2);

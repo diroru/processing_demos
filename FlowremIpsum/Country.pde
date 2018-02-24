@@ -162,6 +162,7 @@ public class Country implements Comparable { //<>// //<>// //<>//
   }
 
   void displayOutlined(PGraphics g, ArrayList<Country> destinationCountries, ArrayList<Country> originCountries) {
+    g.strokeWeight(3);
     boolean isDestination = destinationCountries.contains(this);
     boolean isOrigin = originCountries.contains(this);
     boolean gpiMissing = getGPIRank(activeYear) == GPI_LAST_RANK;
@@ -169,6 +170,7 @@ public class Country implements Comparable { //<>// //<>// //<>//
       g.fill(myRed, myGreen, myBlue, myAlpha);
       if (gpiMissing) {
         g.stroke(myRed, myGreen, myBlue, myAlpha);
+        g.stroke(0);
       }
       if (isDestination) {
         g.stroke(SECONDARY);

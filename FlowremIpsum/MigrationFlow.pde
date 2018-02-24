@@ -2,6 +2,7 @@ class MigrationFlow implements Comparable {
   Country origin, destination;
   int year;
   Long flow;
+  boolean _hover;
 
   MigrationFlow(Country theOrigin, Country theDestination, int theYear, Long theFlow) {
     origin = theOrigin;
@@ -27,10 +28,10 @@ class MigrationFlow implements Comparable {
     drawRoundedLine(g, origin.cx(), origin.cy(), origin.cx(), y, destination.cx(), y, destination.cx(), destination.cy(), 10, WHITE, 127); //last number is amount of roundness
   }
 
-  void displayNormal(PGraphics pg, LayoutInfo theLayout) {
-    float flowNorm = getNormFlow(flow);    
-    float yTop = theLayout.y + theLayout.h - map(flowNorm, 0, 1, 0, theLayout.h  );
-    float alpha =  map(flowNorm, 0, 1, 0, 255);
+  void displayNormal(PGraphics pg, LayoutInfo theLayout, float alphaFactor) {
+    float flowNorm = getNormFlow(flow);
+    float yTop = theLayout.y + theLayout.h - map(flowNorm, 0, 1, 0, theLayout.h);
+    float alpha =  map(flowNorm, 0, 1, 0, 255) * alphaFactor;
     drawRoundedLine(pg, origin.cx(), origin.cy(), origin.cx(), yTop, destination.cx(), yTop, destination.cx(), destination.cy(), 10, WHITE, alpha); //last number is amount of roundness
   }
 
@@ -42,6 +43,43 @@ class MigrationFlow implements Comparable {
       drawRoundedLine(pg, origin.cx(), origin.cy(), origin.cx(), yTop, destination.cx(), yTop, destination.cx(), destination.cy(), 10, c, 127); //last number is amount of roundness
     }
   }
+
+  boolean isHover() {
+    return _hover;
+  }
+
+  void hover(float x, float y, LayoutInfo theLayout) {
+    float yTop = theLayout.y + getHeight(theLayout);
+
+    float xMin = min(origin.cx(), destination.cx());
+    float xMax = max(origin.cx(), destination.cx());
+    float yMin = min(destination.cy(), yTop);
+    float yMax = max(destination.cy(), yTop);
+    //println(xMin, xMax, " | ", yMin, yMax, " | ", x, y);
+    _hover = x >= xMin && x <= xMax && y >= yMin && y <= yMax;
+  }
+
+  void displayHover(PGraphics pg, LayoutInfo theLayout) {
+    color c = PRIMARY;
+    float flowNorm = getNormFlow(flow);
+    float yTop = theLayout.y + theLayout.h - map(flowNorm, 0, 1, 0, theLayout.h);
+    pg.beginShape(POLYGON);
+    drawRoundedLine(pg, origin.cx(), origin.cy(), origin.cx(), yTop, destination.cx(), yTop, destination.cx(), destination.cy(), 10, c, 127); //last number is amount of roundness
+    pg.endShape();
+    pg.textFont(THIRDNUMBER);
+    pg.pushMatrix();
+    pg.translate(0,0,10);
+    pg.textAlign(BOTTOM, LEFT);
+    pg.fill(WHITE);
+    pg.noStroke();
+    pg.text(flow + "", min(origin.cx() + 10, destination.cx() + 10), yTop - 10);
+    pg.textAlign(TOP, LEFT);
+    pg.fill(c);
+    pg.textFont(INFOHEADLINE);
+    pg.text("People moved from " + origin.name + " to " + destination.name, min(origin.cx() + 10, destination.cx() + 10), yTop + 25);
+    pg.popMatrix();
+  }
+
 
   void displayAsTop(PGraphics pg, LayoutInfo theLayout, Country activeCountry, int No) {
     color c = PRIMARY;
@@ -63,7 +101,12 @@ class MigrationFlow implements Comparable {
     case 2:
       pg.textFont(THIRDNUMBER);
       break;
+    default:
+      pg.textFont(THIRDNUMBER);
+      break;
     }
+    pg.pushMatrix();
+    pg.translate(0,0,10);
     pg.textAlign(BOTTOM, LEFT);
     pg.fill(WHITE);
     pg.noStroke();
@@ -72,6 +115,7 @@ class MigrationFlow implements Comparable {
     pg.fill(c);
     pg.textFont(INFOHEADLINE);
     pg.text("People moved from " + origin.name + " to " + destination.name, min(origin.cx() + 10, destination.cx() + 10), yTop + 25);
+    pg.popMatrix();
   }
 
   //COMPARISON
@@ -91,6 +135,13 @@ class MigrationFlow implements Comparable {
   }
   boolean isActive(Country activeCountry) {
     return this.origin.name.equals(activeCountry.name) || this.destination.name.equals(activeCountry.name);
+  }
+
+  float getHeight(LayoutInfo theLayout) {
+    float flowNorm = getNormFlow(flow);
+    float result = theLayout.h - map(flowNorm, 0, 1, 0, theLayout.h);
+    //println(theLayout.h, map(flowNorm, 0, 1, 0, theLayout.h));
+    return result;
   }
 }
 

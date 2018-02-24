@@ -122,6 +122,7 @@ PImage zenith;
 PImage legend;
 
 Country activeCountry, hoverCountry;
+MigrationFlow hoverMigrationFlow;
 
 void settings() {
   size(DOME_SIZE, DOME_SIZE, P3D); //for working on the laptop (single screen)
@@ -234,7 +235,8 @@ void draw() {
     theCountry.displayName(canvas, highlightDestinationCountries, highlightOriginCountries);
   }
 
-  displayFlows(canvas, activeCountry);
+  displayFlows(canvas, activeCountry, hoverCountry);
+
   for (YearSelector ys : yearSelectors) {
     ys.display(canvas);
   }
@@ -302,11 +304,34 @@ void drawFlowGraphLegend(LayoutInfo graphLayout, LayoutInfo flowLayout, float ma
   pg.text("MIGRATION", flowLayout.x - margin, y - margin - INFO_SIZE);
 }
 
-void displayFlows(PGraphics pg, Country activeCountry) {
+void displayFlows(PGraphics pg, Country activeCountry, Country hoverCountry) {
   pg.noFill();
   pg.strokeWeight(2);
+  MigrationFlow highlightedFlow = getHighlightedMigrationFlow(yearlyMigrationFlows, activeCountry, hoverCountry);
 
-  if (currentShowMode == SHOW_TOP_THREE ) {
+  if (hoverMigrationFlow != null) {
+    for (MigrationFlow mf : yearlyMigrationFlows) {
+      if (mf.flow > MIGRATION_FLOW_LOWER_LIMIT && !mf.equals(highlightedFlow)) {
+        pg.beginShape(POLYGON);
+        mf.displayNormal(pg, flowLayout, 0.1);
+        pg.endShape();
+      }
+    }
+    hoverMigrationFlow.displayHover(pg, flowLayout);
+  } else if (highlightedFlow != null) {
+    for (MigrationFlow mf : yearlyMigrationFlows) {
+      if (mf.flow > MIGRATION_FLOW_LOWER_LIMIT && !mf.equals(highlightedFlow)) {
+        //mf.display(pg, height/2, MARGIN);
+        if (mf.destination.equals(activeCountry) || mf.origin.equals(activeCountry)) {
+          pg.beginShape(POLYGON);
+          mf.displayNormal(pg, flowLayout, 0.2);
+          pg.endShape();
+        }
+      }
+    }
+
+    highlightedFlow.displayAsTop(pg, flowLayout, activeCountry, 2);
+  } else if (currentShowMode == SHOW_TOP_THREE ) {
     if (activeCountry == null) {
       for (int i = 0; i < min(3, yearlyMigrationFlows.size()); i++) {
         MigrationFlow mf = yearlyMigrationFlows.get(i);
@@ -330,7 +355,7 @@ void displayFlows(PGraphics pg, Country activeCountry) {
         if (mf.flow > MIGRATION_FLOW_LOWER_LIMIT) {
           //mf.display(pg, height/2, MARGIN);
           pg.beginShape(POLYGON);
-          mf.displayNormal(pg, flowLayout);
+          mf.displayNormal(pg, flowLayout, 1);
           pg.endShape();
         }
       }
@@ -343,24 +368,24 @@ void displayFlows(PGraphics pg, Country activeCountry) {
           pg.endShape();
         }
       }
-
-      /*
-      if (mf.origin.name.equals(hoverCountry)) {
-       pg.stroke(WHITE, 50);
-       } else if (mf.destination.name.equals(hoverCountry)) {
-       pg.stroke(PRIMARY);
-       } else {
-       //stroke(255, 1);
-       pg.noStroke();
-       }
-       if (mf.flow > MIGRATION_FLOW_LOWER_LIMIT) {
-       //mf.display(pg, height/2, MARGIN);
-       mf.displayRounded(pg, flowLayout.h, flowLayout.y);
-       }
-       */
     }
   }
 }
+
+/*
+if (mf.origin.name.equals(hoverCountry)) {
+ pg.stroke(WHITE, 50);
+ } else if (mf.destination.name.equals(hoverCountry)) {
+ pg.stroke(PRIMARY);
+ } else {
+ //stroke(255, 1);
+ pg.noStroke();
+ }
+ if (mf.flow > MIGRATION_FLOW_LOWER_LIMIT) {
+ //mf.display(pg, height/2, MARGIN);
+ mf.displayRounded(pg, flowLayout.h, flowLayout.y);
+ }
+ */
 
 void displayCountryInfo(PGraphics pg, Country activeCountry, LayoutInfo layout) {
   //if (activeCountry != null || hoverCountries.size() > 0) {
@@ -437,4 +462,15 @@ void keyPressed() {
       break;
     }
   }
+}
+
+MigrationFlow getHighlightedMigrationFlow(ArrayList<MigrationFlow> yearlyMigrationFlows, Country activeCountry, Country hoverCountry) {
+  MigrationFlow result = null;
+  for (MigrationFlow mf : yearlyMigrationFlows) {
+    if (mf.origin.equals(activeCountry) && mf.destination.equals(hoverCountry) || mf.origin.equals(hoverCountry) && mf.destination.equals(activeCountry)) {
+      result = mf;
+      return result;
+    }
+  }
+  return result;
 }

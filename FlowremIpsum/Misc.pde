@@ -74,7 +74,7 @@ void initCanvas() {
   canvas.beginDraw();
   canvas.ortho();
   canvas.background(0);
-  canvas.strokeCap(ROUND);
+  canvas.strokeCap(MITER);
   canvas.endDraw();
 }
 

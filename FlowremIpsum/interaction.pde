@@ -205,6 +205,25 @@ void mouseMoved() {
       rb.hover(mappedMouse.x, mappedMouse.y);
     }
   }
+
+  //making sure that we hover the smallest possible element
+  //when there are several overlapping ones
+  float flowMaxHeight = Float.MIN_VALUE;
+  if (activeCountry == null && hoverCountry == null) {
+    hoverMigrationFlow = null;
+    for (MigrationFlow mf : yearlyMigrationFlows) {
+      mf.hover(mappedMouse.x, mappedMouse.y, flowLayout);
+      if (mf.isHover()) {
+        float h = mf.getHeight(flowLayout);
+        if (h > flowMaxHeight) {
+          println(flowMaxHeight, h);
+          hoverMigrationFlow = mf;
+          flowMaxHeight = h;
+        }
+      }
+    }
+    //println(hoverMigrationFlow);
+  }
 }
 
 void mousePressed() {
@@ -244,4 +263,6 @@ void mousePressed() {
       }
     }
   }
+
+
 }

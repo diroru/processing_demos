@@ -1,4 +1,4 @@
-public class Country implements Comparable { //<>// //<>//
+public class Country implements Comparable { //<>// //<>// //<>//
   //attribute / field
   String name, lookupName, iso3, iso2, region, subRegion;
   //gpi indices by year
@@ -12,11 +12,11 @@ public class Country implements Comparable { //<>// //<>//
   HashMap<Integer, Long> totalEmigraionFlow = new HashMap<Integer, Long>();
   //population by year
   HashMap<Integer, Long> pop = new HashMap<Integer, Long>();
-  float myX = 0f, myY = 0f, myWidth = 0f, myHeight = 0f; 
+  float myX = 0f, myY = 0f, myWidth = 0f, myHeight = 0f;
   float myRed = 0, myGreen = 0, myBlue = 0, myAlpha = 255;
   int activeYear = GPI_YEAR_END;
   boolean hover = false;
-  boolean selected = false;
+  boolean _selected = false;
 
   int sortingMethod = SORT_BY_CONTINENT_THEN_NAME;
   long animationStart, animationEnd, lastTime;
@@ -143,7 +143,7 @@ public class Country implements Comparable { //<>// //<>//
   }
 
   void displayFilled(PGraphics g) {
-    
+
     //if (name.equals("Palestine") || name.equals("Syria")) {
       //println(name, myX, myY, myWidth, myHeight);
     //}
@@ -151,7 +151,8 @@ public class Country implements Comparable { //<>// //<>//
     g.beginShape(QUADS);
     g.noStroke();
     g.fill(myRed, myGreen, myBlue, myAlpha);
-    if (hover || selected) {
+    //if (hover || isSelected()) {
+    if (isSelected()) {
       g.fill(PRIMARY);
     }
     float z = -1;
@@ -160,7 +161,8 @@ public class Country implements Comparable { //<>// //<>//
     g.vertex(this.myX + this.myWidth, this.myY + this.myHeight, z);
     g.vertex(this.myX, this.myY + this.myHeight, z);
     //display country name
-    if (hover || selected) {
+    //if (hover ||  isSelected()) {
+    if (isSelected()) {
       g.endShape();
       g.textFont(INFO);
       g.textAlign(BOTTOM, LEFT);
@@ -198,7 +200,8 @@ public class Country implements Comparable { //<>// //<>//
     g.strokeWeight(1);
     g.fill(0);
     g.fill(myRed, myGreen, myBlue, myAlpha);
-    if (hover || selected) {
+    //if (hover ||  isSelected()) {
+    if (isSelected()) {
       g.stroke(PRIMARY);
     }
     float z = -1;
@@ -207,7 +210,7 @@ public class Country implements Comparable { //<>// //<>//
     g.vertex(this.myX + this.myWidth, this.myY + this.myHeight, z);
     g.vertex(this.myX, this.myY + this.myHeight, z);
     //display country name
-    if (hover || selected) {
+    if (hover ||  isSelected()) {
       g.endShape();
       g.textFont(INFO);
       g.textAlign(BOTTOM, LEFT);
@@ -236,6 +239,11 @@ public class Country implements Comparable { //<>// //<>//
     }
     Country c = ((Country) obj);
     return c.iso3.equals(this.iso3);
+  }
+  
+  @Override
+  public int hashCode() {
+     return Objects.hash(name, lookupName, iso3, iso2, region, subRegion);
   }
 
   @Override
@@ -295,6 +303,14 @@ public class Country implements Comparable { //<>// //<>//
   Long getEmigration(int theYear) {
     return totalEmigraionFlow.get(theYear);
   }
+  
+  void setSelected(boolean s) {
+    _selected = s;
+  }
+  
+  boolean isSelected() {
+    return _selected;
+  }
 
 
   void mouseEvent(MouseEvent e) {
@@ -303,17 +319,37 @@ public class Country implements Comparable { //<>// //<>//
     case MouseEvent.MOVE:
       hover = isHover(mappedMouse.x, mappedMouse.y);
       if (hover) {
+        hoverCountry = this;
+      } else {
+        if (this.equals(hoverCountry)) {
+          hoverCountry = null;
+        }
+      }
+      /*
+      if (hover) {
         hoverCountries.add(this);
       } else {
         hoverCountries.remove(this);
       }
+      */
       break;
     case MouseEvent.CLICK:
       //println("CLICK", e);
       if (hover) {
-        selected = true;
+        if (activeCountry != null) {
+          activeCountry.setSelected(false);
+        }
+        
+        activeCountry = this;
+        setSelected(true);
+        deactivateCountryFlag = false;
       } else {
-        selected = false;
+        
+        if (this.equals(activeCountry)) {
+          //activeCountry = null;
+          //setSelected(false);
+          deactivateCountryFlag = true;
+        }
       }
       break;
     }

@@ -38,6 +38,7 @@ public class YearSelector {
       if(hover) {
         //println("CLICK from year", year);
         setCurrentYear(year);
+        deactivateCountryFlag = false;
       }
       break;
     }

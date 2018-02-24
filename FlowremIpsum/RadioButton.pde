@@ -78,6 +78,7 @@ public class RadioButtonGroup {
           if (rb.isHover(mappedMouse.x, mappedMouse.y)) {
             rb.selected = true;
             selected = rb;
+            deactivateCountryFlag = false;
           }
         }
       }
@@ -177,6 +178,7 @@ public class RadioButton {
       if (hover) {
         try {
           callback.invoke(parent);
+          deactivateCountryFlag = false;
         } 
         catch (Exception ex) {
         }

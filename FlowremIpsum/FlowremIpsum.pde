@@ -1,6 +1,6 @@
-import de.looksgood.ani.*; //<>//
+import de.looksgood.ani.*; //<>// //<>//
 import de.looksgood.ani.easing.*;
-import java.util.*; //<>// //<>// //<>// //<>//
+import java.util.*; //<>// //<>// //<>// //<>// //<>//
 //import java.awt.event.*;
 //import javax.swing.event.*;
 //import java.awt.event.*;
@@ -119,11 +119,15 @@ int GPI_LAST_RANK = 100000;
 PImage zenith;
 PImage legend;
 
+Country activeCountry, hoverCountry;
+
 void settings() {
   size(DOME_SIZE, DOME_SIZE, P3D); //for working on the laptop (single screen)
   pixelDensity(displayDensity()); //uncomment for retina rendering
   //fullScreen( P3D, SPAN); //for presenting in the dome (double screen)
 }
+
+boolean deactivateCountryFlag = false;
 
 void setup() {
 
@@ -190,7 +194,7 @@ void setup() {
 
   setCurrentYear(2013);
   initGUI();
-  
+
   noCursor();
 }
 
@@ -217,12 +221,10 @@ void draw() {
     theCountry.update(delta);
   }
   */
-  Country activeCountry = null;
+
+
   for (Country theCountry : countries) {
     theCountry.display(canvas);
-    if (theCountry.selected || theCountry.hover) {
-      activeCountry = theCountry;
-    }
   }
   canvas.endShape();
   lastTime = millis();
@@ -263,6 +265,13 @@ void draw() {
     break;
   }
   drawGUI();
+  if (deactivateCountryFlag) {
+    if (activeCountry != null) {
+      activeCountry.setSelected(false);
+    }
+    activeCountry = null;
+    deactivateCountryFlag = false;
+  }
 }
 
 void drawFlowGraphLegend(LayoutInfo graphLayout, LayoutInfo flowLayout, float margin, PGraphics pg) {
@@ -302,7 +311,7 @@ void displayFlows(PGraphics pg, Country activeCountry) {
   if (currentShowMode == SHOW_TOP_THREE ) {
     if (activeCountry == null) {
       for (int i = 0; i < min(3, yearlyMigrationFlows.size()); i++) {
-        MigrationFlow mf = yearlyMigrationFlows.get(i);        
+        MigrationFlow mf = yearlyMigrationFlows.get(i);
         mf.displayAsTop(pg, flowLayout, activeCountry, i);
       }
     } else {
@@ -364,7 +373,7 @@ void displayCountryInfo(PGraphics pg, Country activeCountry, LayoutInfo layout) 
     float x = layout.x;
     float y = layout.y;
     PImage flag = flags.get(c.iso2);
-    if (flag != null) {        
+    if (flag != null) {
       pg.image(flag, x, y, 25, 18);
     }
     y+= 20 + MARGIN;

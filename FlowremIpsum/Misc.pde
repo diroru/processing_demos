@@ -74,6 +74,7 @@ void initCanvas() {
   canvas.beginDraw();
   canvas.ortho();
   canvas.background(0);
+  canvas.strokeCap(ROUND);
   canvas.endDraw();
 }
 
@@ -92,7 +93,7 @@ void initShape() {
 
 float getFittingFontSize(String input, PFont font, float targetWidth) {
   float maxWidth = maxWidth(input, font);
-  return targetWidth / maxWidth * font.getDefaultSize(); 
+  return targetWidth / maxWidth * font.getDefaultSize();
 }
 
 ArrayList<String> getOptimalStrings(String input, PFont font) {

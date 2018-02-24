@@ -186,6 +186,7 @@ void setCurrentYear(int theNewYear) {
 }
 
 void mouseMoved() {
+  mappedMouse = mappedMouse(CURRENT_MODE);
   hoverCountry = null;
   for (Country c : countries) {
     c.hover(mappedMouse.x, mappedMouse.y);
@@ -227,11 +228,19 @@ void mousePressed() {
   }
 
   if(!guiInteraction) {
+    if (activeCountry != null) {
+      activeCountry.setSelected(false);
+    }
     activeCountry = null;
+    highlightOriginCountries = new ArrayList<Country>();
+    highlightDestinationCountries = new ArrayList<Country>();
     for (Country c : countries) {
       if (c.isHover()) {
-        println(c);
+        println("Selected: ", c);
         activeCountry = c;
+        activeCountry.setSelected(true);
+        highlightOriginCountries.addAll(activeCountry.getOriginCountries());
+        highlightDestinationCountries.addAll(activeCountry.getDestinationCountries());
       }
     }
   }

@@ -7,6 +7,8 @@ public class Country implements Comparable { //<>// //<>// //<>//
   //migration flows by year and by country iso3
   HashMap<Integer, HashMap<String, Long>> immigrationFlows = new HashMap<Integer, HashMap<String, Long>>();
   HashMap<Integer, HashMap<String, Long>> emigrationFlows = new HashMap<Integer, HashMap<String, Long>>();
+  HashMap<Integer, ArrayList<MigrationFlow>> immigrationFlowsByYear = new HashMap<Integer, ArrayList<MigrationFlow>>();
+  HashMap<Integer, ArrayList<MigrationFlow>> emigrationFlowsByYear = new HashMap<Integer, ArrayList<MigrationFlow>>();
   //totals by year
   HashMap<Integer, Long> totalImmigraionFlow = new HashMap<Integer, Long>();
   HashMap<Integer, Long> totalEmigraionFlow = new HashMap<Integer, Long>();
@@ -90,6 +92,12 @@ public class Country implements Comparable { //<>// //<>// //<>//
     } else {
       //println("IMMIGRATION FLOW already exists!", flow.origin.name, " -> ", flow.destination.name);
     }
+    ArrayList<MigrationFlow> iFlows =  immigrationFlowsByYear.get(y);
+    if (iFlows == null) {
+      iFlows = new ArrayList<MigrationFlow>();
+      immigrationFlowsByYear.put(y, iFlows);
+    }
+    iFlows.add(flow);
   }
 
   void addEmigrationFlow(MigrationFlow flow) {
@@ -106,6 +114,12 @@ public class Country implements Comparable { //<>// //<>// //<>//
     } else {
       //println("EMIGRATION FLOW already exists!", flow.origin.name, " -> ", flow.destination.name);
     }
+    ArrayList<MigrationFlow> eFlows =  emigrationFlowsByYear.get(y);
+    if (eFlows == null) {
+      eFlows = new ArrayList<MigrationFlow>();
+      emigrationFlowsByYear.put(y, eFlows);
+    }
+    eFlows.add(flow);
   }
 
   //used by migration flow
@@ -132,55 +146,72 @@ public class Country implements Comparable { //<>// //<>// //<>//
     myAlpha = alpha(theColor);
   }
 
-  void display(PGraphics g) {
-    //if (!name.equals("Palestine")) {
-      if (getGPIRank(activeYear) == GPI_LAST_RANK) {
-        displayOutlined(g);
-      } else {
-        displayFilled(g);
-      }
-    //}
-  }
-
   void displayFilled(PGraphics g) {
 
-    //if (name.equals("Palestine") || name.equals("Syria")) {
-      //println(name, myX, myY, myWidth, myHeight);
-    //}
-    g.endShape();
-    g.beginShape(QUADS);
-    g.noStroke();
-    g.fill(myRed, myGreen, myBlue, myAlpha);
-    //if (hover || isSelected()) {
-    if (isSelected()) {
-      g.fill(PRIMARY);
+    if (getGPIRank(activeYear) != GPI_LAST_RANK) {
+      g.fill(myRed, myGreen, myBlue, myAlpha);
+      if (isSelected() || isHover()) {
+        g.fill(PRIMARY);
+      }
+      float z = -1;
+      g.vertex(this.myX, this.myY, z);
+      g.vertex(this.myX + this.myWidth, this.myY, z);
+      g.vertex(this.myX + this.myWidth, this.myY + this.myHeight, z);
+      g.vertex(this.myX, this.myY + this.myHeight, z);
     }
-    float z = -1;
-    g.vertex(this.myX, this.myY, z);
-    g.vertex(this.myX + this.myWidth, this.myY, z);
-    g.vertex(this.myX + this.myWidth, this.myY + this.myHeight, z);
-    g.vertex(this.myX, this.myY + this.myHeight, z);
-    //display country name
-    //if (hover ||  isSelected()) {
-    if (isSelected()) {
-      g.endShape();
-      g.textFont(INFO);
-      g.textAlign(BOTTOM, LEFT);
-      float m = 5; //margin
-      float nameY = myY + myHeight + m;
-      g.fill(PRIMARY);
+  }
+
+  void displayOutlined(PGraphics g, ArrayList<Country> destinationCountries, ArrayList<Country> originCountries) {
+    boolean isDestination = destinationCountries.contains(this);
+    boolean isOrigin = originCountries.contains(this);
+    boolean gpiMissing = getGPIRank(activeYear) == GPI_LAST_RANK;
+    if (gpiMissing || isDestination || isOrigin) {
+      g.fill(myRed, myGreen, myBlue, myAlpha);
+      if (gpiMissing) {
+        g.stroke(myRed, myGreen, myBlue, myAlpha);
+      }
+      if (isDestination) {
+        g.stroke(SECONDARY);
+      }
+      if (isSelected() || isHover() || isOrigin) {
+        g.stroke(PRIMARY);
+      }
+      float z = -1;
+      g.vertex(this.myX, this.myY, z);
+      g.vertex(this.myX + this.myWidth, this.myY, z);
+      g.vertex(this.myX + this.myWidth, this.myY + this.myHeight, z);
+      g.vertex(this.myX, this.myY + this.myHeight, z);
+    }
+
+  }
+
+  void displayName(PGraphics g, ArrayList<Country> destinationCountries, ArrayList<Country> originCountries) {
+    boolean isDestination = destinationCountries.contains(this);
+    boolean isOrigin = originCountries.contains(this);
+
+    float m = 5; //margin
+    float nameY = myY + myHeight + m;
+
+    if (isHover() || isSelected() || isDestination || isOrigin) {
       if (myY + myHeight + nameWidth + m > myContainerLayout.y + myContainerLayout.h) {
         g.fill(0);
-        nameY -= nameWidth + 2*m;
+        nameY -= m * 2;
+        g.textAlign(RIGHT, CENTER);
+      } else {
+        if (isSelected() || isHover() || isOrigin) {
+          g.fill(PRIMARY);
+        }
+        if (isDestination) {
+          g.fill(SECONDARY);
+        }
+        g.textAlign(LEFT, CENTER);
       }
       g.pushMatrix();
-      g.translate(myX, nameY);
+      g.translate(myX + myWidth * 0.5, nameY);
       g.rotate(HALF_PI);
       g.text(name, 0, 0);
       g.popMatrix();
-      g.beginShape(QUADS);
     }
-    g.endShape();
   }
 
   String getGPIRankString(int year) {
@@ -189,46 +220,6 @@ public class Country implements Comparable { //<>// //<>// //<>//
       return "N/A";
     }
     return result + "";
-  }
-
-  void displayOutlined(PGraphics g) {
-    //if (name.equals("Palestine")) {
-      //println(name, myX, myY, myWidth, myHeight);
-    //}
-    g.endShape();
-    g.beginShape(QUADS);
-    g.strokeWeight(1);
-    g.fill(0);
-    g.fill(myRed, myGreen, myBlue, myAlpha);
-    //if (hover ||  isSelected()) {
-    if (isSelected()) {
-      g.stroke(PRIMARY);
-    }
-    float z = -1;
-    g.vertex(this.myX, this.myWidth, z);
-    g.vertex(this.myX + this.myWidth, this.myY, z);
-    g.vertex(this.myX + this.myWidth, this.myY + this.myHeight, z);
-    g.vertex(this.myX, this.myY + this.myHeight, z);
-    //display country name
-    if (isHover() ||  isSelected()) {
-      g.endShape();
-      g.textFont(INFO);
-      g.textAlign(BOTTOM, LEFT);
-      float m = 5; //margin
-      float nameY = myY + myHeight + m;
-      g.fill(PRIMARY);
-      if (myY + myHeight + nameWidth + m > myContainerLayout.y + myContainerLayout.h) {
-        g.fill(0);
-        nameY -= nameWidth + 2*m;
-      }
-      g.pushMatrix();
-      g.translate(myX, nameY);
-      g.rotate(HALF_PI);
-      g.text(name, 0, 0);
-      g.popMatrix();
-      g.beginShape(QUADS);
-    }
-    g.endShape();
   }
 
   //COMPARISON
@@ -243,7 +234,7 @@ public class Country implements Comparable { //<>// //<>// //<>//
 
   @Override
   public int hashCode() {
-     return Objects.hash(name, lookupName, iso3, iso2, region, subRegion);
+     return Objects.hash(iso3);
   }
 
   @Override
@@ -314,5 +305,33 @@ public class Country implements Comparable { //<>// //<>// //<>//
 
   boolean isSelected() {
     return _selected;
+  }
+
+  ArrayList<Country> getDestinationCountries() {
+    ArrayList<Country> result = new ArrayList<Country>();
+    ArrayList<MigrationFlow> eFlows = emigrationFlowsByYear.get(currentYear);
+    if (eFlows != null) {
+      for (MigrationFlow mf : eFlows) {
+        if (mf.flow > MIGRATION_FLOW_LOWER_LIMIT) {
+          result.add(mf.destination);
+          println(mf.origin.name, " -> ", mf.destination.name, " : ", mf.flow);
+        }
+      }
+    }
+    return result;
+  }
+
+  ArrayList<Country> getOriginCountries() {
+    ArrayList<Country> result = new ArrayList<Country>();
+    ArrayList<MigrationFlow> iFlows = immigrationFlowsByYear.get(currentYear);
+    if (iFlows != null) {
+      for (MigrationFlow mf : iFlows) {
+        if (mf.flow > MIGRATION_FLOW_LOWER_LIMIT) {
+          result.add(mf.origin);
+          println(mf.destination.name, " <- ", mf.origin.name, " : ", mf.flow);
+        }
+      }
+    }
+    return result;
   }
 }

@@ -27,7 +27,7 @@ int HEADLINETITLE_SIZE = 40;
 int HEADLINESUBTITLE_SIZE = 40;
 int HEADLINEALTSUBTITLE_SIZE = 14;
 int INFOHEADLINE_SIZE = 20;
-int INFO_SIZE = 12;
+int INFO_SIZE = 11;
 int HEADLINECOUNTRY_SIZE = 44;
 int TOPNUMBER_SIZE = 76;
 int SECONDNUMBER_SIZE = 48;
@@ -39,7 +39,7 @@ void initFonts() {
   HEADLINEALTSUBTITLE= loadFont ("Fonts/HelveticaNeue-Bold-14.vlw");
 
   INFOHEADLINE= loadFont ("Fonts/HelveticaNeue-Medium-20.vlw");
-  INFO= loadFont ("Fonts/HelveticaNeue-Medium-12.vlw");
+  INFO= loadFont ("Fonts/HelveticaNeue-Medium-11.vlw");
 
   HEADLINECOUNTRY= loadFont ("Fonts/HelveticaNeue-Bold-44.vlw");
 

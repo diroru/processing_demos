@@ -53,6 +53,8 @@ Long MIGRATION_FLOW_MIN = Long.MAX_VALUE;
 Long MIGRATION_FLOW_LOWER_LIMIT = 100L;
 
 ArrayList<Country> countries = new ArrayList<Country>();
+ArrayList<Country> highlightDestinationCountries = new ArrayList<Country>();
+ArrayList<Country> highlightOriginCountries = new ArrayList<Country>();
 //Map of countries, labelled by names
 HashMap<String, Country> countriesByName = new HashMap<String, Country>();
 HashMap<String, Country> countriesByLookupName = new HashMap<String, Country>();
@@ -198,7 +200,6 @@ void setup() {
 
 void draw() {
   updateShader();
-  mappedMouse = mappedMouse(CURRENT_MODE);
   // The dome projection is centered at (0, 0), so the mouse coordinates
   // need to be offset by (width/2, height/2)
   canvas.beginDraw();
@@ -208,24 +209,30 @@ void draw() {
 
   drawFlowGraphLegend(graphLayout, flowLayout, MARGIN, canvas);
 
-  canvas.fill(WHITE);
-  canvas.noStroke();
-
-  long delta = millis() - lastTime;
+  //drawign outlined shapes
+  canvas.strokeWeight(1);
+  canvas.fill(0);
   canvas.beginShape(QUADS);
-  /*
   for (Country theCountry : countries) {
-    //println(theCountry.name);
-    theCountry.update(delta);
-  }
-  */
-
-
-  for (Country theCountry : countries) {
-    theCountry.display(canvas);
+    theCountry.displayOutlined(canvas, highlightDestinationCountries, highlightOriginCountries);
   }
   canvas.endShape();
-  lastTime = millis();
+
+  //drawing filled shapes
+  canvas.noStroke();
+  canvas.beginShape(QUADS);
+  for (Country theCountry : countries) {
+    theCountry.displayFilled(canvas);
+  }
+  canvas.endShape();
+
+
+
+  //draw name(s)
+  g.textFont(INFO);
+  for (Country theCountry : countries) {
+    theCountry.displayName(canvas, highlightDestinationCountries, highlightOriginCountries);
+  }
 
   displayFlows(canvas, activeCountry);
   for (YearSelector ys : yearSelectors) {

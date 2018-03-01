@@ -2,12 +2,12 @@ void makeLayout(float x0, float y0, float layoutWidth, float layoutHeight, float
   sortCountries(theCountries, theSortingMethod, theYear);
   int countryCount = theCountries.size();
   float countryWidth = (layoutWidth - gap * (countryCount - 1)) / float(countryCount);
-  float x = x0;  
+  float x = x0;
   //this is the same
   //for (int i = 0; i < theCountries.size(); i++) {
   //Country theCountry = theCountries.get(i);
   for (Country theCountry : theCountries) {
-    
+
     Float gpi = theCountry.getGPI(theYear);
     Long pop = theCountry.getPOP(theYear);
     if (pop == null) {
@@ -43,6 +43,11 @@ void makeLayout(float x0, float y0, float layoutWidth, float layoutHeight, float
     //x needs to be incremented for the next country / bar
     x = x + countryWidth + gap;
   }
+  //for (MigrationFlow mf : migrationFlows.values()) {
+    //Ani.to(mf, ANI_DURATION, "myFlowNorm", mf.getNormFlow(currentYear, currentScaleMode));
+    //Ani.to(mf, ANI_DURATION, "myHeight", mf.getHeight(currentYear, false), Ani.LINEAR);
+    //mf.myFlowNorm = mf.getNormFlow(currentYear, currentScaleMode);
+  //}
 }
 
 void makeLayout(LayoutInfo theInfo, ArrayList<Country> theCountries, int theSortingMethod, int theDuration, int theYear) {

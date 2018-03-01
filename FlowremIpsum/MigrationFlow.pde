@@ -1,95 +1,204 @@
-class MigrationFlow implements Comparable {
-  Country origin, destination;
-  int year;
-  Long flow;
+class MigrationFlow {
+  MigrationRelation myRelation;
+  HashMap<Integer, Long> flowsByYear = new HashMap<Integer, Long>();
+  HashMap<Integer, Float> flowsByYearNormLog = new HashMap<Integer, Float>(); //logscaled!
+  HashMap<Integer, Float> flowsByYearNormLinear = new HashMap<Integer, Float>(); //logscaled!
+  //HashMap<Integer, Float> heightsByYearLog = new HashMap<Integer, Float>();
+  //HashMap<Integer, Float> heightsByYearLinear = new HashMap<Integer, Float>();
+
+  LayoutInfo myLayout;
   boolean _hover;
 
-  MigrationFlow(Country theOrigin, Country theDestination, int theYear, Long theFlow) {
-    origin = theOrigin;
-    destination = theDestination;
-    year = theYear;
-    flow = theFlow;
-    origin.addEmigrationFlow(this);
-    destination.addImmigrationFlow(this);
+  //those will be animated
+  //float myHeight;
+  //float myAlphaFactor = 1f;
+  //float myFlowNorm;
+
+  MigrationFlow(MigrationRelation theRelation, LayoutInfo theLayout) {
+    myRelation = theRelation;
+    myLayout = theLayout;
+
+    myRelation.origin.addEmigrationFlow(this);
+    myRelation.destination.addImmigrationFlow(this);
+    //myHeight = 0f;
+    //myFlowNorm = 0f;
   }
 
-  void display(PGraphics g, float maxHeight, float y0) {
-    float y = y0 + map(flow, 0, MIGRATION_FLOW_MAX, maxHeight, 0);
-    g.beginShape();
-    g.vertex(origin.cx(), origin.cy());
-    g.vertex(origin.cx(), y);
-    g.vertex(destination.cx(), y);
-    g.vertex(destination.cx(), destination.cy());
-    g.endShape();
+  MigrationFlow(Country theOrigin, Country theDestination, LayoutInfo theLayout) {
+    this(new MigrationRelation(theOrigin, theDestination), theLayout);
   }
 
-  void displayRounded(PGraphics g, float maxHeight, float y0) {
-    float y = y0 + map(flow, 0, MIGRATION_FLOW_MAX, maxHeight, 0);
-    drawRoundedLine(g, origin.cx(), origin.cy(), origin.cx(), y, destination.cx(), y, destination.cx(), destination.cy(), 10, WHITE, 127); //last number is amount of roundness
-  }
-
-  void displayNormal(PGraphics pg, LayoutInfo theLayout, float alphaFactor) {
-    float flowNorm = getNormFlow(flow);
-    float yTop = theLayout.y + theLayout.h - map(flowNorm, 0, 1, 0, theLayout.h);
-    float alpha =  map(flowNorm, 0, 1, 0, 255) * alphaFactor;
-    drawRoundedLine(pg, origin.cx(), origin.cy(), origin.cx(), yTop, destination.cx(), yTop, destination.cx(), destination.cy(), 10, WHITE, alpha); //last number is amount of roundness
-  }
-
-  void displayHighlighted(PGraphics pg, LayoutInfo theLayout, Country activeCountry) {
-    if (activeCountry.name.equals(origin.name) || activeCountry.name.equals(destination.name)) {
-      color c = activeCountry.name.equals(origin.name) ? SECONDARY : PRIMARY;
-      float flowNorm = getNormFlow(flow);
-      float yTop = theLayout.y + theLayout.h - map(flowNorm, 0, 1, 0, theLayout.h);
-      drawRoundedLine(pg, origin.cx(), origin.cy(), origin.cx(), yTop, destination.cx(), yTop, destination.cx(), destination.cy(), 10, c, 127); //last number is amount of roundness
+  void addFlow(int theYear, Long theFlow) {
+    //TODO: do error checking here?
+    Long existingFlow = flowsByYear.get(theYear);
+    if (existingFlow == null) {
+      flowsByYear.put(theYear, theFlow);
+      flowsByYearNormLog.put(theYear, calcNormFlow(this, theFlow, false));
+      flowsByYearNormLinear.put(theYear, calcNormFlow(this, theFlow, true));
+      //addHeight(theYear, theFlow);
+    } else {
+      println("flow already exists", theYear, " : ", existingFlow, theFlow);
     }
   }
 
-  boolean isHover() {
-    return _hover;
+  Long getFlow(int theYear) {
+    Long result = flowsByYear.get(theYear);
+    if (result == null) {
+      result = 0L;
+    }
+    return result;
   }
 
-  void hover(float x, float y, LayoutInfo theLayout) {
-    float yTop = theLayout.y + getHeight(theLayout);
+  /*
+  void addHeight(int theYear, Long theFlow) {
+   float heightLog = constrainedLogScale(theFlow, MIGRATION_FLOW_LOWER_LIMIT, MIGRATION_FLOW_MAX) * myLayout.h;
+   float heightLinear = norm(theFlow, 0, MIGRATION_FLOW_MAX) * myLayout.h;
+   heightsByYearLinear.put(theYear, heightLinear);
+   heightsByYearLog.put(theYear, heightLinear);
+   }
+   */
 
-    float xMin = min(origin.cx(), destination.cx());
-    float xMax = max(origin.cx(), destination.cx());
-    float yMin = min(destination.cy(), yTop);
-    float yMax = max(destination.cy(), yTop);
-    //println(xMin, xMax, " | ", yMin, yMax, " | ", x, y);
-    _hover = x >= xMin && x <= xMax && y >= yMin && y <= yMax;
+  Float getNormFlow(int theYear, int theCurrentScaleMode) {
+    switch(theCurrentScaleMode) {
+    case SCALE_MODE_LINEAR:
+      return getNormFlow(theYear, true);
+    case SCALE_MODE_LOG:
+      return getNormFlow(theYear, false);
+    }
+    return getNormFlow(theYear, false);
   }
 
-  void displayHover(PGraphics pg, LayoutInfo theLayout) {
+  Float getNormFlow(int theYear, boolean linear) {
+    Float result = linear ? flowsByYearNormLinear.get(theYear) : flowsByYearNormLog.get(theYear);
+    if (result == null) {
+      result = 0f;
+    }
+    return result;
+  }
+
+  Float getNormFlowLog(int theYear) {
+    return getNormFlow(theYear, false);
+  }
+
+  Float getNormFlowLinear(int theYear) {
+    return getNormFlow(theYear, true);
+  }
+
+  Float getHeight(int theYear, int scaleMode) {
+    Float result = scaleMode == SCALE_MODE_LINEAR ? getNormFlowLinear(theYear) * myLayout.h : getNormFlowLog(theYear) * myLayout.h;
+    return result;
+  }
+
+  Float getHeight(int theYear, boolean linear) {
+    Float result = linear ? getNormFlowLinear(theYear) * myLayout.h : getNormFlowLog(theYear) * myLayout.h;
+    return result;
+  }
+
+  Float getHeightLinear(int theYear) {
+    return getHeight(theYear, true);
+  }
+
+  Float getHeightLog(int theYear) {
+    return getHeight(theYear, false);
+  }
+
+  void displayNormal(PGraphics pg) {
+    float theAlpha =  map(myFlowNorm(currentScaleMode), 0, 1, 0, 255) * FLOW_ALPHA_FACTOR;
+    drawLine(pg, WHITE, theAlpha);
+  }
+
+  float myHeight() {
+    return myFlowNorm(currentScaleMode) * myLayout.h;
+  }
+
+  void drawLine(PGraphics pg) {
+    drawLine(pg, WHITE, 255);
+  }
+
+  void drawLine(PGraphics pg, color theColor, float theAlpha) {
+    float x0 = min(myRelation.origin.cx(), myRelation.destination.cx());
+    float x1 = max(myRelation.origin.cx(), myRelation.destination.cx());
+    float y0 = myLayout.y + myLayout.h;
+    float y1 = myLayout.y + myLayout.h - myHeight();
+    drawRoundedLine(pg, x0, x1, y0, y1, 10, theColor, theAlpha); //last number is amount of roundness
+    if (myHeight() > myLayout.h) {
+      //println(this, flowsByYear.get(currentYear), myFlowNorm(currentScaleMode));
+    }
+  }
+
+  void displayHighlighted(PGraphics pg, Country activeCountry) {
+
+    if (originEquals(activeCountry) || destinationEquals(activeCountry)) {
+      color c = originEquals(activeCountry) ? SECONDARY : PRIMARY;
+      drawLine(pg, c, 255);
+    }
+  }
+
+  void displayHover(PGraphics pg) {
+    float yTop = myLayout.y + myLayout.h - myHeight();
     color c = PRIMARY;
-    float flowNorm = getNormFlow(flow);
-    float yTop = theLayout.y + theLayout.h - map(flowNorm, 0, 1, 0, theLayout.h);
     pg.beginShape(POLYGON);
-    drawRoundedLine(pg, origin.cx(), origin.cy(), origin.cx(), yTop, destination.cx(), yTop, destination.cx(), destination.cy(), 10, c, 127); //last number is amount of roundness
+    drawLine(pg, c, 255);
     pg.endShape();
     pg.textFont(THIRDNUMBER);
+
     pg.pushMatrix();
-    pg.translate(0,0,10);
+    pg.translate(0, 0, 10);
     pg.textAlign(BOTTOM, LEFT);
     pg.fill(WHITE);
     pg.noStroke();
-    pg.text(flow + "", min(origin.cx() + 10, destination.cx() + 10), yTop - 10);
+    pg.text(floor(getFlow(currentYear)) + "", min(origin().cx() + 10, destination().cx() + 10), yTop - 10);
     pg.textAlign(TOP, LEFT);
     pg.fill(c);
     pg.textFont(INFOHEADLINE);
-    pg.text("People moved from " + origin.name + " to " + destination.name, min(origin.cx() + 10, destination.cx() + 10), yTop + 25);
+    pg.text("People moved from " + origin().name + " to " + destination().name, min(origin().cx() + 10, destination().cx() + 10), yTop + 25);
+    pg.popMatrix();
+  }
+
+  Country origin() {
+    return myRelation.origin;
+  }
+
+  Country destination() {
+    return myRelation.destination;
+  }
+
+void displayWithInfo(PGraphics pg) {
+    color c = PRIMARY;
+    float yTop =  myLayout.y + myLayout.h - myHeight();
+    int flow = floor(getFlow(currentYear));
+    pg.beginShape(POLYGON);
+    pg.stroke(c);
+    drawLine(pg, c, 127);
+    pg.endShape();
+    pg.textFont(THIRDNUMBER); //TODO
+    pg.pushMatrix();
+    pg.translate(0, 0, 10);
+    pg.textAlign(BOTTOM, LEFT);
+    pg.fill(WHITE);
+    pg.noStroke();
+    pg.text(flow + "", min(origin().cx() + 10, destination().cx() + 10), yTop - 10);
+    pg.textAlign(TOP, LEFT);
+    pg.fill(c);
+    pg.textFont(INFOHEADLINE);
+    pg.text("People moved from " + origin().name + " to " + destination().name, min(origin().cx() + 10, destination().cx() + 10), yTop + 25);
     pg.popMatrix();
   }
 
 
-  void displayAsTop(PGraphics pg, LayoutInfo theLayout, Country activeCountry, int No) {
+  void displayAsTop(PGraphics pg, Country activeCountry, int No) {
+
     color c = PRIMARY;
-    if (activeCountry != null && activeCountry.name.equals(origin.name)) {
+    if (activeCountry != null && originEquals(activeCountry)) {
       c = SECONDARY;
     }
-    float flowNorm = getNormFlow(flow);
-    float yTop = theLayout.y + theLayout.h - map(flowNorm, 0, 1, 0, theLayout.h);
+    float flowNorm = myFlowNorm(currentScaleMode);
+    float yTop =  myLayout.y + myLayout.h - myHeight();
+    int flow = floor(getFlow(currentYear));
     pg.beginShape(POLYGON);
-    drawRoundedLine(pg, origin.cx(), origin.cy(), origin.cx(), yTop, destination.cx(), yTop, destination.cx(), destination.cy(), 10, c, 127); //last number is amount of roundness
+    pg.stroke(c);
+    drawLine(pg, c, 127);
+    //drawRoundedLine(pg, origin.cx(), origin.cy(), origin.cx(), yTop, destination.cx(), yTop, destination.cx(), destination.cy(), 10, c, 127); //last number is amount of roundness
     pg.endShape();
     switch(No) {
     case 0:
@@ -106,52 +215,107 @@ class MigrationFlow implements Comparable {
       break;
     }
     pg.pushMatrix();
-    pg.translate(0,0,10);
+    pg.translate(0, 0, 10);
     pg.textAlign(BOTTOM, LEFT);
     pg.fill(WHITE);
     pg.noStroke();
-    pg.text(flow + "", min(origin.cx() + 10, destination.cx() + 10), yTop - 10);
+    pg.text(flow + "", min(origin().cx() + 10, destination().cx() + 10), yTop - 10);
     pg.textAlign(TOP, LEFT);
     pg.fill(c);
     pg.textFont(INFOHEADLINE);
-    pg.text("People moved from " + origin.name + " to " + destination.name, min(origin.cx() + 10, destination.cx() + 10), yTop + 25);
+    pg.text("People moved from " + origin().name + " to " + destination().name, min(origin().cx() + 10, destination().cx() + 10), yTop + 25);
     pg.popMatrix();
   }
 
-  //COMPARISON
+  boolean isHover() {
+    return _hover;
+  }
+
+  void hover(PVector m) {
+    hover(m.x, m.y);
+  }
+
+  void hover(float x, float y) {
+    float xMin = min(origin().cx(), destination().cx());
+    float xMax = max(origin().cx(), destination().cx());
+
+    float yMin = myLayout.y + myLayout.h  - myHeight();
+    float yMax = myLayout.y + myLayout.h;
+    //println(xMin, xMax, " | ", yMin, yMax, " | ", x, y);
+    _hover = x >= xMin && x <= xMax && y >= yMin && y <= yMax;
+  }
+
+  /*
+  void display(PGraphics g, float maxHeight, float y0) {
+   float y = y0 + map(flow, 0, MIGRATION_FLOW_MAX, maxHeight, 0);
+   g.beginShape();
+   g.vertex(origin.cx(), origin.cy());
+   g.vertex(origin.cx(), y);
+   g.vertex(destination.cx(), y);
+   g.vertex(destination.cx(), destination.cy());
+   g.endShape();
+   }
+   
+   void displayRounded(PGraphics g, float maxHeight, float y0) {
+   float y = y0 + map(flow, 0, MIGRATION_FLOW_MAX, maxHeight, 0);
+   drawRoundedLine(g, origin.cx(), origin.cy(), origin.cx(), y, destination.cx(), y, destination.cx(), destination.cy(), 10, WHITE, 127); //last number is amount of roundness
+   }
+   
+   
+   float getHeight(LayoutInfo theLayout) {
+   float flowNorm = getNormFlow(flow);
+   float result = theLayout.h - map(flowNorm, 0, 1, 0, theLayout.h);
+   //println(theLayout.h, map(flowNorm, 0, 1, 0, theLayout.h));
+   return result;
+   }
+   */
+
+  boolean destinationEquals(Country c) {
+    return myRelation.destination.equals(c);
+  }
+
+  boolean originEquals(Country c) {
+    return myRelation.origin.equals(c);
+  }
+
   @Override
-    public boolean equals(Object obj) {
-    if (!(obj instanceof MigrationFlow)) {
-      return false;
+    String toString() {
+    return myRelation.toString();
+  }
+
+  float myFlowNorm(int theCurrentScaleMode) {
+    int y0 = floor(fractionalYear);
+    int y1 = ceil(fractionalYear);
+    //int y1 = currentYear;
+    float dy = fractionalYear - y0;
+    //float dy = 1f - (fractionalYear - y0) / (y1 - y0);
+    float f0 = getNormFlow(y0, theCurrentScaleMode);
+    float f1 = getNormFlow(y1, theCurrentScaleMode);
+    float result = (f1-f0) * dy + f0;
+    if (Float.isNaN(result)) {
+      result = 0f;
     }
-    MigrationFlow mf = ((MigrationFlow) obj);
-    return mf.origin.equals(this.origin) && mf.destination.equals(this.destination) && mf.year == this.year;
-  }
-
-  @Override
-    public int compareTo(Object o) {
-    MigrationFlow other = (MigrationFlow) o;
-    return int(other.flow - this.flow);
-  }
-  boolean isActive(Country activeCountry) {
-    return this.origin.name.equals(activeCountry.name) || this.destination.name.equals(activeCountry.name);
-  }
-
-  float getHeight(LayoutInfo theLayout) {
-    float flowNorm = getNormFlow(flow);
-    float result = theLayout.h - map(flowNorm, 0, 1, 0, theLayout.h);
-    //println(theLayout.h, map(flowNorm, 0, 1, 0, theLayout.h));
     return result;
+    //return getNormFlow(currentYear, theCurrentScaleMode);
   }
 }
 
-
-float getNormFlow(float flow) {
-  //return norm(flow, 0, MIGRATION_FLOW_MAX);
-  float result = constrainedLogScale(flow, MIGRATION_FLOW_LOWER_LIMIT, MIGRATION_FLOW_MAX);
-  //println(result);
+float calcNormFlow(MigrationFlow mf, float flow, boolean linear) {
+  float result = linear ? norm(flow, 0, MIGRATION_FLOW_MAX) : constrainedLogScale(flow, MIGRATION_FLOW_LOWER_LIMIT, MIGRATION_FLOW_MAX);
+  if (result > 1) {
+    println(mf, flow, MIGRATION_FLOW_MAX, norm(flow, 0, MIGRATION_FLOW_MAX), constrainedLogScale(flow, MIGRATION_FLOW_LOWER_LIMIT, MIGRATION_FLOW_MAX));
+  }
   return result;
 }
+
+float calcNormFlow(MigrationFlow mf, float flow) {
+  return calcNormFlow(mf, flow, true);
+}
+
+void drawRoundedLine(PGraphics pg, float x0, float x1, float y0, float y1, float maxRadius, color c, float alpha) {
+  drawRoundedLine(pg, new PVector(x0, y0), new PVector(x0, y1), new PVector(x1, y1), new PVector(x1, y0), maxRadius, c, alpha);
+}
+
 
 void drawRoundedLine(PGraphics pg, float x0, float y0, float x1, float y1, float x2, float y2, float x3, float y3, float maxRadius, color c, float alpha) {
   drawRoundedLine(pg, new PVector(x0, y0), new PVector(x1, y1), new PVector(x2, y2), new PVector(x3, y3), maxRadius, c, alpha);

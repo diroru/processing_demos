@@ -135,15 +135,19 @@ void setByName() {
 }
 
 void setShowAll() {
-  if (currentShowMode == SHOW_TOP_THREE) {
-    currentShowMode = SHOW_ALL;
+  if (currentShowMode == GS_SHOW_TOP_THREE) {
+    currentShowMode = GS_SHOW_ALL;
+    if (hoverMigrationFlow == null && currentCountryState == CS_NONE) {
+      undimFlows();
+    }
   }
   println("SHOW ALL pressed");
 }
 
 void setShowTopThree() {
-  if (currentShowMode == SHOW_ALL) {
-    currentShowMode = SHOW_TOP_THREE;
+  if (currentShowMode == GS_SHOW_ALL) {
+    currentShowMode = GS_SHOW_TOP_THREE;
+    dimFlows();
   }
   println("SHOW TOP THREE pressed");
 }
@@ -170,33 +174,53 @@ PVector mapMouse(PGraphics target, int mx, int my) {
 
 void displayMouse() {
   canvas.ellipseMode(RADIUS);
-  canvas.fill(SECONDARY,170);
+  canvas.fill(SECONDARY, 170);
   canvas.noStroke();
   canvas.ellipse(mappedMouse.x, mappedMouse.y, 5, 5);
   canvas.ellipse(mappedMouse.x + canvas.width, mappedMouse.y, 10, 5);
 }
 
 void setCurrentYear(int theNewYear) {
+  Ani.to(this, ANI_DURATION, "fractionalYear", theNewYear, Ani.LINEAR);
   currentYear = theNewYear;
-  yearlyMigrationFlows = migrationFlows.get(currentYear);
-  println("setting year to", theNewYear, yearlyMigrationFlows.size());
-
-  Collections.sort(yearlyMigrationFlows);
   makeLayout();
 }
 
 void mouseMoved() {
   mappedMouse = mappedMouse(CURRENT_MODE);
+
   hoverCountry = null;
+  switch(currentCountryState) {
+  case CS_ACTIVE_ACTIVE_HOVER:
+    currentCountryState = CS_ACTIVE_ACTIVE;
+    break;
+  case CS_ACTIVE_HOVER:
+    currentCountryState = CS_ACTIVE;
+    break;
+  case CS_HOVER:
+    currentCountryState = CS_NONE;
+    break;
+  }
   for (Country c : countries) {
     c.hover(mappedMouse.x, mappedMouse.y);
     if (c.isHover()) {
       //println(c);
       hoverCountry = c;
+      switch(currentCountryState) {
+      case CS_ACTIVE_ACTIVE:
+        currentCountryState = CS_ACTIVE_ACTIVE_HOVER;
+        break;
+      case CS_ACTIVE:
+        currentCountryState = CS_ACTIVE_HOVER;
+        break;
+      case CS_NONE:
+        currentCountryState = CS_HOVER;
+        break;
+      }
     }
   }
 
-  for(YearSelector ys : yearSelectors) {
+  for (YearSelector ys : yearSelectors) {
     ys.hover(mappedMouse.x, mappedMouse.y);
   }
 
@@ -206,24 +230,81 @@ void mouseMoved() {
     }
   }
 
+  currentFlowState = MS_NONE;
+  hoverMigrationFlow = null;
+  //if (currentCountryState == CS_NONE) {
   //making sure that we hover the smallest possible element
   //when there are several overlapping ones
-  float flowMaxHeight = Float.MIN_VALUE;
-  if (activeCountry == null && hoverCountry == null) {
-    hoverMigrationFlow = null;
-    for (MigrationFlow mf : yearlyMigrationFlows) {
-      mf.hover(mappedMouse.x, mappedMouse.y, flowLayout);
-      if (mf.isHover()) {
-        float h = mf.getHeight(flowLayout);
-        if (h > flowMaxHeight) {
-          println(flowMaxHeight, h);
-          hoverMigrationFlow = mf;
-          flowMaxHeight = h;
-        }
+  float flowMaxHeight = Float.MAX_VALUE;
+  //if (activeCountry == null && hoverCountry == null && activeCountryTwo == null) {
+  for (MigrationFlow mf : migrationFlows.values()) {
+    mf.hover(mappedMouse);
+    if (mf.isHover()) {
+      currentFlowState = MS_HOVER;
+      float h = mf.getHeight(currentYear, currentScaleMode);
+      if (h < flowMaxHeight) {
+        //println(flowMaxHeight, h);
+        hoverMigrationFlow = mf;
+        flowMaxHeight = h;
       }
     }
+    //}
     //println(hoverMigrationFlow);
   }
+  //}
+  if (hoverMigrationFlow == null && currentCountryState == CS_NONE) {
+    undimFlows();
+  } else {    
+    dimFlows();
+  }
+  if (currentShowMode == GS_SHOW_TOP_THREE) {
+    dimFlows();
+  }
+
+  switch(currentCountryState) {
+  case CS_ACTIVE_ACTIVE:
+    updateHighlights(activeCountry);
+    updateTopThree(activeCountry);
+    break;
+  case CS_ACTIVE:
+    updateHighlights(activeCountry);
+    updateTopThree(activeCountry);
+    break;
+  case CS_ACTIVE_ACTIVE_HOVER:
+    updateHighlights(activeCountry);
+    updateTopThree(hoverCountry);
+    break;
+  case CS_ACTIVE_HOVER:
+    updateHighlights(activeCountry);
+    updateTopThree(hoverCountry);
+    break;
+  case CS_HOVER:
+    updateHighlights(hoverCountry);
+    updateTopThree(hoverCountry);
+    break;
+  case CS_NONE:
+    updateHighlights(null);
+    updateTopThree(null);
+    break;
+  }
+
+  if (currentCountryState == CS_NONE) {
+    //println("cs none");
+    //updateHighlights(null);
+  } else {
+    //Country targetCountry = activeCountry != null ? activeCountry : hoverCountry;
+    //updateHighlights(targetCountry);
+    //updateHighlights(null);
+  }
+
+
+  println("mouse move", millis() / 1000.0);
+  println("STATE", currentCountryState);
+  println("active", activeCountry);
+  println("active 2", activeCountryTwo);
+  println("hover", hoverCountry);
+  println("hover flow", hoverMigrationFlow);
+  println("----------");
 }
 
 void mousePressed() {
@@ -246,23 +327,161 @@ void mousePressed() {
     }
   }
 
-  if(!guiInteraction) {
+  if (!guiInteraction) {
+    /*
     if (activeCountry != null) {
-      activeCountry.setSelected(false);
-    }
-    activeCountry = null;
-    highlightOriginCountries = new ArrayList<Country>();
-    highlightDestinationCountries = new ArrayList<Country>();
+     activeCountry.setSelected(false);
+     }
+     activeCountry = null;
+     */
+    boolean noCountryClicked = true;
+
+
     for (Country c : countries) {
       if (c.isHover()) {
+        noCountryClicked = false;
         println("Selected: ", c);
-        activeCountry = c;
-        activeCountry.setSelected(true);
+        switch(currentCountryState) {
+        case CS_NONE:
+          //this should never be the case, except for clicking during animation?!
+          println("CHECK ERROR IN INTERACTION LOGIC!");
+          break;
+        case CS_HOVER:
+          activeCountry = c;
+          activeCountry.setSelected(true);
+          updateHighlights(activeCountry);
+          currentCountryState = CS_ACTIVE_HOVER;
+          break;
+        case CS_ACTIVE:
+          println("CHECK ERROR IN INTERACTION LOGIC!");
+          break;
+        case CS_ACTIVE_HOVER:
+          if (c.equals(activeCountry)) {
+            activeCountry.setSelected(false);
+            activeCountry = null;
+            hoverCountry = c;
+            currentCountryState = CS_HOVER;
+          } else {
+            activeCountryTwo = c;
+            activeCountryTwo.setSelected(true);
+            currentCountryState = CS_ACTIVE_ACTIVE_HOVER;
+          }
+          break;
+        case CS_ACTIVE_ACTIVE:
+          println("CHECK ERROR IN INTERACTION LOGIC!");
+          break;
+        case CS_ACTIVE_ACTIVE_HOVER:
+          if (c.equals(activeCountry)) {
+            activeCountry.setSelected(false);
+            activeCountryTwo.setSelected(false);
+            activeCountry = activeCountryTwo;
+            activeCountryTwo = null;
+            activeCountry.setSelected(true);
+            currentCountryState = CS_ACTIVE_HOVER;
+          } else if (c.equals(activeCountryTwo)) {
+            activeCountryTwo.setSelected(false);
+            activeCountryTwo = null;
+            currentCountryState = CS_ACTIVE_HOVER;
+          } else {
+            activeCountryTwo.setSelected(false);
+            activeCountryTwo = c;
+            activeCountryTwo.setSelected(true);
+            currentCountryState = CS_ACTIVE_ACTIVE_HOVER;
+          }
+          break;
+        }
+        /*
         highlightOriginCountries.addAll(activeCountry.getOriginCountries());
-        highlightDestinationCountries.addAll(activeCountry.getDestinationCountries());
+         highlightDestinationCountries.addAll(activeCountry.getDestinationCountries());
+         */
       }
+    }
+    if (noCountryClicked) {
+      if (activeCountry != null) {
+        activeCountry.setSelected(false);
+        activeCountry = null;
+      }
+      if (activeCountryTwo != null) {
+        activeCountryTwo.setSelected(false);
+        activeCountryTwo = null;
+      }
+      currentCountryState = CS_NONE;
+      updateHighlights(null);
     }
   }
 
+  println("mouse clicked", millis() / 1000.0);
+  println("STATE", currentCountryState);
+  println("active", activeCountry);
+  println("active 2", activeCountryTwo);
+  println("hover", hoverCountry);
+  println("----------");
+}
 
+void updateHighlights(Country targetCountry) {
+  updateHighlights(targetCountry, false);
+}
+
+void updateHighlights(Country targetCountry, boolean forceUpdate) {
+  boolean updateNeeded = false;
+  if (highlightBase == null) {
+    updateNeeded = true;
+  } else if (!highlightBase.equals(targetCountry)) {
+    updateNeeded = true;
+  }
+  if (updateNeeded || forceUpdate) {
+    println("updating using", targetCountry);
+    highlightedOriginCountries.clear();
+    highlightedDestinationCountries.clear();
+    highlightedFlows.clear();
+
+    if (targetCountry != null) {
+      HashSet<MigrationFlow> flowTemp = new HashSet<MigrationFlow>();
+      HashSet<Country> originTemp = new HashSet<Country>();
+      HashSet<Country> destinationTemp = new HashSet<Country>();
+      for (MigrationFlow mf : migrationFlows.values()) {
+        if (flowIsShowable(mf)) {
+          if (mf.originEquals(targetCountry)) {
+            destinationTemp.add(mf.destination());
+            flowTemp.add(mf);
+          }
+          if (mf.destinationEquals(targetCountry)) {
+            originTemp.add(mf.origin());
+            flowTemp.add(mf);
+          }
+        }
+      }
+      highlightedDestinationCountries.addAll(destinationTemp);
+      highlightedOriginCountries.addAll(originTemp);
+      highlightedFlows.addAll(flowTemp);
+    }
+    highlightBase = targetCountry;
+  }
+}
+
+void updateTopThree(Country targetCountry) {
+  updateTopThree(targetCountry, false);
+}
+
+void updateTopThree(Country targetCountry, boolean forceUpdate) {
+  boolean updateNeeded = false;
+  if (topThreeBase == null) {
+    updateNeeded = true;
+  } else if (!topThreeBase.equals(targetCountry)) {
+    updateNeeded = true;
+  }
+  if (updateNeeded || forceUpdate) {
+    println("updating top three using", targetCountry);
+    topThreeFlows.clear();
+    topThreeFlows = getTopThree(targetCountry);
+    topThreeBase = targetCountry;
+  }
+}
+
+void dimFlows() {
+  Ani.to(this, 0.3, "FLOW_ALPHA_FACTOR", 0.1);
+}
+
+void undimFlows() {
+  Ani.to(this, 0.3, "FLOW_ALPHA_FACTOR", 1.0);
 }

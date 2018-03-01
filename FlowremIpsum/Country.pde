@@ -1,14 +1,16 @@
-public class Country implements Comparable { //<>// //<>// //<>//
+public class Country implements Comparable { //<>// //<>// //<>// //<>// //<>//
   //attribute / field
   String name, lookupName, iso3, iso2, region, subRegion;
   //gpi indices by year
   HashMap<Integer, Float> gpi = new HashMap<Integer, Float>();
   HashMap<Integer, Integer> gpiRanks = new HashMap<Integer, Integer>();
   //migration flows by year and by country iso3
+
   HashMap<Integer, HashMap<String, Long>> immigrationFlows = new HashMap<Integer, HashMap<String, Long>>();
   HashMap<Integer, HashMap<String, Long>> emigrationFlows = new HashMap<Integer, HashMap<String, Long>>();
   HashMap<Integer, ArrayList<MigrationFlow>> immigrationFlowsByYear = new HashMap<Integer, ArrayList<MigrationFlow>>();
   HashMap<Integer, ArrayList<MigrationFlow>> emigrationFlowsByYear = new HashMap<Integer, ArrayList<MigrationFlow>>();
+
   //totals by year
   HashMap<Integer, Long> totalImmigraionFlow = new HashMap<Integer, Long>();
   HashMap<Integer, Long> totalEmigraionFlow = new HashMap<Integer, Long>();
@@ -79,47 +81,51 @@ public class Country implements Comparable { //<>// //<>// //<>//
   }
 
   void addImmigrationFlow(MigrationFlow flow) {
+    /*
     int y = flow.year;
-    String orgISO3 = flow.origin.iso3;
-    if (immigrationFlows.get(y) == null) {
-      immigrationFlows.put(y, new HashMap<String, Long>());
-      totalImmigraionFlow.put(y, 0L);
-    }
-    if (immigrationFlows.get(y).get(orgISO3) == null) {
-      immigrationFlows.get(y).put(orgISO3, flow.flow);
-      long sum = totalImmigraionFlow.get(y) ;
-      totalImmigraionFlow.put(y, sum + flow.flow);
-    } else {
-      //println("IMMIGRATION FLOW already exists!", flow.origin.name, " -> ", flow.destination.name);
-    }
-    ArrayList<MigrationFlow> iFlows =  immigrationFlowsByYear.get(y);
-    if (iFlows == null) {
-      iFlows = new ArrayList<MigrationFlow>();
-      immigrationFlowsByYear.put(y, iFlows);
-    }
-    iFlows.add(flow);
+     String orgISO3 = flow.origin.iso3;
+     if (immigrationFlows.get(y) == null) {
+     immigrationFlows.put(y, new HashMap<String, Long>());
+     totalImmigraionFlow.put(y, 0L);
+     }
+     if (immigrationFlows.get(y).get(orgISO3) == null) {
+     immigrationFlows.get(y).put(orgISO3, flow.flow);
+     long sum = totalImmigraionFlow.get(y) ;
+     totalImmigraionFlow.put(y, sum + flow.flow);
+     } else {
+     //println("IMMIGRATION FLOW already exists!", flow.origin.name, " -> ", flow.destination.name);
+     }
+     ArrayList<MigrationFlow> iFlows =  immigrationFlowsByYear.get(y);
+     if (iFlows == null) {
+     iFlows = new ArrayList<MigrationFlow>();
+     immigrationFlowsByYear.put(y, iFlows);
+     }
+     iFlows.add(flow);
+     */
   }
 
   void addEmigrationFlow(MigrationFlow flow) {
+    /*
     int y = flow.year;
-    String dstISO3 = flow.destination.iso3;
-    if (emigrationFlows.get(y) == null) {
-      emigrationFlows.put(y, new HashMap<String, Long>());
-      totalEmigraionFlow.put(y, 0L);
-    }
-    if (emigrationFlows.get(y).get(dstISO3) == null) {
-      emigrationFlows.get(y).put(dstISO3, flow.flow);
-      long sum = totalEmigraionFlow.get(y) ;
-      totalEmigraionFlow.put(y, sum + flow.flow);
-    } else {
-      //println("EMIGRATION FLOW already exists!", flow.origin.name, " -> ", flow.destination.name);
-    }
-    ArrayList<MigrationFlow> eFlows =  emigrationFlowsByYear.get(y);
-    if (eFlows == null) {
-      eFlows = new ArrayList<MigrationFlow>();
-      emigrationFlowsByYear.put(y, eFlows);
-    }
-    eFlows.add(flow);
+     String dstISO3 = flow.destination.iso3;
+     if (emigrationFlows.get(y) == null) {
+     emigrationFlows.put(y, new HashMap<String, Long>());
+     totalEmigraionFlow.put(y, 0L);
+     }
+     if (emigrationFlows.get(y).get(dstISO3) == null) {
+     emigrationFlows.get(y).put(dstISO3, flow.flow);
+     long sum = totalEmigraionFlow.get(y) ;
+     totalEmigraionFlow.put(y, sum + flow.flow);
+     } else {
+     //println("EMIGRATION FLOW already exists!", flow.origin.name, " -> ", flow.destination.name);
+     }
+     ArrayList<MigrationFlow> eFlows =  emigrationFlowsByYear.get(y);
+     if (eFlows == null) {
+     eFlows = new ArrayList<MigrationFlow>();
+     emigrationFlowsByYear.put(y, eFlows);
+     }
+     eFlows.add(flow);
+     */
   }
 
   //used by migration flow
@@ -134,7 +140,7 @@ public class Country implements Comparable { //<>// //<>// //<>//
 
   @Override
     String toString() {
-    return "\n" + name + " | "  + iso3 + " | " + region + " | " + subRegion + " | " + this.getPOP(2016);
+    return name + " | "  + iso3 + " | " + region + " | " + subRegion + " | " + this.getPOP(2016);
     //return "*";
   }
 
@@ -161,6 +167,28 @@ public class Country implements Comparable { //<>// //<>// //<>//
     }
   }
 
+  void displayMarked(PGraphics g, ArrayList<Country> destinationCountries, ArrayList<Country> originCountries, float h) {
+    boolean isDestination = destinationCountries.contains(this);
+    boolean isOrigin = originCountries.contains(this);
+    if (isDestination || isOrigin) {
+      if (isDestination) {
+        g.fill(SECONDARY);
+      }
+      if (isSelected() || isHover() || isOrigin) {
+        g.fill(PRIMARY);
+      }
+      float z = 2;
+      g.vertex(this.myX, this.myY, z);
+      g.vertex(this.myX + this.myWidth, this.myY, z);
+      g.vertex(this.myX + this.myWidth, this.myY + h, z);
+      g.vertex(this.myX, this.myY + h, z);
+    }
+  }
+
+  void displayOutlined(PGraphics g) {
+    displayOutlined(g, new ArrayList<Country>(), new ArrayList<Country>());
+  }
+
   void displayOutlined(PGraphics g, ArrayList<Country> destinationCountries, ArrayList<Country> originCountries) {
     g.strokeWeight(3);
     boolean isDestination = destinationCountries.contains(this);
@@ -169,7 +197,7 @@ public class Country implements Comparable { //<>// //<>// //<>//
     if (gpiMissing || isDestination || isOrigin) {
       g.fill(myRed, myGreen, myBlue, myAlpha);
       if (gpiMissing) {
-        g.stroke(myRed, myGreen, myBlue, myAlpha);
+        // g.stroke(myRed, myGreen, myBlue, myAlpha);
         g.stroke(0);
       }
       if (isDestination) {
@@ -184,7 +212,6 @@ public class Country implements Comparable { //<>// //<>// //<>//
       g.vertex(this.myX + this.myWidth, this.myY + this.myHeight, z);
       g.vertex(this.myX, this.myY + this.myHeight, z);
     }
-
   }
 
   void displayName(PGraphics g, ArrayList<Country> destinationCountries, ArrayList<Country> originCountries) {
@@ -235,8 +262,8 @@ public class Country implements Comparable { //<>// //<>// //<>//
   }
 
   @Override
-  public int hashCode() {
-     return Objects.hash(iso3);
+    public int hashCode() {
+    return Objects.hash(iso3);
   }
 
   @Override
@@ -311,29 +338,33 @@ public class Country implements Comparable { //<>// //<>// //<>//
 
   ArrayList<Country> getDestinationCountries() {
     ArrayList<Country> result = new ArrayList<Country>();
+    /*
     ArrayList<MigrationFlow> eFlows = emigrationFlowsByYear.get(currentYear);
-    if (eFlows != null) {
-      for (MigrationFlow mf : eFlows) {
-        if (mf.flow > MIGRATION_FLOW_LOWER_LIMIT) {
-          result.add(mf.destination);
-          println(mf.origin.name, " -> ", mf.destination.name, " : ", mf.flow);
-        }
-      }
-    }
+     if (eFlows != null) {
+     for (MigrationFlow mf : eFlows) {
+     if (mf.flow > MIGRATION_FLOW_LOWER_LIMIT) {
+     result.add(mf.destination);
+     println(mf.origin.name, " -> ", mf.destination.name, " : ", mf.flow);
+     }
+     }
+     }
+     */
     return result;
   }
 
   ArrayList<Country> getOriginCountries() {
     ArrayList<Country> result = new ArrayList<Country>();
+    /*
     ArrayList<MigrationFlow> iFlows = immigrationFlowsByYear.get(currentYear);
-    if (iFlows != null) {
-      for (MigrationFlow mf : iFlows) {
-        if (mf.flow > MIGRATION_FLOW_LOWER_LIMIT) {
-          result.add(mf.origin);
-          println(mf.destination.name, " <- ", mf.origin.name, " : ", mf.flow);
-        }
-      }
-    }
+     if (iFlows != null) {
+     for (MigrationFlow mf : iFlows) {
+     if (mf.flow > MIGRATION_FLOW_LOWER_LIMIT) {
+     result.add(mf.origin);
+     println(mf.destination.name, " <- ", mf.origin.name, " : ", mf.flow);
+     }
+     }
+     }
+     */
     return result;
   }
 }

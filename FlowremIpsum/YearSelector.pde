@@ -35,6 +35,8 @@ public class YearSelector {
 
   void trigger() {
     setCurrentYear(year);
+    updateHighlights(highlightBase, true);
+    updateTopThree(topThreeBase, true);
   }
 
   /*

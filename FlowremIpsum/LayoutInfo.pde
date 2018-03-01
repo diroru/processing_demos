@@ -8,4 +8,8 @@ class LayoutInfo {
     this.w = w;
     this.h = h;
   }
+  
+  boolean hover(float mx, float my) {
+    return mx >= x && mx <= y + w && my >= y && my <= y + h;
+  }
 }

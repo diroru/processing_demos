@@ -13,7 +13,7 @@ void loadData(boolean verbose) {
     String name = row.getString("country");
     String region = row.getString("region");
     String subRegion = row.getString("sub-region");
-    String lookupName = populationData.findRow(iso3, "alpha-3").getString("name_lookup"); 
+    String lookupName = populationData.findRow(iso3, "alpha-3").getString("name_lookup");
 
     if (lookupName.equals("")) {
       println("lookup name not found!!!!", name, lookupName, iso3);
@@ -36,7 +36,6 @@ void loadData(boolean verbose) {
     countries.add(theCountry);
     countriesByName.put(name, theCountry);
     countriesByLookupName.put(lookupName, theCountry);
-
 
     //we add the gpi and population value for each year to country "theCountry"
     for (int year = GPI_YEAR_START; year <= GPI_YEAR_END; year++) {
@@ -71,47 +70,122 @@ void loadData(boolean verbose) {
   int from  = YEAR_START;
   int to = YEAR_END;
 
+  /*
   for (int year = from; year <= to; year++) {
     migrationFlows.put(year, new ArrayList<MigrationFlow>());
   }
+  */
   for (TableRow tr : flowData.rows()) {
-    //int from = max(GPI_YEAR_START, MIGRATION_YEAR_START);
-    //int to = min(GPI_YEAR_END, MIGRATION_YEAR_END);
     String originLookupName = tr.getString("from");
     String destinationLookupName = tr.getString("to");
 
-    for (int year = from; year <= to; year++) {
-      Country origin = countriesByLookupName.get(originLookupName);
-      Country destination = countriesByLookupName.get(destinationLookupName);
-      if (origin != null && destination != null) {
+    Country origin = countriesByLookupName.get(originLookupName);
+    Country destination = countriesByLookupName.get(destinationLookupName);
+    if (origin != null && destination != null) {
+      MigrationRelation mr = new MigrationRelation(origin, destination);
+      MigrationFlow mf = migrationFlows.get(mr);
+      if (mf == null) {
+        mf = new MigrationFlow(mr, flowLayout);
+        migrationFlows.put(mr, mf);
+      }
+      for (int year = from; year <= to; year++) {
         try {
           Long flowVolume = tr.getLong(year + "");
           //TODO: treat negative values
           if (flowVolume > 0) {
-            ArrayList<MigrationFlow> flows = migrationFlows.get(year);
-            MigrationFlow mf = new MigrationFlow(origin, destination, year, flowVolume); 
-            flows.add(mf);
-            origin.addEmigrationFlow(mf);
-            destination.addImmigrationFlow(mf);
             MIGRATION_FLOW_MIN = Math.min(flowVolume, MIGRATION_FLOW_MIN);
             MIGRATION_FLOW_MAX = Math.max(flowVolume, MIGRATION_FLOW_MAX);
           }
-        } 
+        }
         catch (Exception e) {
           if (verbose) {
             e.printStackTrace();
           }
         }
-      }  /*else if (origin == null && verbose) {
-       //println("ORIGIN NOT FOUND", originLookupName);
-       } else if (verbose) {
-       //println("DESTINATION NOT FOUND", destinationLookupName);
-       }*/
+      }
     }
   }
-  for (Integer y : migrationFlows.keySet()) {
-    println("flow count: ", y, migrationFlows.get(y).size());
+  
+  for (TableRow tr : flowData.rows()) {
+    String originLookupName = tr.getString("from");
+    String destinationLookupName = tr.getString("to");
+
+    Country origin = countriesByLookupName.get(originLookupName);
+    Country destination = countriesByLookupName.get(destinationLookupName);
+    if (origin != null && destination != null) {
+      MigrationRelation mr = new MigrationRelation(origin, destination);
+      MigrationFlow mf = migrationFlows.get(mr);
+      for (int year = from; year <= to; year++) {
+        try {
+          Long flowVolume = tr.getLong(year + "");
+          //TODO: treat negative values
+          if (flowVolume > 0) {
+            //println("adding", year, flowVolume, "->", mf);
+            mf.addFlow(year, flowVolume);
+          }
+        }
+        catch (Exception e) {
+          if (verbose) {
+            //println("line 129");
+            e.printStackTrace();
+          }
+        }
+      }
+    }
   }
+
+  //TODO: print flows by years
   println("migration flow min:", MIGRATION_FLOW_MIN);
   println("migration flow max:", MIGRATION_FLOW_MAX);
+  println("migration relation count:", migrationFlows.size());
+  /*
+  for (MigrationFlow mf : migrationFlows.values()) {
+    mf.myFlowNorm = mf.getNormFlowLog(currentYear);
+  }
+  */
+}
+
+
+ArrayList<MigrationFlow> getTopThree(Country theReferenceCountry) {
+  ArrayList<MigrationFlow> result = new ArrayList<MigrationFlow>();
+  float firstFlow = 0f;
+  float secondFlow = 0f;
+  float thirdFlow = 0f;
+  MigrationFlow firstCountry = null;
+  MigrationFlow secondCountry = null;
+  MigrationFlow thirdCountry = null;
+  for (MigrationRelation mr : migrationFlows.keySet()) {
+    MigrationFlow mf = migrationFlows.get(mr);
+    boolean consider = false;
+    if(theReferenceCountry == null) {
+      consider = true;
+    } else if (mf.originEquals(theReferenceCountry) || mf.destinationEquals(theReferenceCountry)) {
+      consider = true;
+    }
+    if (consider) {
+      //this could be more general :D
+      float candidateFlow = mf.getFlow(currentYear);
+      if (candidateFlow > firstFlow) {
+        thirdFlow = secondFlow;
+        secondFlow = firstFlow;
+        firstFlow = candidateFlow;
+        thirdCountry = secondCountry;
+        secondCountry = firstCountry;
+        firstCountry = mf;
+      } else if (candidateFlow > secondFlow) {
+        thirdFlow = secondFlow;
+        secondFlow = candidateFlow;
+        thirdCountry = secondCountry;
+        secondCountry = mf;
+      } else if (candidateFlow > thirdFlow) {
+        thirdFlow = candidateFlow;
+        thirdCountry = mf;
+      }
+    }
+  }
+  
+  result.add(firstCountry);
+  result.add(secondCountry);
+  result.add(thirdCountry);
+  return result;
 }

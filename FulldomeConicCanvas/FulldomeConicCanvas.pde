@@ -1,3 +1,5 @@
+import controlP5.*;
+
 PShader domeShader;
 PShape domeQuad;
 PImage img;
@@ -8,16 +10,19 @@ final int CANVAS_MODE = 1;
 PGraphics canvas;
 ConicMeshInfo coneInfo;
 
-float APERTURE = 2f;
+float APERTURE = 1f;
 float CONE_RADIUS_BOTTOM = 512;
 float CONE_RADIUS_TOP = 512;
 float CONE_HEIGHT = 512;
 float CONE_BOTTOM = 0;
 float CONE_ORIENTATION = 0;
 
+ControlP5 cp5;
+
 void setup() {
-  size(800, 800, P3D);
+  size(1000, 1000, P3D);
   pixelDensity(displayDensity());
+  initGUI();
 
   img = loadImage("images/World_Equirectangular.jpg");
   canvas = createGraphics(img.width, img.height, P2D);
@@ -49,10 +54,10 @@ void draw() {
   canvas.ellipse(mm.x + canvas.width, mm.y, 10, 10);
   canvas.endDraw();
   //image(canvas,0,0, canvasToWindowRatio() * canvas.width, canvasToWindowRatio() * canvas.height );
-  CONE_ORIENTATION = frameCount/10000f;
-  //CONE_RADIUS_BOTTOM = mouseX + 0f;
-  CONE_RADIUS_TOP = mouseX + 0f;
-  CONE_BOTTOM = mouseY - height*0.5;
+  //CONE_ORIENTATION = frameCount/10000f;
+  //CONE_RADIUS_BOTTOM = mouseY + 0f;
+  //CONE_RADIUS_TOP = mouseX + 0f;
+  //CONE_BOTTOM = mouseY - height*0.5;
   updateShader();
   pushMatrix();
   translate(width*0.5,height*0.5);
@@ -62,6 +67,7 @@ void draw() {
   popMatrix();
 
   coneInfo.display();
+  drawGUI();
 }
 
 void updateShader() {
@@ -71,6 +77,24 @@ void updateShader() {
   domeShader.set("coneBottom", CONE_BOTTOM);
   domeShader.set("coneHeight", CONE_HEIGHT);
   domeShader.set("coneOrientation", CONE_ORIENTATION);
+}
+
+void mouseWheel(MouseEvent event){
+  float e = event.getCount();
+  //CONE_HEIGHT = floor(constrain(CONE_HEIGHT+ e,0,4096));
+}
+
+void mouseDragged(){
+  //CONE_BOTTOM += (mouseY - pmouseY);
+  //CONE_BOTTOM = constrain(CONE_BOTTOM, -2048, 2048);
+}
+
+void keyPressed() {
+  switch(key) {
+  case 'G':
+  case 'g':
+    drawGUI = !drawGUI;
+  }
 }
 
 void initShape() {

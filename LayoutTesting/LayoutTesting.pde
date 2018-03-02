@@ -7,9 +7,11 @@ ArrayList<FormattedText> myFormattedTexts = new ArrayList<FormattedText>();
 ArrayList<Float> margins;
 ArrayList<String> stringsA, stringsB, stringsC;
 float myReferenceWidth = 300f;
+LayoutInfo containerLayout;
 
 void setup() {
   size(1000, 800);
+  containerLayout = new LayoutInfo(0, 0, width, height);
   fontA = loadFont("HelveticaNeue-Medium-48.vlw");
   fontB = loadFont("HelveticaNeue-Medium-20.vlw");
   fontC = loadFont("HelveticaNeue-Medium-12.vlw");
@@ -24,14 +26,14 @@ void setup() {
 }
 void draw() {
   background(0);
-  PVector origin = new PVector(400, 300);
+  PVector origin = new PVector(myReferenceWidth, 100);
   myFormattedTexts.clear();
   myFormattedTexts.add(new FormattedText(stringsA, fonts, margins, origin, LAYOUT_ABOVE_MIDDLE));
   myFormattedTexts.add(new FormattedText(stringsB, fonts, margins, origin, LAYOUT_ABOVE_MIDDLE));
   myFormattedTexts.add(new FormattedText(stringsC, fonts, margins, origin, LAYOUT_ABOVE_MIDDLE));
-  myFormattedTexts.add(new FormattedText(stringsA, fonts, margins, origin, LAYOUT_ABOVE_MIDDLE));
-  myFormattedTexts.add(new FormattedText(stringsB, fonts, margins, origin, LAYOUT_ABOVE_MIDDLE));
-  myFormattedTexts.add(new FormattedText(stringsC, fonts, margins, origin, LAYOUT_ABOVE_MIDDLE));
+  //  myFormattedTexts.add(new FormattedText(stringsA, fonts, margins, origin, LAYOUT_ABOVE_MIDDLE));
+  //  myFormattedTexts.add(new FormattedText(stringsB, fonts, margins, origin, LAYOUT_ABOVE_MIDDLE));
+  //  myFormattedTexts.add(new FormattedText(stringsC, fonts, margins, origin, LAYOUT_ABOVE_MIDDLE));
 
   /*
   println(myFormattedTexts.get(0).getLayoutInfo(myReferenceWidth));
@@ -41,8 +43,8 @@ void draw() {
    println("-----");
    */
 
-  boolean resolutionFound = resolveLayout(myFormattedTexts, myReferenceWidth);
-  println("resolution found", resolutionFound, frameCount);
+  boolean resolutionFound = resolveLayout(myFormattedTexts, containerLayout, myReferenceWidth);
+  //println("resolution found", resolutionFound, frameCount);
   try {
     myFormattedTexts.get(0).display(g, color(255, 0, 0, 127), myReferenceWidth);
     myFormattedTexts.get(1).display(g, color(0, 255, 0, 127), myReferenceWidth);
@@ -208,15 +210,19 @@ LayoutInfo mergeLayoutsVertically(LayoutInfo l0, LayoutInfo l1) {
 }
 
 boolean resolveLayout(ArrayList<FormattedText> ft, float referenceWidth) {
+  return resolveLayout(ft, new LayoutInfo(Float.MIN_VALUE, Float.MIN_VALUE, Float.MAX_VALUE, Float.MAX_VALUE), referenceWidth);
+}
+
+boolean resolveLayout(ArrayList<FormattedText> ft, LayoutInfo containerLayout, float referenceWidth) {
   boolean result = true;
-  int maxIterations = 1000;
+  int maxIterations = 100;
   int it = 0;
-  int intersectionIndex = intersectsOthers(ft, referenceWidth);
+  int intersectionIndex = intersectsOthers(ft, containerLayout, referenceWidth);
   while (intersectionIndex > -1 && it < maxIterations) {
-    //println("intersection index", intersectionIndex);
+    println("intersection index", intersectionIndex);
     ft.get(intersectionIndex).cycleLayout();
     //println(intersectionIndex, ft.get(intersectionIndex).myLayoutMode);
-    intersectionIndex = intersectsOthers(ft, referenceWidth);
+    intersectionIndex = intersectsOthers(ft, containerLayout, referenceWidth);
     /*
     if (intersectionIndex == ft.size()-1) {
      //resetting options for the rest of the elements
@@ -251,7 +257,13 @@ boolean resolveLayout(ArrayList<FormattedText> ft, float referenceWidth) {
   return result;
 }
 
-int intersectsOthers(ArrayList<FormattedText> ft, float referenceWidth) {
+int intersectsOthers(ArrayList<FormattedText> ft, LayoutInfo containerLayout, float referenceWidth) {
+  for (int i = 0; i < ft.size(); i++) {
+    FormattedText ft0 = ft.get(i);
+    if (!ft0.getLayoutInfo(referenceWidth).isInside(containerLayout)) {
+      return i;
+    }
+  }
   for (int i = 0; i < ft.size(); i++) {
     for (int j = 0; j < ft.size(); j++) {
       if (i < j) {
@@ -298,6 +310,14 @@ class LayoutInfo {
     float y0 = min(this.y + this.h, other.y + other.h);
     //println(x1 - x0, this.w + other.w , y1 - y0, this.h + other.h);
     return x0 > x1 && y0 > y1;
+  }
+
+  boolean isInside(LayoutInfo other) {
+    boolean result = x >= other.x && y >= other.y && x + w <= other.x + other.w && y + h <= other.y + other.h;
+    if (!result) {
+      println(x, y, x+w, y+h, other.x, other.y, other.x + other.w, other.y + other.h);
+    }
+    return result;
   }
 
   @Override

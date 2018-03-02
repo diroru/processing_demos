@@ -208,18 +208,7 @@ LayoutInfo mergeLayoutsVertically(LayoutInfo l0, LayoutInfo l1) {
 }
 
 boolean resolveLayout(ArrayList<FormattedText> ft, float referenceWidth) {
-  boolean doOverNeeded = true;
-  boolean problemFound = false;
-  int counter = 0;
   boolean result = true;
-
-  //int counterA = 0;
-  //int counterB = 0;
-
-
-  FormattedText lastElement = ft.get(ft.size()-1);
-  FormattedText firstElement = ft.get(0);
-
   int maxIterations = 1000;
   int it = 0;
   int intersectionIndex = intersectsOthers(ft, referenceWidth);
@@ -259,36 +248,6 @@ boolean resolveLayout(ArrayList<FormattedText> ft, float referenceWidth) {
   }
   println("took iterations", it);
   println("-------");
-  /*
-  
-   while (counter < ft.size()-1) {
-   println("counter", counter);
-   FormattedText ft0 = ft.get(counter);
-   FormattedText ft1 = ft.get(counter+1);
-   if (ft0.intersects(ft1, referenceWidth)) {
-   if (ft1.myLayoutMode < LAYOUT_ABOVE_RIGHT) {
-   ft1.myLayoutMode++;
-   println("fsdfdsf");
-   } else if (counter == ft.size()-2) {
-   
-   if (ft.get(0).myLayoutMode < LAYOUT_ABOVE_RIGHT) {
-   ft.get(0).myLayoutMode++;
-   for (FormattedText ftt : ft) {
-   ftt.myLayoutMode = LAYOUT_ABOVE_MIDDLE;
-   }
-   counter = 0;
-   } else {
-   result = false;
-   }
-   
-   } else {
-   counter++;
-   }
-   } else {
-   counter++;
-   }
-   }
-   */
   return result;
 }
 

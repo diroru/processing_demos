@@ -5,6 +5,10 @@ class MigrationFlow {
   HashMap<Integer, Float> flowsByYearNormLinear = new HashMap<Integer, Float>(); //logscaled!
   //HashMap<Integer, Float> heightsByYearLog = new HashMap<Integer, Float>();
   //HashMap<Integer, Float> heightsByYearLinear = new HashMap<Integer, Float>();
+  int myLayoutMode = LAYOUT_ABOVE_MIDDLE;
+  float myPadding = 10;
+  float myMargin = 20;
+  float myReferenceHeight = 0f;
 
   LayoutInfo myLayout;
   boolean _hover;
@@ -82,6 +86,37 @@ class MigrationFlow {
 
   Float getNormFlowLinear(int theYear) {
     return getNormFlow(theYear, true);
+  }
+
+  FormattedText getFormattedText(int no) {
+    int flow = floor(getFlow(currentYear));
+    /*    
+     pg.textAlign(BOTTOM, LEFT);
+     pg.text(flow + "", min(origin().cx() + 10, destination().cx() + 10), yTop - 10);
+     pg.textAlign(TOP, LEFT);
+     pg.textFont(INFOHEADLINE);
+     pg.text("People moved from " + origin().name + " to " + destination().name, min(origin().cx() + 10, destination().cx() + 10), yTop + 25);
+     */
+    String s0 = flow + "";
+    PFont f0 = THIRDNUMBER;
+    switch(no) {
+    case 0:
+      f0 = TOPNUMBER;
+      break;
+    case 1:
+      f0 = SECONDNUMBER;
+      break;
+    }
+    String s1 = "People moved from " + origin().name + " to " + destination().name;
+    PFont f1 = INFOHEADLINE;
+
+    float yTop =  myLayout.y + myLayout.h - myHeight();
+    PVector origin = new PVector(min(origin().cx(), destination().cx()), yTop);
+    float theReferenceWidth = abs(origin().cx() -  destination().cx());
+    myReferenceHeight = f0.getDefaultSize() + myMargin;
+    
+    FormattedText result = new FormattedText(new ArrayList<String>(Arrays.asList(s0, s1)), new ArrayList<PFont>(Arrays.asList(f0, f1)), new ArrayList<Float>(Arrays.asList(myMargin, myMargin)), origin, theReferenceWidth, myReferenceHeight, LAYOUT_ABOVE_MIDDLE, myPadding);
+    return result;
   }
 
   Float getHeight(int theYear, int scaleMode) {
@@ -163,7 +198,7 @@ class MigrationFlow {
     return myRelation.destination;
   }
 
-void displayWithInfo(PGraphics pg) {
+  void displayWithInfo(PGraphics pg) {
     color c = PRIMARY;
     float yTop =  myLayout.y + myLayout.h - myHeight();
     int flow = floor(getFlow(currentYear));
@@ -214,16 +249,48 @@ void displayWithInfo(PGraphics pg) {
       pg.textFont(THIRDNUMBER);
       break;
     }
+    float x0 = min(origin().cx(), destination().cx());
+    float x1 = max(origin().cx(), destination().cx());
+    float x = x0 + myPadding;
+    float y = yTop + myPadding;
+    float myReferenceWidth = x1 - x0;
+    
+    switch(myLayoutMode) {
+    case LAYOUT_ABOVE_MIDDLE:
+      pg.textAlign(LEFT, TOP);
+      y -= myReferenceHeight;
+      break;
+    case LAYOUT_BELOW_MIDDLE:
+      pg.textAlign(LEFT, TOP);
+      break;
+    case LAYOUT_BELOW_LEFT:
+      pg.textAlign(RIGHT, TOP);
+      x -= myPadding * 2;
+      break;
+    case LAYOUT_BELOW_RIGHT:
+      pg.textAlign(LEFT, TOP);
+      x += myReferenceWidth;
+      break;
+    case LAYOUT_ABOVE_LEFT:
+      pg.textAlign(RIGHT, TOP);
+      y -= myReferenceHeight;
+      x -= myPadding * 2;
+      break;
+    case LAYOUT_ABOVE_RIGHT:
+      pg.textAlign(LEFT, TOP);
+      y -= myReferenceHeight;
+      x += myReferenceWidth;
+      break;
+    }
+    
     pg.pushMatrix();
     pg.translate(0, 0, 10);
-    pg.textAlign(BOTTOM, LEFT);
     pg.fill(WHITE);
     pg.noStroke();
-    pg.text(flow + "", min(origin().cx() + 10, destination().cx() + 10), yTop - 10);
-    pg.textAlign(TOP, LEFT);
+    pg.text(flow + "", x,y);
     pg.fill(c);
     pg.textFont(INFOHEADLINE);
-    pg.text("People moved from " + origin().name + " to " + destination().name, min(origin().cx() + 10, destination().cx() + 10), yTop + 25);
+    pg.text("People moved from " + origin().name + " to " + destination().name, x, y + myReferenceHeight - myMargin * 0.5);
     pg.popMatrix();
   }
 

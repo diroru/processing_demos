@@ -23,8 +23,8 @@ class MigrationFlow {
     myRelation = theRelation;
     myLayout = theLayout;
 
-    myRelation.origin.addEmigrationFlow(this);
-    myRelation.destination.addImmigrationFlow(this);
+    myRelation.origin.addEmigrationFlow(myRelation.destination, this);
+    myRelation.destination.addImmigrationFlow(myRelation.origin, this);
     //myHeight = 0f;
     //myFlowNorm = 0f;
   }
@@ -91,7 +91,7 @@ class MigrationFlow {
 
   FormattedText getFormattedText(int no) {
     int flow = floor(getFlow(currentYear));
-    /*    
+    /*
      pg.textAlign(BOTTOM, LEFT);
      pg.text(flow + "", min(origin().cx() + 10, destination().cx() + 10), yTop - 10);
      pg.textAlign(TOP, LEFT);
@@ -203,12 +203,15 @@ class MigrationFlow {
 
   void displayWithInfo(PGraphics pg) {
     color c = PRIMARY;
-    float yTop =  myLayout.y + myLayout.h - myHeight();
-    int flow = floor(getFlow(currentYear));
+    //float yTop =  myLayout.y + myLayout.h - myHeight();
+    //int flow = floor(getFlow(currentYear));
     pg.beginShape(POLYGON);
     pg.stroke(c);
     drawLine(pg, c, 127);
     pg.endShape();
+    myReferenceHeight = SECONDNUMBER.getDefaultSize() + myMargin0*0.5;
+    displayText(pg, c, 1);
+    /*
     pg.textFont(THIRDNUMBER); //TODO
     pg.pushMatrix();
     pg.translate(0, 0, 10);
@@ -221,24 +224,19 @@ class MigrationFlow {
     pg.textFont(INFOHEADLINE);
     pg.text("People moved from " + origin().name + " to " + destination().name, min(origin().cx() + 10, destination().cx() + 10), yTop + 25);
     pg.popMatrix();
+    */
   }
 
+  void displayText(PGraphics pg, color c) {
+    displayText(pg, c, 2);
+  }
 
-  void displayAsTop(PGraphics pg, Country activeCountry, int No) {
-
-    color c = PRIMARY;
-    if (activeCountry != null && originEquals(activeCountry)) {
-      c = SECONDARY;
-    }
+  void displayText(PGraphics pg, color c, int no) {
     float flowNorm = myFlowNorm(currentScaleMode);
     float yTop =  myLayout.y + myLayout.h - myHeight();
     int flow = floor(getFlow(currentYear));
-    pg.beginShape(POLYGON);
-    pg.stroke(c);
-    drawLine(pg, c, 127);
-    //drawRoundedLine(pg, origin.cx(), origin.cy(), origin.cx(), yTop, destination.cx(), yTop, destination.cx(), destination.cy(), 10, c, 127); //last number is amount of roundness
-    pg.endShape();
-    switch(No) {
+
+    switch(no) {
     case 0:
       pg.textFont(TOPNUMBER);
       break;
@@ -299,12 +297,27 @@ class MigrationFlow {
     pg.translate(0, 0, 10);
     pg.fill(WHITE);
     pg.noStroke();
-    pg.text(flow + "", x, y);
+    pg.text(formatLong(flow), x, y);
     pg.fill(c);
     pg.textFont(INFOHEADLINE);
     pg.text("People moved from " + origin().name, x, y + myReferenceHeight);
     pg.text("to " + destination().name, x, y + myReferenceHeight + INFOHEADLINE.getDefaultSize() + myMargin1);
     pg.popMatrix();
+  }
+
+
+  void displayAsTop(PGraphics pg, Country activeCountry, int no) {
+
+    color c = PRIMARY;
+    if (activeCountry != null && originEquals(activeCountry)) {
+      c = SECONDARY;
+    }
+    pg.beginShape(POLYGON);
+    pg.stroke(c);
+    drawLine(pg, c, 127);
+    //drawRoundedLine(pg, origin.cx(), origin.cy(), origin.cx(), yTop, destination.cx(), yTop, destination.cx(), destination.cy(), 10, c, 127); //last number is amount of roundness
+    pg.endShape();
+    displayText(pg, c, no);
   }
 
   boolean isHover() {
@@ -335,13 +348,13 @@ class MigrationFlow {
    g.vertex(destination.cx(), destination.cy());
    g.endShape();
    }
-   
+
    void displayRounded(PGraphics g, float maxHeight, float y0) {
    float y = y0 + map(flow, 0, MIGRATION_FLOW_MAX, maxHeight, 0);
    drawRoundedLine(g, origin.cx(), origin.cy(), origin.cx(), y, destination.cx(), y, destination.cx(), destination.cy(), 10, WHITE, 127); //last number is amount of roundness
    }
-   
-   
+
+
    float getHeight(LayoutInfo theLayout) {
    float flowNorm = getNormFlow(flow);
    float result = theLayout.h - map(flowNorm, 0, 1, 0, theLayout.h);

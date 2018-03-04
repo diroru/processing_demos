@@ -338,7 +338,7 @@ void drawFlowGraphLegend(LayoutInfo graphLayout, LayoutInfo flowLayout, float ma
 void displayFlows(PGraphics pg) {
   pg.noFill();
   pg.strokeWeight(2);
-  MigrationFlow highlightedFlow = null;  
+  MigrationFlow highlightedFlow = null;
 
   for (MigrationFlow mf : migrationFlows.values()) {
     if (flowIsShowable(mf) && !mf.equals(highlightedFlow)) {
@@ -348,16 +348,10 @@ void displayFlows(PGraphics pg) {
     }
   }
 
+  boolean noMeaningfulHighlightAvailable = true;
+
   switch(currentShowMode) {
   case GS_SHOW_ALL:
-
-    for (MigrationFlow mf : highlightedFlows) {
-      //Country c = hoverCountry != null ? hoverCountry : activeCountry;
-      pg.beginShape(POLYGON);
-      mf.displayHighlighted(pg, highlightBase);
-      pg.endShape();
-    }
-
     switch(currentCountryState) {
     case CS_NONE:
       if (currentFlowState == MS_HOVER) {
@@ -369,10 +363,34 @@ void displayFlows(PGraphics pg) {
     case CS_ACTIVE:
       break;
     case CS_ACTIVE_HOVER:
+      if (activeCountry.hasOrigin(hoverCountry) || activeCountry.hasDestination(hoverCountry)) {
+        noMeaningfulHighlightAvailable = false;
+        if (activeCountry.hasOrigin(hoverCountry)) {
+          highlightedFlow = migrationFlows.get(new MigrationRelation(hoverCountry, activeCountry));
+        } else {
+          highlightedFlow = migrationFlows.get(new MigrationRelation(activeCountry, hoverCountry));
+        }
+      }
       break;
     case CS_ACTIVE_ACTIVE:
+      if (activeCountry.hasOrigin(activeCountryTwo) || activeCountry.hasDestination(activeCountryTwo)) {
+        noMeaningfulHighlightAvailable = false;
+        if (activeCountry.hasOrigin(hoverCountry)) {
+          highlightedFlow = migrationFlows.get(new MigrationRelation(activeCountryTwo, activeCountry));
+        } else {
+          highlightedFlow = migrationFlows.get(new MigrationRelation(activeCountry, activeCountryTwo));
+        }
+      }
       break;
     case CS_ACTIVE_ACTIVE_HOVER:
+      if (activeCountry.hasOrigin(hoverCountry) || activeCountry.hasDestination(hoverCountry)) {
+        noMeaningfulHighlightAvailable = false;
+        if (activeCountry.hasOrigin(hoverCountry)) {
+          highlightedFlow = migrationFlows.get(new MigrationRelation(hoverCountry, activeCountry));
+        } else {
+          highlightedFlow = migrationFlows.get(new MigrationRelation(activeCountry, hoverCountry));
+        }
+      }
       break;
     }
     break;
@@ -386,13 +404,24 @@ void displayFlows(PGraphics pg) {
         if (mf != null) {
           mf.displayAsTop(pg, topThreeBase, i);
         }
-      } 
+      }
       catch (Exception e) {
         e.printStackTrace();
       }
       layoutNeedsUpdate = false;
     }
     break;
+  }
+
+  if (noMeaningfulHighlightAvailable) {
+    for (MigrationFlow mf : highlightedFlows) {
+      //Country c = hoverCountry != null ? hoverCountry : activeCountry;
+      pg.beginShape(POLYGON);
+      mf.displayHighlighted(pg, highlightBase);
+      pg.endShape();
+    }
+  } else {
+      highlightedFlow.displayWithInfo(canvas);
   }
 }
 
@@ -429,7 +458,7 @@ void stash() {
    }
    }
    }
-   
+
    highlightedFlow.displayAsTop(pg, activeCountry, 2);
    } else if (currentShowMode == GS_SHOW_TOP_THREE ) {
    if (activeCountry == null) {
@@ -450,7 +479,7 @@ void stash() {
    mf.displayAsTop(pg, activeCountry, count);
    count++;
    }
-   
+
    i++;
    }
    }
@@ -539,11 +568,11 @@ void displayCountryInfo(PGraphics pg, LayoutInfo layout) {
     pg.textSize(HEADLINEALTSUBTITLE.getDefaultSize());
     pg.text("Global Peace Index: #" + c.getGPIRankString(currentYear), x, y);
     y+= 5 + HEADLINEALTSUBTITLE_SIZE;
-    pg.text("Population: " + c.pop.get(currentYear), x, y);
+    pg.text("Population: " + formatLong(c.pop.get(currentYear)), x, y);
     y+= 5 + HEADLINEALTSUBTITLE_SIZE;
-    pg.text("Immigration: " + c.totalImmigraionFlow.get(currentYear), x, y);
+    pg.text("Immigration: " + formatLong(c.totalImmigraionFlow.get(currentYear)), x, y);
     y+= 5+ HEADLINEALTSUBTITLE_SIZE;
-    pg.text("Emigration: " + c.totalEmigraionFlow.get(currentYear), x, y);
+    pg.text("Emigration: " + formatLong(c.totalEmigraionFlow.get(currentYear)), x, y);
   }
 }
 

@@ -6,10 +6,10 @@ public class Country implements Comparable { //<>// //<>// //<>// //<>// //<>//
   HashMap<Integer, Integer> gpiRanks = new HashMap<Integer, Integer>();
   //migration flows by year and by country iso3
 
-  HashMap<Integer, HashMap<String, Long>> immigrationFlows = new HashMap<Integer, HashMap<String, Long>>();
-  HashMap<Integer, HashMap<String, Long>> emigrationFlows = new HashMap<Integer, HashMap<String, Long>>();
-  HashMap<Integer, ArrayList<MigrationFlow>> immigrationFlowsByYear = new HashMap<Integer, ArrayList<MigrationFlow>>();
-  HashMap<Integer, ArrayList<MigrationFlow>> emigrationFlowsByYear = new HashMap<Integer, ArrayList<MigrationFlow>>();
+  HashMap<Country, MigrationFlow> immigrationFlows = new HashMap<Country, MigrationFlow>();
+  HashMap<Country, MigrationFlow> emigrationFlows = new HashMap<Country, MigrationFlow>();
+  //HashMap<Integer, ArrayList<MigrationFlow>> immigrationFlowsByYear = new HashMap<Integer, ArrayList<MigrationFlow>>();
+  //HashMap<Integer, ArrayList<MigrationFlow>> emigrationFlowsByYear = new HashMap<Integer, ArrayList<MigrationFlow>>();
 
   //totals by year
   HashMap<Integer, Long> totalImmigraionFlow = new HashMap<Integer, Long>();
@@ -80,7 +80,32 @@ public class Country implements Comparable { //<>// //<>// //<>// //<>// //<>//
     return result;
   }
 
-  void addImmigrationFlow(MigrationFlow flow) {
+  boolean hasOrigin(Country other) {
+    return hasOrigin(other, currentYear);
+  }
+
+  boolean hasDestination(Country other) {
+    return hasDestination(other, currentYear);
+  }
+
+  boolean hasOrigin(Country other, int currentYear) {
+    MigrationFlow mf = immigrationFlows.get(other);
+    if (mf != null) {
+      return mf.getFlow(currentYear) > 0L;
+    }
+    return false;
+  }
+
+  boolean hasDestination(Country other, int currentYear) {
+    MigrationFlow mf = emigrationFlows.get(other);
+    if (mf != null) {
+      return mf.getFlow(currentYear) > 0L;
+    }
+    return false;
+  }
+
+  void addImmigrationFlow(Country theOrigin, MigrationFlow flow) {
+    immigrationFlows.put(theOrigin, flow);
     /*
     int y = flow.year;
      String orgISO3 = flow.origin.iso3;
@@ -104,7 +129,8 @@ public class Country implements Comparable { //<>// //<>// //<>// //<>// //<>//
      */
   }
 
-  void addEmigrationFlow(MigrationFlow flow) {
+  void addEmigrationFlow(Country theDestination, MigrationFlow flow) {
+    emigrationFlows.put(theDestination, flow);
     /*
     int y = flow.year;
      String dstISO3 = flow.destination.iso3;
@@ -126,6 +152,21 @@ public class Country implements Comparable { //<>// //<>// //<>// //<>// //<>//
      }
      eFlows.add(flow);
      */
+  }
+
+  void updateTotals(int startYear, int endYear) {
+    for (int y = startYear; y <= endYear; y++) {
+      Long totalEmigrations = 0L;
+      Long totalImmigrations = 0L;
+      for (MigrationFlow mf : emigrationFlows.values()) {
+        totalEmigrations += mf.getFlow(y);
+      }
+      for (MigrationFlow mf : immigrationFlows.values()) {
+        totalImmigrations += mf.getFlow(y);
+      }
+      totalEmigraionFlow.put(y, totalEmigrations);
+      totalImmigraionFlow.put(y, totalImmigrations);
+    }
   }
 
   //used by migration flow

@@ -138,6 +138,9 @@ void loadData(boolean verbose) {
   println("migration flow min:", MIGRATION_FLOW_MIN);
   println("migration flow max:", MIGRATION_FLOW_MAX);
   println("migration relation count:", migrationFlows.size());
+  for (Country c : countries) {
+    c.updateTotals(YEAR_START,YEAR_END);
+  }
   /*
   for (MigrationFlow mf : migrationFlows.values()) {
     mf.myFlowNorm = mf.getNormFlowLog(currentYear);

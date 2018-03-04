@@ -131,3 +131,16 @@ float maxWidth(String input, PFont font) {
   }
   return maxWidth;
 }
+
+String formatLong(Number theLong) {
+  String input = theLong + "";
+  String result = "";
+  for (int i = 0; i < input.length(); i++) {
+    result += input.charAt(i);
+    int c = input.length() - 1 - i;
+    if (c%3 == 0 && c > 0) {
+      result += '.';
+    }
+  }
+  return result;
+}

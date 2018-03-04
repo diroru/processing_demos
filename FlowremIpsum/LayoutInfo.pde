@@ -88,7 +88,7 @@ void updateTopThreeLayouts(ArrayList<MigrationFlow> topThreeFlows) {
     }
   }
 
-  LayoutInfo li = new LayoutInfo(flowLayout.x, flowLayout.y-50, flowLayout.w, flowLayout.h+0);
+  LayoutInfo li = new LayoutInfo(flowLayout.x, flowLayout.y, flowLayout.w, flowLayout.h);
   boolean layoutResolved = resolveLayout(ft, li);
 
   for (int i = 0; i < topThreeFlows.size(); i++) {
@@ -99,10 +99,11 @@ void updateTopThreeLayouts(ArrayList<MigrationFlow> topThreeFlows) {
     catch (Exception e) {
     }
   }
-
+  /*
   for (FormattedText ftt : ft) {
     ftt.display(canvas, color(255, 255, 0, 63));
   }
+  */
 }
 
 
@@ -327,13 +328,11 @@ boolean resolveLayout(ArrayList<FormattedText> ft, LayoutInfo containerLayout) {
           if (outsideArea > 0) {
             solutionFound = false;
             intersection += outsideArea;
-            //break;
           }
           float is = ft0.intersection(ft1); 
           if (is > 0) {
             solutionFound = false;
             intersection += is;
-            //break;
           }
         }
       }

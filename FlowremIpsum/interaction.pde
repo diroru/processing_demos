@@ -188,7 +188,7 @@ void setCurrentYear(int theNewYear) {
 
 void mouseMoved() {
   layoutNeedsUpdate = true;
-  
+
   mappedMouse = mappedMouse(CURRENT_MODE);
 
   hoverCountry = null;
@@ -256,7 +256,7 @@ void mouseMoved() {
   //}
   if (hoverMigrationFlow == null && currentCountryState == CS_NONE) {
     undimFlows();
-  } else {    
+  } else {
     dimFlows();
   }
   if (currentShowMode == GS_SHOW_TOP_THREE) {
@@ -299,7 +299,7 @@ void mouseMoved() {
     //updateHighlights(null);
   }
 
-
+  /*
   println("mouse move", millis() / 1000.0);
   println("STATE", currentCountryState);
   println("active", activeCountry);
@@ -307,6 +307,7 @@ void mouseMoved() {
   println("hover", hoverCountry);
   println("hover flow", hoverMigrationFlow);
   println("----------");
+  */
 }
 
 void mousePressed() {
@@ -433,7 +434,7 @@ void updateHighlights(Country targetCountry, boolean forceUpdate) {
     updateNeeded = true;
   }
   if (updateNeeded || forceUpdate) {
-    println("updating using", targetCountry);
+    //println("updating using", targetCountry);
     highlightedOriginCountries.clear();
     highlightedDestinationCountries.clear();
     highlightedFlows.clear();
@@ -474,7 +475,7 @@ void updateTopThree(Country targetCountry, boolean forceUpdate) {
     updateNeeded = true;
   }
   if (updateNeeded || forceUpdate) {
-    println("updating top three using", targetCountry);
+    //println("updating top three using", targetCountry);
     topThreeFlows.clear();
     topThreeFlows = getTopThree(targetCountry);
     topThreeBase = targetCountry;

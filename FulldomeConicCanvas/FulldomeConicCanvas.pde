@@ -1,3 +1,4 @@
+//TODO: settings in config file!!!
 import controlP5.*;
 
 PShader domeShader;
@@ -24,7 +25,7 @@ void setup() {
   pixelDensity(displayDensity());
   initGUI();
 
-  img = loadImage("images/World_Equirectangular.jpg");
+  img = loadImage("images/input.jpg");
   canvas = createGraphics(img.width, img.height, P2D);
   canvas.beginDraw();
   canvas.background(0);

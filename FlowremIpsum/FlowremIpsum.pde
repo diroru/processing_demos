@@ -1,6 +1,6 @@
-import de.looksgood.ani.*; //<>// //<>// //<>// //<>// //<>// //<>//
+import de.looksgood.ani.*; //<>// //<>// //<>// //<>// //<>// //<>// //<>//
 import de.looksgood.ani.easing.*;
-import java.util.*; //<>//
+import java.util.*;
 //import java.awt.event.*;
 //import javax.swing.event.*;
 //import java.awt.event.*;
@@ -338,10 +338,12 @@ void drawFlowGraphLegend(LayoutInfo graphLayout, LayoutInfo flowLayout, float ma
 void displayFlows(PGraphics pg) {
   pg.noFill();
   pg.strokeWeight(2);
-  MigrationFlow highlightedFlow = null;
+  MigrationFlow highlightedFlowA = null;
+  MigrationFlow highlightedFlowB = null;
 
   for (MigrationFlow mf : migrationFlows.values()) {
-    if (flowIsShowable(mf) && !mf.equals(highlightedFlow)) {
+    //if (flowIsShowable(mf) && !mf.equals(highlightedFlow)) {
+    if (flowIsShowable(mf)) {
       pg.beginShape(POLYGON);
       mf.displayNormal(pg);
       pg.endShape();
@@ -366,9 +368,10 @@ void displayFlows(PGraphics pg) {
       if (activeCountry.hasOrigin(hoverCountry) || activeCountry.hasDestination(hoverCountry)) {
         noMeaningfulHighlightAvailable = false;
         if (activeCountry.hasOrigin(hoverCountry)) {
-          highlightedFlow = migrationFlows.get(new MigrationRelation(hoverCountry, activeCountry));
-        } else {
-          highlightedFlow = migrationFlows.get(new MigrationRelation(activeCountry, hoverCountry));
+          highlightedFlowA = migrationFlows.get(new MigrationRelation(hoverCountry, activeCountry));
+        } 
+        if (activeCountry.hasDestination(hoverCountry)) {
+          highlightedFlowB = migrationFlows.get(new MigrationRelation(activeCountry, hoverCountry));
         }
       }
       break;
@@ -376,9 +379,10 @@ void displayFlows(PGraphics pg) {
       if (activeCountry.hasOrigin(activeCountryTwo) || activeCountry.hasDestination(activeCountryTwo)) {
         noMeaningfulHighlightAvailable = false;
         if (activeCountry.hasOrigin(hoverCountry)) {
-          highlightedFlow = migrationFlows.get(new MigrationRelation(activeCountryTwo, activeCountry));
-        } else {
-          highlightedFlow = migrationFlows.get(new MigrationRelation(activeCountry, activeCountryTwo));
+          highlightedFlowA = migrationFlows.get(new MigrationRelation(activeCountryTwo, activeCountry));
+        } 
+        if (activeCountry.hasDestination(hoverCountry)) {
+          highlightedFlowB = migrationFlows.get(new MigrationRelation(activeCountry, activeCountryTwo));
         }
       }
       break;
@@ -386,9 +390,10 @@ void displayFlows(PGraphics pg) {
       if (activeCountry.hasOrigin(hoverCountry) || activeCountry.hasDestination(hoverCountry)) {
         noMeaningfulHighlightAvailable = false;
         if (activeCountry.hasOrigin(hoverCountry)) {
-          highlightedFlow = migrationFlows.get(new MigrationRelation(hoverCountry, activeCountry));
-        } else {
-          highlightedFlow = migrationFlows.get(new MigrationRelation(activeCountry, hoverCountry));
+          highlightedFlowA = migrationFlows.get(new MigrationRelation(hoverCountry, activeCountry));
+        } 
+        if (activeCountry.hasDestination(hoverCountry)) {
+          highlightedFlowB = migrationFlows.get(new MigrationRelation(activeCountry, hoverCountry));
         }
       }
       break;
@@ -421,7 +426,13 @@ void displayFlows(PGraphics pg) {
       pg.endShape();
     }
   } else {
-      highlightedFlow.displayWithInfo(canvas);
+    updateLayouts(new ArrayList<MigrationFlow>(Arrays.asList(highlightedFlowA, highlightedFlowB)));
+    if (highlightedFlowA != null) {
+      highlightedFlowA.displayWithInfo(canvas);
+    }
+    if (highlightedFlowB != null) {
+      highlightedFlowB.displayWithInfo(canvas);
+    }
   }
 }
 
@@ -458,7 +469,7 @@ void stash() {
    }
    }
    }
-
+   
    highlightedFlow.displayAsTop(pg, activeCountry, 2);
    } else if (currentShowMode == GS_SHOW_TOP_THREE ) {
    if (activeCountry == null) {
@@ -479,7 +490,7 @@ void stash() {
    mf.displayAsTop(pg, activeCountry, count);
    count++;
    }
-
+   
    i++;
    }
    }

@@ -105,7 +105,7 @@ void loadData(boolean verbose) {
       }
     }
   }
-  
+
   for (TableRow tr : flowData.rows()) {
     String originLookupName = tr.getString("from");
     String destinationLookupName = tr.getString("to");
@@ -146,6 +146,32 @@ void loadData(boolean verbose) {
     mf.myFlowNorm = mf.getNormFlowLog(currentYear);
   }
   */
+
+  //clean-up in order to remove ambiguity
+  /*
+  HashMap<MigrationRelation, MigrationFlow> tempFlows = new HashMap<MigrationRelation, MigrationFlow>();
+  for (MigrationRelation mr : migrationFlows.keySet()) {
+    MigrationFlow mf = migrationFlows.get(mr);
+    MigrationRelation mrInverse = new MigrationRelation(mr.destination, mr.origin);
+    MigrationFlow mfInverse = migrationFlows.get(mrInverse);
+    if (mfInverse != null) {
+      for (int y = YEAR_START; y <= YEAR_END; y++) {
+        Long flow = mf.getFlow(y);
+        Long flowInverse = mfInverse.getFlow(y);
+        Long delta = flow - flowInverse;
+        if (flow > 0 && flowInverse > 0) {
+          println(mr.origin, mr.destination, y, flow, flowInverse);
+        }
+        if (delta >= 0) {
+          mf.updateFlow(y, delta);
+          mfInverse.updateFlow(y, 0L);
+        } else {
+          mfInverse.updateFlow(y, -delta);
+          mf.updateFlow (y, 0L);
+        }
+      }
+    }
+  }*/
 }
 
 
@@ -186,7 +212,7 @@ ArrayList<MigrationFlow> getTopThree(Country theReferenceCountry) {
       }
     }
   }
-  
+
   result.add(firstCountry);
   result.add(secondCountry);
   result.add(thirdCountry);

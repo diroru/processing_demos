@@ -73,6 +73,33 @@ class LayoutInfo {
   }
 }
 
+void updateLayouts(ArrayList<MigrationFlow> highlightedFlows) {
+  ArrayList<FormattedText> ft = new ArrayList<FormattedText>();
+  for (int i = 0; i < highlightedFlows.size(); i++) {
+    try {
+      MigrationFlow mf = highlightedFlows.get(i);
+      if (mf != null) {
+        mf.myLayoutMode = LAYOUT_ABOVE_MIDDLE_LEFT;
+        ft.add(mf.getFormattedText(i));
+      }
+    } 
+    catch (Exception e) {
+    }
+  }
+
+  LayoutInfo li = new LayoutInfo(flowLayout.x, flowLayout.y, flowLayout.w, flowLayout.h);
+  boolean layoutResolved = resolveLayout(ft, li);
+
+  for (int i = 0; i < topThreeFlows.size(); i++) {
+    //println(topThreeFlows.get(i).myLayoutMode, "->", ft.get(i).myLayoutMode);
+    try {
+      highlightedFlows.get(i).myLayoutMode = ft.get(i).myLayoutMode;
+    } 
+    catch (Exception e) {
+    }
+  }
+}
+
 void updateTopThreeLayouts(ArrayList<MigrationFlow> topThreeFlows) {
   ArrayList<FormattedText> ft = new ArrayList<FormattedText>();
   for (int i = 0; i < topThreeFlows.size(); i++) {

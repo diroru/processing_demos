@@ -37,13 +37,17 @@ class MigrationFlow {
     //TODO: do error checking here?
     Long existingFlow = flowsByYear.get(theYear);
     if (existingFlow == null) {
-      flowsByYear.put(theYear, theFlow);
-      flowsByYearNormLog.put(theYear, calcNormFlow(this, theFlow, false));
-      flowsByYearNormLinear.put(theYear, calcNormFlow(this, theFlow, true));
+      updateFlow(theYear, theFlow);
       //addHeight(theYear, theFlow);
     } else {
       println("flow already exists", theYear, " : ", existingFlow, theFlow);
     }
+  }
+
+  void updateFlow(int theYear, Long theFlow) {
+    flowsByYear.put(theYear, theFlow);
+    flowsByYearNormLog.put(theYear, calcNormFlow(this, theFlow, false));
+    flowsByYearNormLinear.put(theYear, calcNormFlow(this, theFlow, true));
   }
 
   Long getFlow(int theYear) {

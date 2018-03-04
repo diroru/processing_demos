@@ -173,11 +173,14 @@ PVector mapMouse(PGraphics target, int mx, int my) {
 }
 
 void displayMouse() {
+  canvas.pushMatrix();
+  canvas.translate(0,0,20);
   canvas.ellipseMode(RADIUS);
   canvas.fill(SECONDARY, 170);
   canvas.noStroke();
   canvas.ellipse(mappedMouse.x, mappedMouse.y, 5, 5);
-  canvas.ellipse(mappedMouse.x + canvas.width, mappedMouse.y, 10, 5);
+  canvas.ellipse(mappedMouse.x + canvas.width, mappedMouse.y, 5, 5);
+  canvas.popMatrix();
 }
 
 void setCurrentYear(int theNewYear) {

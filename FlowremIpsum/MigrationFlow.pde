@@ -10,6 +10,8 @@ class MigrationFlow {
   float myMargin0 = 10;
   float myMargin1 = 5;
   float myReferenceHeight = 0f;
+  float myDefaultRounding = 10f;
+  float myYExtra = 20;
 
   LayoutInfo myLayout;
   boolean _hover;
@@ -146,7 +148,7 @@ class MigrationFlow {
 
   void displayNormal(PGraphics pg) {
     float theAlpha =  map(myFlowNorm(currentScaleMode), 0, 1, 0, 255) * FLOW_ALPHA_FACTOR;
-    drawLine(pg, WHITE, theAlpha);
+    drawLine(pg, WHITE, theAlpha, 0);
   }
 
   float myHeight() {
@@ -154,25 +156,24 @@ class MigrationFlow {
   }
 
   void drawLine(PGraphics pg) {
-    drawLine(pg, WHITE, 255);
+    drawLine(pg, WHITE, 255, 0);
   }
 
-  void drawLine(PGraphics pg, color theColor, float theAlpha) {
+  void drawLine(PGraphics pg, color theColor, float theAlpha, float yExtra) {
     float x0 = min(myRelation.origin.cx(), myRelation.destination.cx());
     float x1 = max(myRelation.origin.cx(), myRelation.destination.cx());
-    float y0 = myLayout.y + myLayout.h;
+    float y0 = myLayout.y + myLayout.h + yExtra;
     float y1 = myLayout.y + myLayout.h - myHeight();
-    drawRoundedLine(pg, x0, x1, y0, y1, 10, theColor, theAlpha); //last number is amount of roundness
+    drawRoundedLine(pg, x0, x1, y0, y1, myDefaultRounding, theColor, theAlpha); //last number is amount of roundness
     if (myHeight() > myLayout.h) {
       //println(this, flowsByYear.get(currentYear), myFlowNorm(currentScaleMode));
     }
   }
 
   void displayHighlighted(PGraphics pg, Country activeCountry) {
-
     if (originEquals(activeCountry) || destinationEquals(activeCountry)) {
       color c = originEquals(activeCountry) ? SECONDARY : PRIMARY;
-      drawLine(pg, c, 255);
+      drawLine(pg, c, 255, myYExtra);
     }
   }
 
@@ -180,7 +181,7 @@ class MigrationFlow {
     float yTop = myLayout.y + myLayout.h - myHeight();
     color c = PRIMARY;
     pg.beginShape(POLYGON);
-    drawLine(pg, c, 255);
+    drawLine(pg, c, 255, 10);
     pg.endShape();
     pg.textFont(THIRDNUMBER);
 
@@ -211,7 +212,7 @@ class MigrationFlow {
     //int flow = floor(getFlow(currentYear));
     pg.beginShape(POLYGON);
     pg.stroke(c);
-    drawLine(pg, c, 127);
+    drawLine(pg, c, 127, myYExtra);
     pg.endShape();
     myReferenceHeight = SECONDNUMBER.getDefaultSize() + myMargin0*0.5;
     displayText(pg, c, 1);
@@ -318,7 +319,7 @@ class MigrationFlow {
     }
     pg.beginShape(POLYGON);
     pg.stroke(c);
-    drawLine(pg, c, 127);
+    drawLine(pg, c, 127, myYExtra);
     //drawRoundedLine(pg, origin.cx(), origin.cy(), origin.cx(), yTop, destination.cx(), yTop, destination.cx(), destination.cy(), 10, c, 127); //last number is amount of roundness
     pg.endShape();
     displayText(pg, c, no);

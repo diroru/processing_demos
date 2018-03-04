@@ -218,8 +218,6 @@ void setup() {
 
   setCurrentYear(2013);
   initGUI();
-
-  noCursor();
 }
 
 void draw() {
@@ -434,87 +432,6 @@ void displayFlows(PGraphics pg) {
       highlightedFlowB.displayWithInfo(canvas);
     }
   }
-}
-
-void stash() {
-
-  //MigrationFlow highlightedFlow = getHighlightedMigrationFlow(activeCountry, hoverCountry);
-  /*
-  for (MigrationFlow mf : migrationFlows.values()) {
-   if (mf.getNormFlowLog(currentYear) > MIGRATION_FLOW_LOWER_LIMIT / MIGRATION_FLOW_MAX) {
-   pg.beginShape(POLYGON);
-   mf.displayNormal(pg);
-   pg.endShape();
-   }
-   }
-   */
-  /*
-  if (hoverMigrationFlow != null) {
-   for (MigrationFlow mf : migrationFlows.values()) {
-   if (flowIsShowable(mf) && !mf.equals(highlightedFlow)) {
-   pg.beginShape(POLYGON);
-   mf.displayNormal(pg);
-   pg.endShape();
-   }
-   }
-   hoverMigrationFlow.displayHover(pg);
-   } else if (highlightedFlow != null) {
-   for (MigrationFlow mf : migrationFlows.values()) {
-   if (flowIsShowable(mf) && !mf.equals(highlightedFlow)) {
-   //mf.display(pg, height/2, MARGIN);
-   if (mf.destinationEquals(activeCountry) || mf.originEquals(activeCountry)) {
-   pg.beginShape(POLYGON);
-   mf.displayNormal(pg);
-   pg.endShape();
-   }
-   }
-   }
-   
-   highlightedFlow.displayAsTop(pg, activeCountry, 2);
-   } else if (currentShowMode == GS_SHOW_TOP_THREE ) {
-   if (activeCountry == null) {
-  /*
-   for (int i = 0; i < min(3, migrationFlows.size()); i++) {
-   MigrationFlow mf = migrationFlows.get(i);
-   mf.displayAsTop(pg, hoverCountry, i);
-   }
-   */
-  /*
-    } else {
-   int count = 0;
-   int i = 0;
-   while (count < 3 && i < migrationFlows.size()) {
-   //MigrationFlow mf = migrationFlows.values().get(i);
-  /*
-   if (mf.isActive(activeCountry)) {
-   mf.displayAsTop(pg, activeCountry, count);
-   count++;
-   }
-   
-   i++;
-   }
-   }
-   } else {
-   if (activeCountry == null) {
-   for (MigrationFlow mf : migrationFlows.values()) {
-   if (flowIsShowable(mf)) {
-   //mf.display(pg, height/2, MARGIN);
-   pg.beginShape(POLYGON);
-   mf.displayNormal(pg);
-   pg.endShape();
-   }
-   }
-   } else {
-   for (MigrationFlow mf : migrationFlows.values()) {
-   //mf.display(pg, height/2, MARGIN);
-   if (flowIsShowable(mf)) {
-   pg.beginShape(POLYGON);
-   mf.displayHighlighted(pg, activeCountry);
-   pg.endShape();
-   }
-   }
-   }
-   }*/
 }
 
 boolean flowIsShowable(MigrationFlow mf) {

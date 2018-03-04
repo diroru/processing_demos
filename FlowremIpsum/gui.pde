@@ -1,5 +1,15 @@
 boolean drawGUI = false;
 
+int CONE_BOTTOM_MIN = -1000;
+int CONE_BOTTOM_MAX = 1000;
+int CONE_HEIGHT_MIN = 0;
+int CONE_HEIGHT_MAX = 1000;
+int CONE_RADIUS_TOP_MIN = 0;
+int CONE_RADIUS_TOP_MAX = 1000;
+int CONE_RADIUS_BOTTOM_MIN = 0;
+int CONE_RADIUS_BOTTOM_MAX = 1000;
+
+
 void initGUI() {
   cp5 = new ControlP5(this);
   //Button b = cp5.addButton("toggleBox", 1, 20, 20, 100, 20);
@@ -15,13 +25,13 @@ void initGUI() {
   //cp5.addButton("button", 10, 100, 60, 80, 20).setId(1);
   //cp5.addButton("buttonValue", 4, 100, 90, 80, 20).setId(2);
 
-  cp5.addSlider("coneBottom", -300, 300).setValue(CONE_BOTTOM).setHeight(h).setWidth(w).setPosition(margin, y0);
+  cp5.addSlider("coneBottom", CONE_BOTTOM_MIN, CONE_BOTTOM_MAX).setValue(CONE_BOTTOM).setHeight(h).setWidth(w).setPosition(margin, y0);
   y0 += h + padding;
-  cp5.addSlider("coneHeight", 0, 1000).setValue(CONE_HEIGHT).setHeight(h).setWidth(w).setPosition(margin, y0);
+  cp5.addSlider("coneHeight", CONE_HEIGHT_MIN, CONE_HEIGHT_MAX).setValue(CONE_HEIGHT).setHeight(h).setWidth(w).setPosition(margin, y0);
   y0 += h + padding;
-  cp5.addSlider("coneRadiusTop", 0, 1000).setValue(CONE_RADIUS_TOP).setHeight(h).setWidth(w).setPosition(margin, y0);
+  cp5.addSlider("coneRadiusTop", CONE_RADIUS_TOP_MIN, CONE_RADIUS_TOP_MAX).setValue(CONE_RADIUS_TOP).setHeight(h).setWidth(w).setPosition(margin, y0);
   y0 += h + padding;
-  cp5.addSlider("coneRadiusBottom", 0, 1000).setValue(CONE_RADIUS_BOTTOM).setHeight(h).setWidth(w).setPosition(margin, y0);
+  cp5.addSlider("coneRadiusBottom", CONE_RADIUS_BOTTOM_MIN, CONE_RADIUS_BOTTOM_MAX).setValue(CONE_RADIUS_BOTTOM).setHeight(h).setWidth(w).setPosition(margin, y0);
   y0 += h + padding;
   cp5.addSlider("aperture", 0, 360).setValue(APERTURE).setHeight(h).setWidth(w).setPosition(margin, y0);
   y0 += h + padding;
@@ -60,6 +70,9 @@ void drawGUI() {
   camera();
   if (drawGUI) {
     cp5.draw();
-  } 
+    cursor();
+  } else {
+    noCursor();
+  }
   hint(ENABLE_DEPTH_TEST);
 }

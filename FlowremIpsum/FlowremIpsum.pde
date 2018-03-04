@@ -1,6 +1,6 @@
-import de.looksgood.ani.*; //<>// //<>// //<>// //<>// //<>//
+import de.looksgood.ani.*; //<>// //<>// //<>// //<>// //<>// //<>//
 import de.looksgood.ani.easing.*;
-import java.util.*; //<>// //<>//
+import java.util.*; //<>//
 //import java.awt.event.*;
 //import javax.swing.event.*;
 //import java.awt.event.*;
@@ -377,7 +377,9 @@ void displayFlows(PGraphics pg) {
     }
     break;
   case GS_SHOW_TOP_THREE:
-    updateTopThreeLayouts(topThreeFlows);
+    if (layoutNeedsUpdate) {
+      updateTopThreeLayouts(topThreeFlows);
+    }
     for (int i =0; i < topThreeFlows.size(); i++) {
       MigrationFlow mf = topThreeFlows.get(i);
       try {
@@ -388,6 +390,7 @@ void displayFlows(PGraphics pg) {
       catch (Exception e) {
         e.printStackTrace();
       }
+      layoutNeedsUpdate = false;
     }
     break;
   }

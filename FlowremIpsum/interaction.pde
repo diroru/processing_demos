@@ -187,6 +187,8 @@ void setCurrentYear(int theNewYear) {
 }
 
 void mouseMoved() {
+  layoutNeedsUpdate = true;
+  
   mappedMouse = mappedMouse(CURRENT_MODE);
 
   hoverCountry = null;
@@ -309,6 +311,7 @@ void mouseMoved() {
 
 void mousePressed() {
   //check if interacting with UI
+  layoutNeedsUpdate = true;
   boolean guiInteraction = false;
   for (RadioButtonGroup rbg : radio) {
     for (RadioButton rb : rbg.buttons) {

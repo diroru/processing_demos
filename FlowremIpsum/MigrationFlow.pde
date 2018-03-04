@@ -5,9 +5,10 @@ class MigrationFlow {
   HashMap<Integer, Float> flowsByYearNormLinear = new HashMap<Integer, Float>(); //logscaled!
   //HashMap<Integer, Float> heightsByYearLog = new HashMap<Integer, Float>();
   //HashMap<Integer, Float> heightsByYearLinear = new HashMap<Integer, Float>();
-  int myLayoutMode = LAYOUT_ABOVE_MIDDLE;
+  int myLayoutMode = LAYOUT_ABOVE_MIDDLE_LEFT;
   float myPadding = 10;
-  float myMargin = 20;
+  float myMargin0 = 10;
+  float myMargin1 = 5;
   float myReferenceHeight = 0f;
 
   LayoutInfo myLayout;
@@ -107,15 +108,17 @@ class MigrationFlow {
       f0 = SECONDNUMBER;
       break;
     }
-    String s1 = "People moved from " + origin().name + " to " + destination().name;
+    String s1 = "People moved from " + origin().name;
     PFont f1 = INFOHEADLINE;
+    String s2 = " to " + destination().name;
+    PFont f2 = INFOHEADLINE;
 
     float yTop =  myLayout.y + myLayout.h - myHeight();
     PVector origin = new PVector(min(origin().cx(), destination().cx()), yTop);
     float theReferenceWidth = abs(origin().cx() -  destination().cx());
-    myReferenceHeight = f0.getDefaultSize() + myMargin;
-    
-    FormattedText result = new FormattedText(new ArrayList<String>(Arrays.asList(s0, s1)), new ArrayList<PFont>(Arrays.asList(f0, f1)), new ArrayList<Float>(Arrays.asList(myMargin, myMargin)), origin, theReferenceWidth, myReferenceHeight, LAYOUT_ABOVE_MIDDLE, myPadding);
+    myReferenceHeight = f0.getDefaultSize() + myMargin0*0.5;
+
+    FormattedText result = new FormattedText(new ArrayList<String>(Arrays.asList(s0, s1, s2)), new ArrayList<PFont>(Arrays.asList(f0, f1, f2)), new ArrayList<Float>(Arrays.asList(myMargin0, myMargin1, myMargin1)), origin, theReferenceWidth, myReferenceHeight, LAYOUT_ABOVE_MIDDLE_LEFT, myPadding);
     return result;
   }
 
@@ -254,14 +257,23 @@ class MigrationFlow {
     float x = x0 + myPadding;
     float y = yTop + myPadding;
     float myReferenceWidth = x1 - x0;
-    
+
     switch(myLayoutMode) {
-    case LAYOUT_ABOVE_MIDDLE:
+    case LAYOUT_ABOVE_MIDDLE_LEFT:
       pg.textAlign(LEFT, TOP);
       y -= myReferenceHeight;
       break;
-    case LAYOUT_BELOW_MIDDLE:
+    case LAYOUT_BELOW_MIDDLE_LEFT:
       pg.textAlign(LEFT, TOP);
+      break;
+    case LAYOUT_ABOVE_MIDDLE_RIGHT:
+      pg.textAlign(RIGHT, TOP);
+      y -= myReferenceHeight;
+      x += myReferenceWidth - 2 * myPadding;
+      break;
+    case LAYOUT_BELOW_MIDDLE_RIGHT:
+      pg.textAlign(RIGHT, TOP);
+      x += myReferenceWidth - 2 * myPadding;
       break;
     case LAYOUT_BELOW_LEFT:
       pg.textAlign(RIGHT, TOP);
@@ -282,15 +294,16 @@ class MigrationFlow {
       x += myReferenceWidth;
       break;
     }
-    
+
     pg.pushMatrix();
     pg.translate(0, 0, 10);
     pg.fill(WHITE);
     pg.noStroke();
-    pg.text(flow + "", x,y);
+    pg.text(flow + "", x, y);
     pg.fill(c);
     pg.textFont(INFOHEADLINE);
-    pg.text("People moved from " + origin().name + " to " + destination().name, x, y + myReferenceHeight - myMargin * 0.5);
+    pg.text("People moved from " + origin().name, x, y + myReferenceHeight);
+    pg.text("to " + destination().name, x, y + myReferenceHeight + INFOHEADLINE.getDefaultSize() + myMargin1);
     pg.popMatrix();
   }
 

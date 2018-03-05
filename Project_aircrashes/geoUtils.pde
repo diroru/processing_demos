@@ -1,66 +1,47 @@
-float[] getProjectionParams(Datum d) {
-  return getProjectionParams(radians(d.depLatLng[0]), radians(d.depLatLng[1]), radians(d.dstLatLng[0]), radians(d.dstLatLng[1]), TARGET_SIZE);
-}
-
-
 float[] getProjectionParams(PVector latLon0, PVector latLon1,  float targetSize) {
-  return getProjectionParams(latLon0.x, latLon0.y, latLon1.x, latLon1.y, targetSize);
+  return getProjectionParams(latLon0.x, latLon0.y, latLon1.x, latLon1.y, targetSize, ORIENTATION_TRAJECTORY);
 }
 
-float[] getProjectionParams(float lat0, float lon0, float lat1, float lon1, float targetSize) {
+float[] getProjectionParams(float lat0, float lon0, float lat1, float lon1, float targetSize, float theTrajectoryOrientation) {
   PVector midpointLatLon = getMidpoint(lat0, lon0, lat1, lon1);
   float theDeltaLat = HALF_PI + midpointLatLon.x;
   float theDeltaLon = -PI + midpointLatLon.y;
-  PVector startXY = getGeodeticPoint(lat0, lon0, theDeltaLat, theDeltaLon, 1);
-  PVector endXY = getGeodeticPoint(lat1, lon1, theDeltaLat, theDeltaLon, 1);
+  PVector startXY = getGeodeticPoint(lat0, lon0, theDeltaLat, theDeltaLon, 0, 1);
+  PVector endXY = getGeodeticPoint(lat1, lon1, theDeltaLat, theDeltaLon, 0, 1);
   float currentSize = PVector.dist(startXY, endXY);
   float theSize = currentSize/targetSize;
+  float theDeltaLonPost = HALF_PI - atan2(startXY.y - endXY.y, startXY.x - endXY.x) + theTrajectoryOrientation;
   /*
   println("****");
   println(degrees(lat0), " > ", degrees(ll.x), " > ", degrees(lat1));
   println(degrees(lon0), " > ", degrees(ll.y), " > ", degrees(lon1));
   println("****");
   */
-  if (Float.isNaN(theDeltaLat) || Float.isNaN(theDeltaLon)) {
+  if (Float.isNaN(theDeltaLat) || Float.isNaN(theDeltaLon) || Float.isNaN(theDeltaLonPost) || Float.isNaN(theSize)) {
     theDeltaLat = 0f;
     theDeltaLon = 0f;
-    mapScale = 2.5;
+    theDeltaLonPost = theTrajectoryOrientation;
+    theSize = 2.5;
   }
-  return new float[]{theDeltaLat, theDeltaLon, theSize};
+  return new float[]{theDeltaLat, theDeltaLon, theDeltaLonPost, theSize};
 }
 
 PVector getMidpoint(float lat0, float lon0, float lat1, float lon1) {
   PVector startXYZ = latLonToXYZ_basic(lat0, lon0);
   PVector endXYZ = latLonToXYZ_basic(lat1, lon1);
+  //PVector startXYZ = latLonToXYZ(lat0, lon0, 0, 0, 0);
+  //PVector endXYZ = latLonToXYZ(lat1, lon1, 0, 0, 0);
   PVector midpointXYZ = sphericInterpolation(startXYZ, endXYZ, 0.5);
   return xyzToLatLon(midpointXYZ);
 }
 
 ArrayList<PVector> getGeodetic(float lat0, float lon0, float lat1, float lon1) {
-  return getGeodetic(lat0, lon0, lat1, lon1, deltaLat, deltaLon, mapScale, 64);
+  return getGeodetic(lat0, lon0, lat1, lon1, deltaLat, deltaLon, deltaLonPost, mapScale, 64);
 }
 
-void drawGeodetic(PVector latLon0, PVector latLon1) {
-  drawGeodetic(latLon0.x, latLon0.y, latLon1.x, latLon1.y, deltaLat, deltaLon, mapScale, 64);
-}
-
-
-void drawGeodetic(float lat0, float lon0, float lat1, float lon1) {
-  drawGeodetic(lat0, lon0, lat1, lon1, deltaLat, deltaLon, mapScale, 64);
-}
-
-void drawGeodetic(float lat0, float lon0, float lat1, float lon1, float deltaLat, float deltaLon, float scale, int resolution) {
-  ArrayList<PVector> gs = getGeodetic(lat0, lon0, lat1, lon1, deltaLat, deltaLon, scale, resolution);
-  beginShape();
-  for (PVector v : gs) {
-    vertex(v.x, v.y);
-  }
-  endShape();
-}
-
-ArrayList<PVector> getGeodetic(float lat0, float lon0, float lat1, float lon1, float deltaLat, float deltaLon, float scale, int resolution) {
-  PVector startXYZ = latLonToXYZ(lat0, lon0, deltaLat, deltaLon);
-  PVector endXYZ = latLonToXYZ(lat1, lon1, deltaLat, deltaLon);
+ArrayList<PVector> getGeodetic(float lat0, float lon0, float lat1, float lon1, float deltaLat, float deltaLon, float deltaLonPost, float scale, int resolution) {
+  PVector startXYZ = latLonToXYZ(lat0, lon0, deltaLat, deltaLon, deltaLonPost);
+  PVector endXYZ = latLonToXYZ(lat1, lon1, deltaLat, deltaLon, deltaLonPost);
   ArrayList<PVector> result = new ArrayList<PVector>();
   result.add(getGeodeticPoint(startXYZ, scale));
   for (int i = 1; i < resolution; i++) {
@@ -71,17 +52,13 @@ ArrayList<PVector> getGeodetic(float lat0, float lon0, float lat1, float lon1, f
   return result;
 }
 
-PVector getGeodeticPoint(PVector latLon) {
-  return getGeodeticPoint(latLon.x, latLon.y);
-}
-
 PVector getGeodeticPoint(float lat, float lon) {
-  return getGeodeticPoint(lat, lon, deltaLat, deltaLon, mapScale);
+  return getGeodeticPoint(lat, lon, deltaLat, deltaLon, deltaLonPost, mapScale);
 }
 
 //in radians!!!
-PVector getGeodeticPoint(float lat, float lon, float deltaLat, float deltaLon, float scale) {
-  PVector xyz = latLonToXYZ(lat, lon, deltaLat, deltaLon);
+PVector getGeodeticPoint(float lat, float lon, float deltaLat, float deltaLon, float deltaLonPost, float scale) {
+  PVector xyz = latLonToXYZ(lat, lon, deltaLat, deltaLon, deltaLonPost);
   return getGeodeticPoint(xyz, scale);
 }
 
@@ -121,18 +98,18 @@ PVector rotateAroundAxis(PVector v, PVector axis, float theta) {
 }
 
 PVector xyzToLatLon(PVector xyz) {
-  //float lat = asin(xyz.z);
-  xyz.normalize();
-  float lat = atan2(xyz.z, sqrt(xyz.y * xyz.y + xyz.x * xyz.x));
+  //xyz.normalize();
+  //float lat = atan2(xyz.z, sqrt(xyz.y * xyz.y + xyz.x * xyz.x));
+  float lat = asin(xyz.z);
   float lon = atan2(xyz.y, xyz.x);
   return new PVector(lat, lon);
 }
 
 PVector latLonToXYZ(float lat, float lon) {
-  return latLonToXYZ(lat, lon, 0f, 0f);
+  return latLonToXYZ(lat, lon, 0f, 0f, 0f);
 }
 
-PVector latLonToXYZ(float lat, float lon, float deltaLat, float deltaLon) {
+PVector latLonToXYZ(float lat, float lon, float deltaLat, float deltaLon, float deltaLonPost) {
   float x = cos(lon) * cos(lat);
   float y = sin(lon) * cos(lat);
   float z = sin(lat);
@@ -140,7 +117,7 @@ PVector latLonToXYZ(float lat, float lon, float deltaLat, float deltaLon) {
   PVector result = new PVector(x,y,z);
   result = rotateZ(result, deltaLon); //"hack" for glsl
   result = rotateY(result, -deltaLat); //"hack" for glsl
-  result = rotateZ(result, -deltaLon); //"hack" for glsl
+  result = rotateZ(result, -deltaLon - deltaLonPost); //"hack" for glsl
   return result;
 }
 
@@ -174,10 +151,39 @@ PVector rotateX(PVector v, float theta) {
   return new PVector(x,y,z);
 }
 
+
+////////////////
+
+float[] getProjectionParams(Datum d) {
+  return getProjectionParams(radians(d.depLatLng[0]), radians(d.depLatLng[1]), radians(d.dstLatLng[0]), radians(d.dstLatLng[1]), TARGET_SIZE, ORIENTATION_TRAJECTORY);
+}
+
+void drawGeodetic(PVector latLon0, PVector latLon1) {
+  drawGeodetic(latLon0.x, latLon0.y, latLon1.x, latLon1.y, deltaLat, deltaLon, deltaLonPost, mapScale, 64);
+}
+ 
+
+void drawGeodetic(float lat0, float lon0, float lat1, float lon1) {
+  drawGeodetic(lat0, lon0, lat1, lon1, deltaLat, deltaLon, deltaLonPost, mapScale, 64);
+}
+
+void drawGeodetic(float lat0, float lon0, float lat1, float lon1, float deltaLat, float deltaLon, float deltaLonPost, float scale, int resolution) {
+  ArrayList<PVector> gs = getGeodetic(lat0, lon0, lat1, lon1, deltaLat, deltaLon, deltaLonPost, scale, resolution);
+  beginShape();
+  for (PVector v : gs) {
+    vertex(v.x, v.y);
+  }
+  endShape();
+}
+
+PVector getGeodeticPoint(PVector latLon) {
+  return getGeodeticPoint(latLon.x, latLon.y);
+}
+
 PVector getLatLonAtNormDist(PVector latLng0, PVector latLng1, float norm) {
   return getLatLonAtNormDist(latLng0.x, latLng0.y, latLng1.x, latLng1.y, norm);
 }
- 
+
 PVector getLatLonAtNormDist(float lat0, float lon0, float lat1, float lon1, float norm) {
   //PVector v0 = latLonToXYZ(lat0, lng0, deltaLat, deltaLon);
   //PVector v1 = latLonToXYZ(lat1, lng1, deltaLat, deltaLon);
@@ -198,7 +204,7 @@ void drawDashedGeodetic(PVector latLng0, PVector latLng1, int res, float dashLen
 
 void drawDashedGeodetic(float lat0, float lng0, float lat1, float lng1, int res, float dashLength, float gapLength) {
   //drawGeodetic(lat0, lng0, lat1, lng1);
-  
+
   ArrayList<PVector> gs = getGeodetic(lat0, lng0, lat1, lng1);
   boolean dash = true;
   boolean gap = false;
@@ -225,10 +231,10 @@ void drawDashedGeodetic(float lat0, float lng0, float lat1, float lng1, int res,
         gap = false;
         dash = true;
       }
-    }    
+    }
 
     v0 = v.copy();
   }
   endShape();
-  
+
 }

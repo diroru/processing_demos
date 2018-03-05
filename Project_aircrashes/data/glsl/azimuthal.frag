@@ -7,6 +7,7 @@ precision highp int;
 uniform sampler2D mapTexture;
 uniform float deltaLat;
 uniform float deltaLon;
+uniform float deltaLonPost;
 uniform float scale;
 
 varying vec2 vertTexCoord;
@@ -114,9 +115,10 @@ void main() {
   float z = sin(lat);
   vec3 xyz = vec3(x,y,z);
 
-  xyz = rotateZ(xyz, deltaLon);
+  xyz = rotateZ(xyz, deltaLon + deltaLonPost);
   xyz = rotateY(xyz, deltaLat);
   xyz = rotateZ(xyz, -deltaLon);
+  //xyz = rotateZ(xyz, deltaLonPost);
 
   float lat1 = asin(xyz.z);
   float lon1 = atan(xyz.y, xyz.x);

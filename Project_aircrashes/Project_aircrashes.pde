@@ -29,7 +29,8 @@ float SCALE = 0.76; //0.8125; //map scaling
 
 //float PHI1 = radians(12);
 //float LAMBDA0 = radians(25);
-float ORIENTATION = HALF_PI; 
+float ORIENTATION = 0;
+float ORIENTATION_TRAJECTORY = radians(24);
 
 ArrayList<Datum> data = new ArrayList<Datum>();
 ArrayList<CrashDot> myDots = new ArrayList<CrashDot>();
@@ -58,9 +59,10 @@ CrashFlight activeFlight;
 PShape map, quad;
 PGraphics mapContainer;
 PShader shader;
-float deltaLat = PI, deltaLon = -PI, mapScale = 2.5;
+//float deltaLat = PI, deltaLon = -PI, deltaLonPost = 0f, mapScale = 2.5;
+float deltaLat = 0f, deltaLon = 0f, deltaLonPost = 0f, mapScale = 2.5;
 float TARGET_SIZE;
-float MIN_MAP_SCALE = 0.3;
+float MIN_MAP_SCALE = 0.1;
 
 void setup() {
   //size(1920, 1920, P3D);
@@ -97,15 +99,17 @@ void setup() {
 
 void draw() {
   background(255, 0, 0);
-
-  // pushMatrix();
+  
+  pushMatrix();
   translate(width*0.5, height*0.5);
-  rotate(ORIENTATION);
+  rotate(ORIENTATION);  
   translate(-width*0.5, -height*0.5);
+  
   updateShader();
   shader(shader);
   shape(quad);
-  resetShader();
+  resetShader();  
+
   drawMask(400*scaleFactor);
 
   drawLegend();
@@ -113,7 +117,8 @@ void draw() {
   for (CrashDot cd : myDots) {
     cd.display();
   }
-
+  popMatrix();
+  
   updateState();
 }
 
@@ -267,8 +272,13 @@ void updateState() {
 }
 
 void updateShader() {
+  //deltaLat = 0;
+  //deltaLon = 0;
+  //deltaLonPost = 0;
+  mapScale = 2;
   shader.set("deltaLat", deltaLat);
   shader.set("deltaLon", deltaLon);
+  shader.set("deltaLonPost", deltaLonPost); //TODO: +/-ORIENTATION?
   shader.set("scale", mapScale);
 }
 

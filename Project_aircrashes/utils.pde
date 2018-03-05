@@ -124,17 +124,51 @@ void setActiveFlight(CrashFlight theFlight) {
   activeFlight.pausable = false;
   activeFlight.displayAll = false;
   float[] nextProjecitonParams = getProjectionParams(activeFlight.myDatum);
+  
+  //float nextDeltaLat = (nextProjecitonParams[0] + TWO_PI) % TWO_PI;
+  //float nextDeltaLon = (nextProjecitonParams[1] + TWO_PI) % TWO_PI;
+  //float nextDeltaLonPost = (nextProjecitonParams[2] + TWO_PI) % TWO_PI;
+  float nextDeltaLat = nextProjecitonParams[0];
+  float nextDeltaLon = nextProjecitonParams[1];
+  float nextDeltaLonPost = nextProjecitonParams[2] + HALF_PI;
+  float nextMapScale = max(nextProjecitonParams[3], MIN_MAP_SCALE);
+  
+  
+  float ddlon = nextDeltaLon - deltaLon;
+  //println(degrees(ddlon));
+  while (abs(ddlon) > PI) {
+    ddlon -= signum(ddlon) * TWO_PI;
+    //println(degrees(ddlon));
+  }
   /*
-  deltaLat = nextProjecitonParams[0];
-  deltaLon = nextProjecitonParams[1];
-  mapScale = max(nextProjecitonParams[2], MIN_MAP_SCALE);
+  if (abs(ddlon) > HALF_PI) {
+    ddlon = ddlon - signum(ddlon) * PI;
+    println(degrees(ddlon));
+  }
   */
-  println("animating", degrees(deltaLat), " > ", degrees(nextProjecitonParams[0]));
-  println("animating", degrees(deltaLon), " > ", degrees(nextProjecitonParams[1]));
-  println("animating", mapScale, " > ", max(nextProjecitonParams[2], MIN_MAP_SCALE));
-  println("-----");
-  Ani.to(this, 5.0, "deltaLat", nextProjecitonParams[0]);
-  Ani.to(this, 5.0, "deltaLon", nextProjecitonParams[1]);
-  Ani.to(this, 5.0, "mapScale", max(nextProjecitonParams[2], MIN_MAP_SCALE));
+  //println(degrees(ddlon));
+  
+  nextDeltaLon = deltaLon + ddlon;
+  //println(degrees(nextDeltaLon), degrees(deltaLon), "******");
+  
+  float ddlonp = nextDeltaLonPost - deltaLonPost;
+  while (abs(ddlonp) > PI) {
+    ddlonp -= signum(ddlonp) * PI;
+  }
+  if (abs(ddlonp) > HALF_PI) {
+    ddlonp = ddlonp - signum(ddlonp) * PI;
+  }
 
+  nextDeltaLonPost = deltaLonPost + ddlonp;
+  
+  println("animating delta lat", degrees(deltaLat), " > ", degrees(nextDeltaLat));
+  println("animating delta lon", degrees(deltaLon), " > ", degrees(nextDeltaLon));
+  println("animating delta lon post", degrees(deltaLonPost), " > ", degrees(nextDeltaLonPost));
+  println("animating scale", mapScale, " > ", max(nextProjecitonParams[3], MIN_MAP_SCALE));
+  println(degrees(nextDeltaLon) - degrees(nextDeltaLonPost), degrees(nextDeltaLon) + degrees(nextDeltaLonPost));
+  println("-----");
+  Ani.to(this, 5.0, "deltaLat", nextDeltaLat);
+  Ani.to(this, 5.0, "deltaLon", nextDeltaLon);
+  Ani.to(this, 5.0, "deltaLonPost", nextDeltaLonPost);
+  Ani.to(this, 5.0, "mapScale", max(nextMapScale, MIN_MAP_SCALE));
 }

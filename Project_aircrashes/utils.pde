@@ -161,17 +161,66 @@ void updateSequence(CrashFlight nextFlight) {
   println(degrees(nextDeltaLon) - degrees(nextDeltaLonPost), degrees(nextDeltaLon) + degrees(nextDeltaLonPost));
   println("-----");
   
+  float t = SEEK_DURATION; 
+  float t_half = t/2f;
+  float t_two_thirds = t/3f * 2f;
+  float t_third = t/3f;
+  float dt = t*0.15;
   
-  
-  if (globalAniSequence.isEnded() || !globalAniSequence.isPlaying()) {
+  //if (globalAniSequence.isEnded() || !globalAniSequence.isPlaying()) {
     globalAniSequence = new AniSequence(this);
     globalAniSequence.beginSequence();
-    globalAniSequence.add(Ani.to(this, TIME_BETWEEN_TWO_CRASHES, "TIME", activeFlight.myDatum.normMoment));
+    
+    globalAniSequence.beginStep();
+    //1. animate time, NB callback!
+    globalAniSequence.add(Ani.to(this, t, "TIME", activeFlight.myDatum.normMoment, Ani.LINEAR));
+    //2. zoom out
+    globalAniSequence.add(Ani.to(this, t_third, 0, "mapScale", MAX_MAP_SCALE));
+    //3. rotate
+    globalAniSequence.add(Ani.to(this, t_third + dt*2, t_third - dt,  "deltaLon", nextDeltaLon));
+    globalAniSequence.add(Ani.to(this, t_third + dt*2, t_third - dt, "deltaLonPost", nextDeltaLonPost));
+    globalAniSequence.add(Ani.to(this, t_third + dt*2, t_third - dt, "deltaLat", nextDeltaLat));
+    //4. zoom in
+    globalAniSequence.add(Ani.to(this, t_third, t_two_thirds, "mapScale", nextMapScale));
+    globalAniSequence.endStep();
+    //5. TODO: animate flight
+    globalAniSequence.beginStep();
+    globalAniSequence.add(Ani.to(this, FADE_DURATION, "FADE_TIME", 1));
+    globalAniSequence.endStep();
+    globalAniSequence.beginStep();
+    globalAniSequence.add(Ani.to(this, TRAJECTORY_SHOW_DURATION, "TRAJECTORY_SHOW_TIME", 1));
+    globalAniSequence.endStep();
+    globalAniSequence.beginStep();
+    globalAniSequence.add(Ani.to(this, FADE_DURATION, "CRASH_INFO_SHOW_TIME", 1, Ani.BOUNCE_OUT));
+    globalAniSequence.endStep();
+    globalAniSequence.beginStep();
+    globalAniSequence.add(Ani.to(this, FADE_DURATION, CRASH_INFO_SHOW_DURATION, "FADE_TIME", 0, Ani.getDefaultEasing(), "onEnd:goToNextFlight"));
+    globalAniSequence.endStep();
+
     globalAniSequence.endSequence();
     globalAniSequence.start();
-  } else {
-   println("not ended or is playing");   
+  //} else {
+  // println("not ended or is playing");   
+  //}
+}
+
+void goToNextFlight() {
+  println("foo");
+  switch(currentState) {
+    case STATE_PLAY:
+    TRAJECTORY_SHOW_TIME = 0;
+    CRASH_INFO_SHOW_TIME = 0;
+    activeFlight = getNextFlight(activeFlight);
+    updateSequence(activeFlight);
+    break;
   }
+}
+
+CrashFlight getNextFlight(CrashFlight theActiveFlight) {
+  if (theActiveFlight == null) {
+    return myFlights.get(0);
+  }
+  return theActiveFlight.nextFlight;
 }
 
 
@@ -190,7 +239,7 @@ void setActiveFlightOld(CrashFlight theFlight) {
   float nextDeltaLat = nextProjecitonParams[0];
   float nextDeltaLon = nextProjecitonParams[1];
   float nextDeltaLonPost = nextProjecitonParams[2] + HALF_PI;
-  float nextMapScale = max(nextProjecitonParams[3], MIN_MAP_SCALE);
+  float nextMapScale = constrain(nextProjecitonParams[3], MIN_MAP_SCALE, MAX_MAP_SCALE);
 
 
   float ddlon = nextDeltaLon - deltaLon;

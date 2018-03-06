@@ -74,6 +74,7 @@ void initDots() {
   }
 }
 
+/*
 CrashFlight getFlight(float theTime) {
   for (Datum d : data) {
     if (abs(d.normMoment - theTime) < SEEK_EPSILON) {
@@ -86,6 +87,8 @@ CrashFlight getFlight(float theTime) {
 boolean aboutFlightTime(float time, CrashFlight flight) {
   return abs(flight.myDatum.normMoment - time) < SEEK_EPSILON;
 }
+*/
+
 
 CrashFlight getFlightByDatum(Datum d) {
   for (CrashFlight cf : myFlights) {

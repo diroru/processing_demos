@@ -13,15 +13,14 @@ Table worstData;
 Table unusualData;
 
 Timeline timeline;
-float TIME = 0;
 //float TIME_INC = 0.001; //used to be 0.00007
-float FLIGHT_TIME = 0;
-float FLIGHT_SHOW_TIME = 0;
+//float FLIGHT_TIME = 0;
+//float FLIGHT_SHOW_TIME = 0;
 //float FLIGHT_TIME_INC = 0.003;
-float SEEK_TIME = 1;
-float SEEK_INC = 0.005f;
-float SEEK_EPSILON = 0.001;
-float SEEK_DURATION = 100f;
+//float SEEK_TIME = 1;
+//float SEEK_INC = 0.005f;
+//float SEEK_EPSILON = 0.001;
+//float SEEK_DURATION = 100f;
 float GLOW_DURATION = 0.01;
 int YEAR_START = 1930;
 int YEAR_END = 2015;
@@ -46,7 +45,7 @@ int currentState = STATE_PLAY;
 ArrayList<CrashFlight> myFlights = new ArrayList<CrashFlight>();
 
 color GREEN = #1ce58e;
-color RED = #e81a9a;
+color RED = #e81a9a; 
 
 int MIN_FATALITIES = Integer.MAX_VALUE;
 int MAX_FATALITIES = Integer.MIN_VALUE;
@@ -61,15 +60,21 @@ PShape map, quad;
 PGraphics mapContainer;
 PShader shader;
 //float deltaLat = PI, deltaLon = -PI, deltaLonPost = 0f, mapScale = 2.5;
-float deltaLat = 0f, deltaLon = 0f, deltaLonPost = 0f, mapScale = 2.5;
 float TARGET_SIZE;
 float MIN_MAP_SCALE = 0.1;
+float MAX_MAP_SCALE = 2.5;
+float deltaLat = 0f, deltaLon = 0f, deltaLonPost = 0f, mapScale = MAX_MAP_SCALE;
 
 float SPEED_FACTOR = 1;
-float TIME_BETWEEN_TWO_CRASHES = 2 * SPEED_FACTOR; // in seconds
-float TRAJECTORY_SHOW_TIME = 4 * SPEED_FACTOR; // in seconds
-float CRASH_INFO_SHOW_TIME = 2 * SPEED_FACTOR; // in seconds
-float FADE_TIME = 1 * SPEED_FACTOR; // in seconds
+float SEEK_DURATION = 6 * SPEED_FACTOR; // in seconds
+float TRAJECTORY_SHOW_DURATION = 3 * SPEED_FACTOR; // in seconds
+float CRASH_INFO_SHOW_DURATION = 3 * SPEED_FACTOR; // in seconds
+float FADE_DURATION = 1 * SPEED_FACTOR; // in seconds
+
+float TIME = 0;
+float FADE_TIME = 0;
+float TRAJECTORY_SHOW_TIME = 0;
+float CRASH_INFO_SHOW_TIME = 0;
 
 AniSequence globalAniSequence;
 
@@ -77,7 +82,7 @@ void setup() {
   //size(1920, 1920, P3D);
   size(1000, 1000, P2D);
   Ani.init(this);
-  Ani.setDefaultEasing(Ani.QUART_OUT);
+  Ani.setDefaultEasing(Ani.QUAD_IN_OUT);
   globalAniSequence = new AniSequence(this);
   pixelDensity(displayDensity());
   scaleFactor = width / 1920f;
@@ -102,7 +107,8 @@ void setup() {
   initFlights(timeline);
   //activeFlight = myFlights.get(0);
   //setActiveFlight(myFlights.get(0));
-  updateSequence(myFlights.get(0));
+  //updateSequence(getNextFlight(activeFlight));
+  updateSequence(myFlights.get(20));
   //activeFlight = myFlights.get(49);
   initDots();
   hint(DISABLE_DEPTH_TEST);
@@ -130,13 +136,11 @@ void draw() {
   }
   popMatrix();
   
-  /*
   if (activeFlight != null) {
-    activeFlight.display(FLIGHT_TIME);
+    activeFlight.display();
   }
-  */
-
-  updateState();
+  
+  //updateState();
 }
 
 //just prevents clutter
@@ -252,13 +256,6 @@ void updateState() {
       TIME += TIME_INC;
     }
     */
-    if (globalAniSequence.isEnded()) {
-      if (activeFlight == null) {
-        updateSequence(myFlights.get(0));
-      } else {
-        updateSequence(activeFlight.nextFlight);
-      }
-    }
     break;
   case STATE_SEEK:
     /*

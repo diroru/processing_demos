@@ -21,7 +21,7 @@ float[] getProjectionParams(float lat0, float lon0, float lat1, float lon1, floa
     theDeltaLat = 0f;
     theDeltaLon = 0f;
     theDeltaLonPost = theTrajectoryOrientation;
-    theSize = 2.5;
+    theSize = MAX_MAP_SCALE;
   }
   return new float[]{theDeltaLat, theDeltaLon, theDeltaLonPost, theSize};
 }

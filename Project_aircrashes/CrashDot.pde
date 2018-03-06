@@ -65,7 +65,7 @@ public class CrashDot {  //<>// //<>//
     ellipseMode(RADIUS);
     ellipse(myPos.x, myPos.y, myRadius, myRadius);
     /*
-    if (mouseOver) {
+    if (mouseOver) {  
       fill(255);
       textSize(20);
       drawTangentialText(myDatum.date, mouseX, mouseY);
@@ -89,11 +89,13 @@ public class CrashDot {  //<>// //<>//
       //println("CLICK", e);
       
       if(mouseOver) {
+        /*
         SEEK_TIME = myNormTime;
         SEEK_INC = (SEEK_TIME - TIME) / SEEK_DURATION;
         //SEEK_INC = signum(SEEK_TIME - TIME) * abs(SEEK_INC);
         currentState = STATE_SEEK;
         //setActiveFlight(getFlightByDatum(myDatum));
+        */
       }
       break;
     }

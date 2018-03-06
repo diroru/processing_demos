@@ -10,11 +10,13 @@ class CrashFlight {
   float rOcc, rFat;
   Float progressTime;
   CrashFlight previousFlight = null, nextFlight = null;
+  /*
   boolean finished = false, displayAll = false, pausable = false;
   float myTotalDuration;
   float FADE_IN_TIME = 0.2;
   float FADE_OUT_TIME = 0.2;
   float DISPLAY_TIME = 1.0;
+  */
 
   CrashFlight(Datum d, Timeline tl) {
     myDatum = d;
@@ -37,7 +39,7 @@ class CrashFlight {
       e.printStackTrace();
       progressTime = 0.5;
     }
-    myTotalDuration = FADE_IN_TIME + progressTime + DISPLAY_TIME + FADE_OUT_TIME;
+    //myTotalDuration = FADE_IN_TIME + progressTime + DISPLAY_TIME + FADE_OUT_TIME;
   }
 
   void update(float normTime) {
@@ -48,6 +50,7 @@ class CrashFlight {
     //if (coordsValid && normTime >= myStartMoment && normTime <= myEndMoment) {
 
     //float progress = norm(normTime, myStartMoment, myEndMoment);
+    /*
     float alpha = map(normTime, 0, FADE_IN_TIME, 0, 255);
     if (normTime >= myTotalDuration - FADE_OUT_TIME) {
       alpha = map(normTime, myTotalDuration - FADE_OUT_TIME, myTotalDuration, 255, 0);
@@ -129,6 +132,7 @@ class CrashFlight {
      noStroke();
      }
      */
+     /*
     noStroke();
     fill(GREEN, alpha*0.4);
     ellipse(planePosXY.x, planePosXY.y, rOcc * scaleFactor, rOcc * scaleFactor);
@@ -150,7 +154,7 @@ class CrashFlight {
       //drawTangentialText(new String[]{myDatum.fatalities+ " / ", myDatum.occupants + ""}, new color[]{color(RED), color(GREEN)}, alpha, planePosXY.x, planePosXY.y);
       popStyle();
     }
-
+    */
     //}
   }
 }

@@ -14,9 +14,10 @@ Table unusualData;
 
 Timeline timeline;
 float TIME = 0;
-float TIME_INC = 0.001; //used to be 0.00007
+//float TIME_INC = 0.001; //used to be 0.00007
 float FLIGHT_TIME = 0;
-float FLIGHT_TIME_INC = 0.003;
+float FLIGHT_SHOW_TIME = 0;
+//float FLIGHT_TIME_INC = 0.003;
 float SEEK_TIME = 1;
 float SEEK_INC = 0.005f;
 float SEEK_EPSILON = 0.001;
@@ -40,7 +41,7 @@ final int STATE_DISPLAY_FLIGHT = 1;
 final int STATE_DISPLAY_FLIGHT_THEN_PAUSE = 2;
 final int STATE_PAUSED = 3;
 final int STATE_SEEK = 4;
-int currentState = STATE_PAUSED;
+int currentState = STATE_PLAY;
 
 ArrayList<CrashFlight> myFlights = new ArrayList<CrashFlight>();
 
@@ -64,11 +65,20 @@ float deltaLat = 0f, deltaLon = 0f, deltaLonPost = 0f, mapScale = 2.5;
 float TARGET_SIZE;
 float MIN_MAP_SCALE = 0.1;
 
+float SPEED_FACTOR = 1;
+float TIME_BETWEEN_TWO_CRASHES = 2 * SPEED_FACTOR; // in seconds
+float TRAJECTORY_SHOW_TIME = 4 * SPEED_FACTOR; // in seconds
+float CRASH_INFO_SHOW_TIME = 2 * SPEED_FACTOR; // in seconds
+float FADE_TIME = 1 * SPEED_FACTOR; // in seconds
+
+AniSequence globalAniSequence;
+
 void setup() {
   //size(1920, 1920, P3D);
   size(1000, 1000, P2D);
   Ani.init(this);
   Ani.setDefaultEasing(Ani.QUART_OUT);
+  globalAniSequence = new AniSequence(this);
   pixelDensity(displayDensity());
   scaleFactor = width / 1920f;
   println(scaleFactor);
@@ -91,7 +101,8 @@ void setup() {
   initData(timeline);
   initFlights(timeline);
   //activeFlight = myFlights.get(0);
-  setActiveFlight(myFlights.get(0));
+  //setActiveFlight(myFlights.get(0));
+  updateSequence(myFlights.get(0));
   //activeFlight = myFlights.get(49);
   initDots();
   hint(DISABLE_DEPTH_TEST);
@@ -220,6 +231,7 @@ void drawLegend() {
 void updateState() {
   switch(currentState) {
   case STATE_PLAY:
+    /*
     boolean flightFound = false;
     if (activeFlight == null) {
       int i = 0;
@@ -239,16 +251,27 @@ void updateState() {
     } else {
       TIME += TIME_INC;
     }
+    */
+    if (globalAniSequence.isEnded()) {
+      if (activeFlight == null) {
+        updateSequence(myFlights.get(0));
+      } else {
+        updateSequence(activeFlight.nextFlight);
+      }
+    }
     break;
   case STATE_SEEK:
+    /*
     TIME += SEEK_INC;
     FLIGHT_TIME = 0;
     if (abs(SEEK_TIME - TIME) < SEEK_EPSILON) {
       currentState = STATE_DISPLAY_FLIGHT_THEN_PAUSE;
       println("STATE_SEEK > STATE_DISPLAY_FLIGHT_THEN_PAUSE");
     }
+    */
     break;
   case STATE_DISPLAY_FLIGHT:
+    /*
     FLIGHT_TIME += FLIGHT_TIME_INC;
     activeFlight.display(FLIGHT_TIME);
     if (activeFlight.finished) {
@@ -258,8 +281,10 @@ void updateState() {
       TIME += TIME_INC;
       FLIGHT_TIME = 0;
     }
+    */
     break;
   case STATE_DISPLAY_FLIGHT_THEN_PAUSE:
+    /*
     //TODO: »freeze« display
     FLIGHT_TIME += FLIGHT_TIME_INC;
     activeFlight.display(FLIGHT_TIME);
@@ -268,13 +293,14 @@ void updateState() {
       currentState = STATE_PAUSED;
       println("STATE_DISPLAY_FLIGHT_THEN_PAUSE > STATE_PAUSED");
     }
+    */
     break;
   case STATE_PAUSED:
-    
+    /*
     if (activeFlight != null) {
       activeFlight.display(FLIGHT_TIME);
     }
-    
+    */
     break;
   }
 }

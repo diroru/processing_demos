@@ -54,6 +54,8 @@ void initFlights(Timeline tl) {
     myFlights.add(flight);
     flightsByDatum.put(d, flight);
   }
+  myFlights.get(myFlights.size()-1).nextFlight = myFlights.get(0);
+  myFlights.get(0).previousFlight = myFlights.get(myFlights.size()-1);
 }
 
 void initDots() {

@@ -93,7 +93,7 @@ public class CrashDot {  //<>// //<>//
         SEEK_INC = (SEEK_TIME - TIME) / SEEK_DURATION;
         //SEEK_INC = signum(SEEK_TIME - TIME) * abs(SEEK_INC);
         currentState = STATE_SEEK;
-        setActiveFlight(getFlightByDatum(myDatum));
+        //setActiveFlight(getFlightByDatum(myDatum));
       }
       break;
     }

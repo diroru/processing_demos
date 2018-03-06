@@ -96,11 +96,11 @@ void drawTangentialText(String theText, float x, float y) {
 
 void drawRadialText(String s, PVector p, float angle, float angle2, float radius) {
   pushMatrix();
-  translate(p.x,p.y);
+  translate(p.x, p.y);
   rotate(angle);
-  translate(radius,0);
+  translate(radius, 0);
   rotate(angle2);
-  text(s,0,0);
+  text(s, 0, 0);
   popMatrix();
 }
 
@@ -128,30 +128,22 @@ int signum(float f) {
   return -1;
 }
 
-void setActiveFlight(CrashFlight theFlight) {
-  activeFlight = theFlight;
-  activeFlight.finished = false;
-  activeFlight.pausable = false;
-  activeFlight.displayAll = false;
+void updateSequence(CrashFlight nextFlight) {
+  activeFlight = nextFlight;
   float[] nextProjecitonParams = getProjectionParams(activeFlight.myDatum);
-  
-  //float nextDeltaLat = (nextProjecitonParams[0] + TWO_PI) % TWO_PI;
-  //float nextDeltaLon = (nextProjecitonParams[1] + TWO_PI) % TWO_PI;
-  //float nextDeltaLonPost = (nextProjecitonParams[2] + TWO_PI) % TWO_PI;
+
   float nextDeltaLat = nextProjecitonParams[0];
   float nextDeltaLon = nextProjecitonParams[1];
   float nextDeltaLonPost = nextProjecitonParams[2] + HALF_PI;
   float nextMapScale = max(nextProjecitonParams[3], MIN_MAP_SCALE);
-  
-  
+
   float ddlon = nextDeltaLon - deltaLon;
-  //println(degrees(ddlon));
   while (abs(ddlon) > PI) {
     ddlon -= signum(ddlon) * TWO_PI;
   }
-  
+
   nextDeltaLon = deltaLon + ddlon;
-  
+
   float ddlonp = nextDeltaLonPost - deltaLonPost;
   while (abs(ddlonp) > PI) {
     ddlonp -= signum(ddlonp) * PI;
@@ -161,7 +153,64 @@ void setActiveFlight(CrashFlight theFlight) {
   }
 
   nextDeltaLonPost = deltaLonPost + ddlonp;
+
+  println("animating delta lat", degrees(deltaLat), " > ", degrees(nextDeltaLat));
+  println("animating delta lon", degrees(deltaLon), " > ", degrees(nextDeltaLon));
+  println("animating delta lon post", degrees(deltaLonPost), " > ", degrees(nextDeltaLonPost));
+  println("animating scale", mapScale, " > ", nextMapScale);
+  println(degrees(nextDeltaLon) - degrees(nextDeltaLonPost), degrees(nextDeltaLon) + degrees(nextDeltaLonPost));
+  println("-----");
   
+  
+  
+  if (globalAniSequence.isEnded() || !globalAniSequence.isPlaying()) {
+    globalAniSequence = new AniSequence(this);
+    globalAniSequence.beginSequence();
+    globalAniSequence.add(Ani.to(this, TIME_BETWEEN_TWO_CRASHES, "TIME", activeFlight.myDatum.normMoment));
+    globalAniSequence.endSequence();
+    globalAniSequence.start();
+  } else {
+   println("not ended or is playing");   
+  }
+}
+
+
+void setActiveFlightOld(CrashFlight theFlight) {
+  activeFlight = theFlight;
+  /*
+  activeFlight.finished = false;
+   activeFlight.pausable = false;
+   activeFlight.displayAll = false;
+   */
+  float[] nextProjecitonParams = getProjectionParams(activeFlight.myDatum);
+
+  //float nextDeltaLat = (nextProjecitonParams[0] + TWO_PI) % TWO_PI;
+  //float nextDeltaLon = (nextProjecitonParams[1] + TWO_PI) % TWO_PI;
+  //float nextDeltaLonPost = (nextProjecitonParams[2] + TWO_PI) % TWO_PI;
+  float nextDeltaLat = nextProjecitonParams[0];
+  float nextDeltaLon = nextProjecitonParams[1];
+  float nextDeltaLonPost = nextProjecitonParams[2] + HALF_PI;
+  float nextMapScale = max(nextProjecitonParams[3], MIN_MAP_SCALE);
+
+
+  float ddlon = nextDeltaLon - deltaLon;
+  //println(degrees(ddlon));
+  while (abs(ddlon) > PI) {
+    ddlon -= signum(ddlon) * TWO_PI;
+  }
+
+  nextDeltaLon = deltaLon + ddlon;
+
+  float ddlonp = nextDeltaLonPost - deltaLonPost;
+  while (abs(ddlonp) > PI) {
+    ddlonp -= signum(ddlonp) * PI;
+  }
+  if (abs(ddlonp) > HALF_PI) {
+    ddlonp = ddlonp - signum(ddlonp) * PI;
+  }
+
+  nextDeltaLonPost = deltaLonPost + ddlonp;
+
   println("animating delta lat", degrees(deltaLat), " > ", degrees(nextDeltaLat));
   println("animating delta lon", degrees(deltaLon), " > ", degrees(nextDeltaLon));
   println("animating delta lon post", degrees(deltaLonPost), " > ", degrees(nextDeltaLonPost));

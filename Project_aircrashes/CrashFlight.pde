@@ -6,7 +6,7 @@ class CrashFlight {
   boolean coordsValid;
   Timeline myTimeline;
   float myStartMoment, myEndMoment;
-  float minRadius = 3 * scaleFactor, maxRadius = 200 * scaleFactor;
+  float minRadius = 3 * scaleFactor, maxRadius = 300 * scaleFactor;
   float rOcc, rFat;
   Float progressTime;
   CrashFlight previousFlight = null, nextFlight = null;
@@ -122,7 +122,6 @@ class CrashFlight {
      */
 
     float radiusAnimationFactor = min(FADE_TIME, CRASH_INFO_SHOW_TIME);
-    println(radiusAnimationFactor);
     noStroke();
     fill(GREEN, 255*0.4);
     ellipse(planePosXY.x, planePosXY.y, rOcc * scaleFactor * radiusAnimationFactor, rOcc * scaleFactor * radiusAnimationFactor);
@@ -137,7 +136,8 @@ class CrashFlight {
     drawRadialText(myDatum.fatalities + "", planePosXY, depAngle + HALF_PI, PI, refRadius);
     textAlign(LEFT, CENTER);
     fill(GREEN, radiusAnimationFactor*255);
-    drawRadialText((myDatum.occupants - myDatum.fatalities) + "", planePosXY, depAngle - HALF_PI, 0, refRadius);
+    //drawRadialText((myDatum.occupants - myDatum.fatalities) + "", planePosXY, depAngle - HALF_PI, 0, refRadius);
+    drawRadialText(myDatum.occupants + "", planePosXY, depAngle - HALF_PI, 0, refRadius);
     popStyle();
   }
 }

@@ -1,6 +1,6 @@
 //TODO: font settings
 
-void drawArcTextCentered(String theText, PVector v) {
+void drawArcTextCentered(String theText, PVector v) {  
   drawArcTextCentered(theText, v.x, v.y);
 }
 
@@ -129,113 +129,10 @@ int signum(float f) {
 }
 
 void updateSequence(CrashFlight nextFlight) {
-  activeFlight = nextFlight;
-  float[] nextProjecitonParams = getProjectionParams(activeFlight.myDatum);
-
-  nextDeltaLat = nextProjecitonParams[0];
-  nextDeltaLon = nextProjecitonParams[1];
-  nextDeltaLonPost = nextProjecitonParams[2] + HALF_PI;
-  nextMapScale = max(nextProjecitonParams[3], MIN_MAP_SCALE);
-
-  float ddlon = nextDeltaLon - deltaLon;
-  while (abs(ddlon) > PI) {
-    ddlon -= signum(ddlon) * TWO_PI;
-  }
-
-  nextDeltaLon = deltaLon + ddlon;
-
-  float ddlonp = nextDeltaLonPost - deltaLonPost;
-  while (abs(ddlonp) > PI) {
-    ddlonp -= signum(ddlonp) * PI;
-  }
-  if (abs(ddlonp) > HALF_PI) {
-    ddlonp = ddlonp - signum(ddlonp) * PI;
-  }
-
-  nextDeltaLonPost = deltaLonPost + ddlonp;
-
-  println("animating delta lat", degrees(deltaLat), " > ", degrees(nextDeltaLat));
-  println("animating delta lon", degrees(deltaLon), " > ", degrees(nextDeltaLon));
-  println("animating delta lon post", degrees(deltaLonPost), " > ", degrees(nextDeltaLonPost));
-  println("animating scale", mapScale, " > ", nextMapScale);
-  println(degrees(nextDeltaLon) - degrees(nextDeltaLonPost), degrees(nextDeltaLon) + degrees(nextDeltaLonPost));
-  println("-----");
-
-  float t = SEEK_DURATION;
-  float t_half = t/2f;
-  float t_two_thirds = t/3f * 2f;
-  float t_third = t/3f;
-  float dt = t*0.15;
-  float tSum = 0;
-
-  CRASH_INFO_SHOW_TIME = 0;
-  TRAJECTORY_SHOW_TIME = 0;
-  FADE_TIME = 0;
-  //if (globalAniSequence.isEnded() || !globalAniSequence.isPlaying()) {
-  Ani.killAll();
-  //1. animate time, NB callback!
-  timeAni = Ani.to(this, t, 0, "TIME", activeFlight.myDatum.normMoment, Ani.LINEAR);
-
-  //2. zoom out
-  mapScaleOutAni = Ani.to(this, t_third, 0, "mapScale", MAX_MAP_SCALE);
-  //3. rotate
-  lonAni = Ani.to(this, t_third + dt*2, t_third - dt, "deltaLon", nextDeltaLon);
-  latAni = Ani.to(this, t_third + dt*2, t_third - dt, "deltaLat", nextDeltaLat);
-  lonPostAni = Ani.to(this, t_third + dt*2 + 0.1, t_third - dt, "deltaLonPost", nextDeltaLonPost, Ani.getDefaultEasing(), "onEnd:zoomIn");
-
-
-  timeAni.start();
-  mapScaleOutAni.start();
-  lonAni.start();
-  lonPostAni.start();
-  latAni.start();
+  updateSequence(nextFlight, 0f);
 }
 
-void zoomIn() {
-  Ani.killAll();
-  //4. zoom in
-  mapScaleInAni = Ani.to(this, SEEK_DURATION / 3f, "mapScale", nextMapScale, Ani.getDefaultEasing(), "onEnd:fadeIn");
-  mapScaleInAni.start();
-}
-
-void fadeIn() {
-  Ani.killAll();
-  //5. TODO: animate flight
-  fadeInAni = Ani.to(this, FADE_DURATION, "FADE_TIME", 1, Ani.getDefaultEasing(), "onEnd:showFlight");
-  fadeInAni.start();
-}
-
-void showFlight() {
-  Ani.killAll();
-  trajectoryShowAni = Ani.to(this, TRAJECTORY_SHOW_DURATION, "TRAJECTORY_SHOW_TIME", 1);
-  crashInfoShowAni = Ani.to(this, FADE_DURATION, TRAJECTORY_SHOW_DURATION, "CRASH_INFO_SHOW_TIME", 1, Ani.BOUNCE_OUT, "onEnd:fadeOut");
-  trajectoryShowAni.start();
-  crashInfoShowAni.start();
-}
-
-void fadeOut() {
-  Ani.killAll();
-  fadeOutAni = Ani.to(this, FADE_DURATION, "FADE_TIME", 0, Ani.getDefaultEasing(), "onEnd:callbackAfterFlightShown");
-  fadeOutAni.start();
-}
-
-void pauseSafely(Ani theAni) {
-  if (theAni != null) {
-    if (theAni.isPlaying () || theAni.isDelaying() && !theAni.isEnded()) {
-      theAni.pause();
-    }
-  }
-}
-
-void resumeSafely(Ani theAni) {
-  if (theAni != null) {
-    if (!theAni.isPlaying() && !theAni.isEnded()) {
-      theAni.resume();
-    }
-  }
-}
-
-void updateSequenceOld(CrashFlight nextFlight, float seekTime) {
+void updateSequence(CrashFlight nextFlight, float seekTime) {
   activeFlight = nextFlight;
   float[] nextProjecitonParams = getProjectionParams(activeFlight.myDatum);
 
@@ -268,7 +165,7 @@ void updateSequenceOld(CrashFlight nextFlight, float seekTime) {
   println(degrees(nextDeltaLon) - degrees(nextDeltaLonPost), degrees(nextDeltaLon) + degrees(nextDeltaLonPost));
   println("-----");
 
-  float t = SEEK_DURATION;
+  float t = SEEK_DURATION; 
   float t_half = t/2f;
   float t_two_thirds = t/3f * 2f;
   float t_third = t/3f;
@@ -276,7 +173,7 @@ void updateSequenceOld(CrashFlight nextFlight, float seekTime) {
   float tSum = 0;
 
   //if (globalAniSequence.isEnded() || !globalAniSequence.isPlaying()) {
-  //Ani.killAll();
+  Ani.killAll();
   globalAniSequence = new AniSequence(this);
   globalAniSequence.beginSequence();
 
@@ -295,23 +192,22 @@ void updateSequenceOld(CrashFlight nextFlight, float seekTime) {
   globalAniSequence.add(Ani.to(this, t_third, 0, "mapScale", nextMapScale));
   globalAniSequence.endStep();
   //5. TODO: animate flight
-
+  
   globalAniSequence.beginStep();
   globalAniSequence.add(Ani.to(this, FADE_DURATION, "FADE_TIME", 1));
   globalAniSequence.endStep();
-
+  
   globalAniSequence.beginStep();
   globalAniSequence.add(Ani.to(this, TRAJECTORY_SHOW_DURATION, "TRAJECTORY_SHOW_TIME", 1));
   globalAniSequence.endStep();
   globalAniSequence.beginStep();
   globalAniSequence.add(Ani.to(this, FADE_DURATION, "CRASH_INFO_SHOW_TIME", 1, Ani.BOUNCE_OUT));
   globalAniSequence.endStep();
-
+  
   globalAniSequence.beginStep();
-  //globalAniSequence.add(Ani.to(this, FADE_DURATION, CRASH_INFO_SHOW_DURATION, "FADE_TIME", 0, Ani.getDefaultEasing(), "onEnd:callbackAfterFlightShown"));
-  globalAniSequence.add(Ani.to(this, FADE_DURATION, CRASH_INFO_SHOW_DURATION, "FADE_TIME", 0));
+  globalAniSequence.add(Ani.to(this, FADE_DURATION, CRASH_INFO_SHOW_DURATION, "FADE_TIME", 0, Ani.getDefaultEasing(), "onEnd:callbackAfterFlightShown"));
   globalAniSequence.endStep();
-
+  
 
   globalAniSequence.endSequence();
   //println("seeking to", seekTime);
@@ -320,7 +216,7 @@ void updateSequenceOld(CrashFlight nextFlight, float seekTime) {
 
 
   //} else {
-  // println("not ended or is playing");
+  // println("not ended or is playing");   
   //}
 }
 

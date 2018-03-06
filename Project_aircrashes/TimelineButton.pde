@@ -61,7 +61,7 @@ public class TimelineButton {
     float dy = my - height *0.5;
     float r = sqrt(dx * dx + dy * dy);
     float theta = atan2(dy, dx) - ORIENTATION;
-    return theta +PI +HALF_PI >= myAngle - myDeltaAngle && theta +PI +HALF_PI<= myAngle + myDeltaAngle && r >= myTimeline.innerRadius() && r <= myTimeline.outerRadius(); 
+    return theta +PI +HALF_PI >= myAngle - myDeltaAngle && theta +PI +HALF_PI<= myAngle + myDeltaAngle && r >= myTimeline.innerRadius() && r <= myTimeline.outerRadius();
     //return false;
   }
 
@@ -70,32 +70,53 @@ public class TimelineButton {
     switch(e.getAction()) {
     case MouseEvent.MOVE:
       mouseOver = mouseOver(mouseX, mouseY);
+      //println("timeline button move", e);
       break;
     case MouseEvent.CLICK:
-      //println("CLICK", e);
       if (mouseOver) {
-        switch(currentState) {
-        case STATE_PLAY:
-          currentState = STATE_PAUSED;
-          println("STATE_PLAY > STATE_PAUSED");
-          break;
-        case STATE_PAUSED:
-          if (activeFlight == null) {
-            currentState = STATE_PLAY;
-            println("STATE_PAUSED > STATE_PLAY");
-          } else {
-            currentState = STATE_DISPLAY_FLIGHT;
-            println("STATE_PAUSED > STATE_DISPLAY_FLIGHT");
-          }
-
-          break;
-        case STATE_SEEK:
-          currentState = STATE_PLAY;
-          println("STATE_SEEK > STATE_PLAY");
-          break;
-        }
+        scheduleTimeLineButtonPress = true;
       }
       break;
+      /*
+      println("timeline button CLICK", e);
+       if (mouseOver) {
+       switch(currentState) {
+       case STATE_PLAY:
+       if (globalAniSequence.isPlaying()) {
+       globalAniSequence.pause();
+       }
+       //currentSeekTime = globalAniSequence.getSeek();
+       //Ani.killAll();
+       currentState = STATE_PAUSED;
+       println("STATE_PLAY > STATE_PAUSED");
+       break;
+       case STATE_PAUSED:
+       //if (activeFlight == null) {
+       if (!globalAniSequence.isPlaying() && !globalAniSequence.isEnded()) {
+       globalAniSequence.resume();
+       }
+
+
+       //globalAniSequence.start();
+       //TIME = 0;
+       //FADE_TIME = 0;
+       //updateSequence(activeFlight, currentSeekTime);
+       currentState = STATE_PLAY;
+       println("STATE_PAUSED > STATE_PLAY");
+       //} else {
+       // currentState = STATE_DISPLAY_FLIGHT;
+       // println("STATE_PAUSED > STATE_DISPLAY_FLIGHT");
+       //}
+
+       break;
+       case STATE_SEEK:
+       currentState = STATE_PLAY;
+       println("STATE_SEEK > STATE_PLAY");
+       break;
+       }
+       }
+       break;
+       */
     }
   }
 }

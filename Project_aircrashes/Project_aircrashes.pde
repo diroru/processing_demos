@@ -36,7 +36,7 @@ ArrayList<Datum> data = new ArrayList<Datum>();
 ArrayList<CrashDot> myDots = new ArrayList<CrashDot>();
 
 final int STATE_PLAY = 0;
-final int STATE_DISPLAY_FLIGHT = 1;
+//final int STATE_DISPLAY_FLIGHT = 1;
 final int STATE_DISPLAY_FLIGHT_THEN_PAUSE = 2;
 final int STATE_PAUSED = 3;
 final int STATE_SEEK = 4;
@@ -65,7 +65,7 @@ float MIN_MAP_SCALE = 0.1;
 float MAX_MAP_SCALE = 2.5;
 float deltaLat = 0f, deltaLon = 0f, deltaLonPost = 0f, mapScale = MAX_MAP_SCALE;
 
-float SPEED_FACTOR = 1;
+float SPEED_FACTOR = 0.5;
 float SEEK_DURATION = 6 * SPEED_FACTOR; // in seconds
 float TRAJECTORY_SHOW_DURATION = 3 * SPEED_FACTOR; // in seconds
 float CRASH_INFO_SHOW_DURATION = 3 * SPEED_FACTOR; // in seconds
@@ -77,13 +77,24 @@ float TRAJECTORY_SHOW_TIME = 0;
 float CRASH_INFO_SHOW_TIME = 0;
 
 AniSequence globalAniSequence;
+boolean scheduleTimeLineButtonPress = false;
+
+float currentSeekTime = 0;
+
+int buttonPressDelay = 2000; //in millis
+int lastButtonPress;
+
+  float nextDeltaLat, nextDeltaLon, nextDeltaLonPost, nextMapScale;
+
+Ani latAni, lonAni, lonPostAni, mapScaleInAni, mapScaleOutAni, timeAni, fadeInAni, fadeOutAni, trajectoryShowAni, crashInfoShowAni;
 
 void setup() {
   //size(1920, 1920, P3D);
   size(1000, 1000, P2D);
   Ani.init(this);
   Ani.setDefaultEasing(Ani.QUAD_IN_OUT);
-  globalAniSequence = new AniSequence(this);
+  Ani.noOverwrite();
+  //globalAniSequence = new AniSequence(this);
   pixelDensity(displayDensity());
   scaleFactor = width / 1920f;
   println(scaleFactor);
@@ -105,16 +116,15 @@ void setup() {
 
   initData(timeline);
   initFlights(timeline);
-  //activeFlight = myFlights.get(0);
-  //setActiveFlight(myFlights.get(0));
-  //updateSequence(getNextFlight(activeFlight));
-  updateSequence(myFlights.get(20));
-  //activeFlight = myFlights.get(49);
+  updateSequence(getNextFlight(activeFlight));
+  //updateSequence(myFlights.get(20));
   initDots();
   hint(DISABLE_DEPTH_TEST);
+  lastButtonPress = millis();
 }
 
 void draw() {
+
   background(255, 0, 0);
 
   pushMatrix();
@@ -135,12 +145,62 @@ void draw() {
     cd.display();
   }
   popMatrix();
-  
+
   if (activeFlight != null) {
     activeFlight.display();
   }
-  
+
+
+  //println(globalAniSequence.getTime());
   //updateState();
+  if (scheduleTimeLineButtonPress) {
+    println("foo");
+    switch(currentState) {
+    case STATE_PLAY:
+      pauseSafely(timeAni);      
+      pauseSafely(mapScaleOutAni);
+      pauseSafely(lonAni);
+      pauseSafely(lonPostAni);
+      pauseSafely(latAni);
+      pauseSafely(mapScaleInAni);
+      pauseSafely(fadeInAni);
+      pauseSafely(trajectoryShowAni);
+      pauseSafely(crashInfoShowAni);
+      pauseSafely(fadeOutAni);
+      currentState = STATE_PAUSED;
+      println("STATE_PLAY > STATE_PAUSED");
+      break;
+    case STATE_PAUSED:
+      //if (activeFlight == null) {
+      //globalAniSequence.start();
+      resumeSafely(timeAni);
+      resumeSafely(mapScaleOutAni);
+      resumeSafely(lonAni);
+      resumeSafely(lonPostAni);
+      resumeSafely(latAni);
+      resumeSafely(mapScaleInAni);
+      resumeSafely(fadeInAni);
+      resumeSafely(trajectoryShowAni);
+      resumeSafely(crashInfoShowAni);
+      resumeSafely(fadeOutAni);
+
+      currentState = STATE_PLAY;
+      println("STATE_PAUSED > STATE_PLAY");
+      //} else {
+      // currentState = STATE_DISPLAY_FLIGHT;
+      // println("STATE_PAUSED > STATE_DISPLAY_FLIGHT");
+      //}
+
+      break;
+    case STATE_SEEK:
+      currentState = STATE_PLAY;
+      println("STATE_SEEK > STATE_PLAY");
+      break;
+    }
+    scheduleTimeLineButtonPress = false;
+    lastButtonPress= millis();
+  }
+  //println(TIME, FADE_TIME, TRAJECTORY_SHOW_TIME, CRASH_INFO_SHOW_TIME);
 }
 
 //just prevents clutter
@@ -237,67 +297,68 @@ void updateState() {
   case STATE_PLAY:
     /*
     boolean flightFound = false;
-    if (activeFlight == null) {
-      int i = 0;
-      while (i < myFlights.size() && !flightFound) {
-        CrashFlight cf = myFlights.get(i);
-        if (cf.myDatum.normMoment > TIME) {
-          setActiveFlight(cf);
-          flightFound = true;
-        }
-        i++;
-      }
-    }
-    if (aboutFlightTime(TIME, activeFlight)) {
-      FLIGHT_TIME = 0;
-      currentState = STATE_DISPLAY_FLIGHT;
-      println("PLAY > STATE_DISPLAY_FLIGHT");
-    } else {
-      TIME += TIME_INC;
-    }
-    */
+     if (activeFlight == null) {
+     int i = 0;
+     while (i < myFlights.size() && !flightFound) {
+     CrashFlight cf = myFlights.get(i);
+     if (cf.myDatum.normMoment > TIME) {
+     setActiveFlight(cf);
+     flightFound = true;
+     }
+     i++;
+     }
+     }
+     if (aboutFlightTime(TIME, activeFlight)) {
+     FLIGHT_TIME = 0;
+     currentState = STATE_DISPLAY_FLIGHT;
+     println("PLAY > STATE_DISPLAY_FLIGHT");
+     } else {
+     TIME += TIME_INC;
+     }
+     */
     break;
   case STATE_SEEK:
     /*
     TIME += SEEK_INC;
-    FLIGHT_TIME = 0;
-    if (abs(SEEK_TIME - TIME) < SEEK_EPSILON) {
-      currentState = STATE_DISPLAY_FLIGHT_THEN_PAUSE;
-      println("STATE_SEEK > STATE_DISPLAY_FLIGHT_THEN_PAUSE");
-    }
-    */
+     FLIGHT_TIME = 0;
+     if (abs(SEEK_TIME - TIME) < SEEK_EPSILON) {
+     currentState = STATE_DISPLAY_FLIGHT_THEN_PAUSE;
+     println("STATE_SEEK > STATE_DISPLAY_FLIGHT_THEN_PAUSE");
+     }
+     */
     break;
-  case STATE_DISPLAY_FLIGHT:
     /*
-    FLIGHT_TIME += FLIGHT_TIME_INC;
-    activeFlight.display(FLIGHT_TIME);
-    if (activeFlight.finished) {
-      activeFlight = null;
-      currentState = STATE_PLAY;
-      println("STATE_DISPLAY_FLIGHT > STATE_PLAY");
-      TIME += TIME_INC;
-      FLIGHT_TIME = 0;
-    }
-    */
-    break;
+  case STATE_DISPLAY_FLIGHT:
+     
+     FLIGHT_TIME += FLIGHT_TIME_INC;
+     activeFlight.display(FLIGHT_TIME);
+     if (activeFlight.finished) {
+     activeFlight = null;
+     currentState = STATE_PLAY;
+     println("STATE_DISPLAY_FLIGHT > STATE_PLAY");
+     TIME += TIME_INC;
+     FLIGHT_TIME = 0;
+     }
+     break;
+     */
   case STATE_DISPLAY_FLIGHT_THEN_PAUSE:
     /*
     //TODO: »freeze« display
-    FLIGHT_TIME += FLIGHT_TIME_INC;
-    activeFlight.display(FLIGHT_TIME);
-    if (activeFlight.pausable) {
-      ////activeFlight = null;
-      currentState = STATE_PAUSED;
-      println("STATE_DISPLAY_FLIGHT_THEN_PAUSE > STATE_PAUSED");
-    }
-    */
+     FLIGHT_TIME += FLIGHT_TIME_INC;
+     activeFlight.display(FLIGHT_TIME);
+     if (activeFlight.pausable) {
+     ////activeFlight = null;
+     currentState = STATE_PAUSED;
+     println("STATE_DISPLAY_FLIGHT_THEN_PAUSE > STATE_PAUSED");
+     }
+     */
     break;
   case STATE_PAUSED:
     /*
     if (activeFlight != null) {
-      activeFlight.display(FLIGHT_TIME);
-    }
-    */
+     activeFlight.display(FLIGHT_TIME);
+     }
+     */
     break;
   }
 }
@@ -345,4 +406,5 @@ void initShape() {
 }
 
 void keyPressed() {
+  scheduleTimeLineButtonPress = true;
 }

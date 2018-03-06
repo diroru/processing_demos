@@ -168,9 +168,6 @@ void updateSequence(CrashFlight nextFlight) {
   float dt = t*0.15;
   float tSum = 0;
 
-  CRASH_INFO_SHOW_TIME = 0;
-  TRAJECTORY_SHOW_TIME = 0;
-  FADE_TIME = 0;
   //if (globalAniSequence.isEnded() || !globalAniSequence.isPlaying()) {
   Ani.killAll();
   //1. animate time, NB callback!
@@ -179,9 +176,9 @@ void updateSequence(CrashFlight nextFlight) {
   //2. zoom out
   mapScaleOutAni = Ani.to(this, t_third, 0, "mapScale", MAX_MAP_SCALE);
   //3. rotate
-  lonAni = Ani.to(this, t_third + dt*2, t_third - dt, "deltaLon", nextDeltaLon);
-  latAni = Ani.to(this, t_third + dt*2, t_third - dt, "deltaLat", nextDeltaLat);
-  lonPostAni = Ani.to(this, t_third + dt*2 + 0.1, t_third - dt, "deltaLonPost", nextDeltaLonPost, Ani.getDefaultEasing(), "onEnd:zoomIn");
+  lonAni = Ani.to(this, t_half + dt*2, t_half - dt, "deltaLon", nextDeltaLon);
+  latAni = Ani.to(this, t_half + dt*2, t_half - dt, "deltaLat", nextDeltaLat);
+  lonPostAni = Ani.to(this, t_half + dt*2 + 0.1, t_half - dt, "deltaLonPost", nextDeltaLonPost, Ani.getDefaultEasing(), "onEnd:zoomIn");
 
 
   timeAni.start();
@@ -215,7 +212,7 @@ void showFlight() {
 
 void fadeOut() {
   Ani.killAll();
-  fadeOutAni = Ani.to(this, FADE_DURATION, "FADE_TIME", 0, Ani.getDefaultEasing(), "onEnd:callbackAfterFlightShown");
+  fadeOutAni = Ani.to(this, FADE_DURATION, CRASH_INFO_SHOW_DURATION, "FADE_TIME", 0, Ani.getDefaultEasing(), "onEnd:callbackAfterFlightShown");
   fadeOutAni.start();
 }
 
@@ -235,102 +232,17 @@ void resumeSafely(Ani theAni) {
   }
 }
 
-void updateSequenceOld(CrashFlight nextFlight, float seekTime) {
-  activeFlight = nextFlight;
-  float[] nextProjecitonParams = getProjectionParams(activeFlight.myDatum);
-
-  float nextDeltaLat = nextProjecitonParams[0];
-  float nextDeltaLon = nextProjecitonParams[1];
-  float nextDeltaLonPost = nextProjecitonParams[2] + HALF_PI;
-  float nextMapScale = max(nextProjecitonParams[3], MIN_MAP_SCALE);
-
-  float ddlon = nextDeltaLon - deltaLon;
-  while (abs(ddlon) > PI) {
-    ddlon -= signum(ddlon) * TWO_PI;
-  }
-
-  nextDeltaLon = deltaLon + ddlon;
-
-  float ddlonp = nextDeltaLonPost - deltaLonPost;
-  while (abs(ddlonp) > PI) {
-    ddlonp -= signum(ddlonp) * PI;
-  }
-  if (abs(ddlonp) > HALF_PI) {
-    ddlonp = ddlonp - signum(ddlonp) * PI;
-  }
-
-  nextDeltaLonPost = deltaLonPost + ddlonp;
-
-  println("animating delta lat", degrees(deltaLat), " > ", degrees(nextDeltaLat));
-  println("animating delta lon", degrees(deltaLon), " > ", degrees(nextDeltaLon));
-  println("animating delta lon post", degrees(deltaLonPost), " > ", degrees(nextDeltaLonPost));
-  println("animating scale", mapScale, " > ", nextMapScale);
-  println(degrees(nextDeltaLon) - degrees(nextDeltaLonPost), degrees(nextDeltaLon) + degrees(nextDeltaLonPost));
-  println("-----");
-
-  float t = SEEK_DURATION;
-  float t_half = t/2f;
-  float t_two_thirds = t/3f * 2f;
-  float t_third = t/3f;
-  float dt = t*0.15;
-  float tSum = 0;
-
-  //if (globalAniSequence.isEnded() || !globalAniSequence.isPlaying()) {
-  //Ani.killAll();
-  globalAniSequence = new AniSequence(this);
-  globalAniSequence.beginSequence();
-
-  globalAniSequence.beginStep();
-  //1. animate time, NB callback!
-  globalAniSequence.add(Ani.to(this, t, "TIME", activeFlight.myDatum.normMoment, Ani.LINEAR));
-  //2. zoom out
-  globalAniSequence.add(Ani.to(this, t_third, 0, "mapScale", MAX_MAP_SCALE));
-  //3. rotate
-  globalAniSequence.add(Ani.to(this, t_third + dt*2, t_third - dt, "deltaLon", nextDeltaLon));
-  globalAniSequence.add(Ani.to(this, t_third + dt*2, t_third - dt, "deltaLonPost", nextDeltaLonPost));
-  globalAniSequence.add(Ani.to(this, t_third + dt*2, t_third - dt, "deltaLat", nextDeltaLat));
-  globalAniSequence.endStep();
-  globalAniSequence.beginStep();
-  //4. zoom in
-  globalAniSequence.add(Ani.to(this, t_third, 0, "mapScale", nextMapScale));
-  globalAniSequence.endStep();
-  //5. TODO: animate flight
-
-  globalAniSequence.beginStep();
-  globalAniSequence.add(Ani.to(this, FADE_DURATION, "FADE_TIME", 1));
-  globalAniSequence.endStep();
-
-  globalAniSequence.beginStep();
-  globalAniSequence.add(Ani.to(this, TRAJECTORY_SHOW_DURATION, "TRAJECTORY_SHOW_TIME", 1));
-  globalAniSequence.endStep();
-  globalAniSequence.beginStep();
-  globalAniSequence.add(Ani.to(this, FADE_DURATION, "CRASH_INFO_SHOW_TIME", 1, Ani.BOUNCE_OUT));
-  globalAniSequence.endStep();
-
-  globalAniSequence.beginStep();
-  //globalAniSequence.add(Ani.to(this, FADE_DURATION, CRASH_INFO_SHOW_DURATION, "FADE_TIME", 0, Ani.getDefaultEasing(), "onEnd:callbackAfterFlightShown"));
-  globalAniSequence.add(Ani.to(this, FADE_DURATION, CRASH_INFO_SHOW_DURATION, "FADE_TIME", 0));
-  globalAniSequence.endStep();
-
-
-  globalAniSequence.endSequence();
-  //println("seeking to", seekTime);
-  globalAniSequence.start();
-  //globalAniSequence.seek(seekTime);
-
-
-  //} else {
-  // println("not ended or is playing");
-  //}
-}
-
 void callbackAfterFlightShown() {
   switch(currentState) {
   case STATE_PLAY:
     TRAJECTORY_SHOW_TIME = 0;
     CRASH_INFO_SHOW_TIME = 0;
-    activeFlight = getNextFlight(activeFlight);
-    updateSequence(activeFlight);
+    if (nextFlightCandidate == null) {
+      updateSequence(getNextFlight(activeFlight));
+    } else {
+      updateSequence(nextFlightCandidate);
+      nextFlightCandidate = null;
+    }
     break;
   }
 }
@@ -340,53 +252,4 @@ CrashFlight getNextFlight(CrashFlight theActiveFlight) {
     return myFlights.get(0);
   }
   return theActiveFlight.nextFlight;
-}
-
-
-void setActiveFlightOld(CrashFlight theFlight) {
-  activeFlight = theFlight;
-  /*
-  activeFlight.finished = false;
-   activeFlight.pausable = false;
-   activeFlight.displayAll = false;
-   */
-  float[] nextProjecitonParams = getProjectionParams(activeFlight.myDatum);
-
-  //float nextDeltaLat = (nextProjecitonParams[0] + TWO_PI) % TWO_PI;
-  //float nextDeltaLon = (nextProjecitonParams[1] + TWO_PI) % TWO_PI;
-  //float nextDeltaLonPost = (nextProjecitonParams[2] + TWO_PI) % TWO_PI;
-  float nextDeltaLat = nextProjecitonParams[0];
-  float nextDeltaLon = nextProjecitonParams[1];
-  float nextDeltaLonPost = nextProjecitonParams[2] + HALF_PI;
-  float nextMapScale = constrain(nextProjecitonParams[3], MIN_MAP_SCALE, MAX_MAP_SCALE);
-
-
-  float ddlon = nextDeltaLon - deltaLon;
-  //println(degrees(ddlon));
-  while (abs(ddlon) > PI) {
-    ddlon -= signum(ddlon) * TWO_PI;
-  }
-
-  nextDeltaLon = deltaLon + ddlon;
-
-  float ddlonp = nextDeltaLonPost - deltaLonPost;
-  while (abs(ddlonp) > PI) {
-    ddlonp -= signum(ddlonp) * PI;
-  }
-  if (abs(ddlonp) > HALF_PI) {
-    ddlonp = ddlonp - signum(ddlonp) * PI;
-  }
-
-  nextDeltaLonPost = deltaLonPost + ddlonp;
-
-  println("animating delta lat", degrees(deltaLat), " > ", degrees(nextDeltaLat));
-  println("animating delta lon", degrees(deltaLon), " > ", degrees(nextDeltaLon));
-  println("animating delta lon post", degrees(deltaLonPost), " > ", degrees(nextDeltaLonPost));
-  println("animating scale", mapScale, " > ", max(nextProjecitonParams[3], MIN_MAP_SCALE));
-  println(degrees(nextDeltaLon) - degrees(nextDeltaLonPost), degrees(nextDeltaLon) + degrees(nextDeltaLonPost));
-  println("-----");
-  Ani.to(this, 5.0, "deltaLat", nextDeltaLat);
-  Ani.to(this, 5.0, "deltaLon", nextDeltaLon);
-  Ani.to(this, 5.0, "deltaLonPost", nextDeltaLonPost);
-  Ani.to(this, 5.0, "mapScale", max(nextMapScale, MIN_MAP_SCALE));
 }

@@ -20,14 +20,6 @@ public class TimelineButton {
     } else {
       stroke(255);
     }
-    switch(currentState) {
-    case STATE_PLAY:
-      break;
-    case STATE_PAUSED:
-      break;
-    case STATE_SEEK:
-      break;
-    }
     myTimeline.drawArcAround(myAngle + HALF_PI, myDeltaAngle);
     popStyle();
 
@@ -74,49 +66,41 @@ public class TimelineButton {
       break;
     case MouseEvent.CLICK:
       if (mouseOver) {
-        scheduleTimeLineButtonPress = true;
+        switch(currentState) {
+        case STATE_PLAY:
+          pauseSafely(timeAni);      
+          pauseSafely(mapScaleOutAni);
+          pauseSafely(lonAni);
+          pauseSafely(lonPostAni);
+          pauseSafely(latAni);
+          pauseSafely(mapScaleInAni);
+          pauseSafely(fadeInAni);
+          pauseSafely(trajectoryShowAni);
+          pauseSafely(crashInfoShowAni);
+          pauseSafely(fadeOutAni);
+
+          currentState = STATE_PAUSED;
+          println("STATE_PLAY > STATE_PAUSED");
+          break;
+        case STATE_PAUSED:
+          //if (activeFlight == null) {
+          //globalAniSequence.start();
+          resumeSafely(timeAni);
+          resumeSafely(mapScaleOutAni);
+          resumeSafely(lonAni);
+          resumeSafely(lonPostAni);
+          resumeSafely(latAni);
+          resumeSafely(mapScaleInAni);
+          resumeSafely(fadeInAni);
+          resumeSafely(trajectoryShowAni);
+          resumeSafely(crashInfoShowAni);
+          resumeSafely(fadeOutAni);
+
+          currentState = STATE_PLAY;
+          println("STATE_PAUSED > STATE_PLAY");
+          break;
+        }
       }
-      break;
-      /*
-      println("timeline button CLICK", e);
-       if (mouseOver) {
-       switch(currentState) {
-       case STATE_PLAY:
-       if (globalAniSequence.isPlaying()) {
-       globalAniSequence.pause();
-       }
-       //currentSeekTime = globalAniSequence.getSeek();
-       //Ani.killAll();
-       currentState = STATE_PAUSED;
-       println("STATE_PLAY > STATE_PAUSED");
-       break;
-       case STATE_PAUSED:
-       //if (activeFlight == null) {
-       if (!globalAniSequence.isPlaying() && !globalAniSequence.isEnded()) {
-       globalAniSequence.resume();
-       }
-
-
-       //globalAniSequence.start();
-       //TIME = 0;
-       //FADE_TIME = 0;
-       //updateSequence(activeFlight, currentSeekTime);
-       currentState = STATE_PLAY;
-       println("STATE_PAUSED > STATE_PLAY");
-       //} else {
-       // currentState = STATE_DISPLAY_FLIGHT;
-       // println("STATE_PAUSED > STATE_DISPLAY_FLIGHT");
-       //}
-
-       break;
-       case STATE_SEEK:
-       currentState = STATE_PLAY;
-       println("STATE_SEEK > STATE_PLAY");
-       break;
-       }
-       }
-       break;
-       */
     }
   }
 }

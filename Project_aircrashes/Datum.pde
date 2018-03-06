@@ -49,6 +49,11 @@ class Datum implements Comparable {
     //TODO!!!
     return d.id.equals(this.id);
   }
+  
+  @Override
+  public int hashCode() {
+    return Objects.hash(id);
+  }
 
   boolean coordsValid() {
     return depLatLng[0] != null && depLatLng[1] != null && dstLatLng[0] != null && dstLatLng[1] != null;

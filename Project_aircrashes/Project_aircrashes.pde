@@ -37,9 +37,8 @@ ArrayList<CrashDot> myDots = new ArrayList<CrashDot>();
 
 final int STATE_PLAY = 0;
 //final int STATE_DISPLAY_FLIGHT = 1;
-final int STATE_DISPLAY_FLIGHT_THEN_PAUSE = 2;
+//final int STATE_DISPLAY_FLIGHT_THEN_PAUSE = 2;
 final int STATE_PAUSED = 3;
-final int STATE_SEEK = 4;
 int currentState = STATE_PLAY;
 
 ArrayList<CrashFlight> myFlights = new ArrayList<CrashFlight>();
@@ -55,7 +54,7 @@ int MAX_OCCUPANTS = Integer.MIN_VALUE;
 HashSet<String> phaseCodes = new HashSet<String>();
 HashMap<String, Float> phaseProgress = new HashMap<String, Float>();
 HashMap<Datum, CrashFlight> flightsByDatum = new HashMap<Datum, CrashFlight>();
-CrashFlight activeFlight;
+CrashFlight activeFlight, nextFlightCandidate;
 PShape map, quad;
 PGraphics mapContainer;
 PShader shader;
@@ -84,7 +83,7 @@ float currentSeekTime = 0;
 int buttonPressDelay = 2000; //in millis
 int lastButtonPress;
 
-  float nextDeltaLat, nextDeltaLon, nextDeltaLonPost, nextMapScale;
+float nextDeltaLat, nextDeltaLon, nextDeltaLonPost, nextMapScale;
 
 Ani latAni, lonAni, lonPostAni, mapScaleInAni, mapScaleOutAni, timeAni, fadeInAni, fadeOutAni, trajectoryShowAni, crashInfoShowAni;
 
@@ -149,84 +148,6 @@ void draw() {
   if (activeFlight != null) {
     activeFlight.display();
   }
-
-
-  //println(globalAniSequence.getTime());
-  //updateState();
-  if (scheduleTimeLineButtonPress) {
-    println("foo");
-    switch(currentState) {
-    case STATE_PLAY:
-      pauseSafely(timeAni);      
-      pauseSafely(mapScaleOutAni);
-      pauseSafely(lonAni);
-      pauseSafely(lonPostAni);
-      pauseSafely(latAni);
-      pauseSafely(mapScaleInAni);
-      pauseSafely(fadeInAni);
-      pauseSafely(trajectoryShowAni);
-      pauseSafely(crashInfoShowAni);
-      pauseSafely(fadeOutAni);
-      currentState = STATE_PAUSED;
-      println("STATE_PLAY > STATE_PAUSED");
-      break;
-    case STATE_PAUSED:
-      //if (activeFlight == null) {
-      //globalAniSequence.start();
-      resumeSafely(timeAni);
-      resumeSafely(mapScaleOutAni);
-      resumeSafely(lonAni);
-      resumeSafely(lonPostAni);
-      resumeSafely(latAni);
-      resumeSafely(mapScaleInAni);
-      resumeSafely(fadeInAni);
-      resumeSafely(trajectoryShowAni);
-      resumeSafely(crashInfoShowAni);
-      resumeSafely(fadeOutAni);
-
-      currentState = STATE_PLAY;
-      println("STATE_PAUSED > STATE_PLAY");
-      //} else {
-      // currentState = STATE_DISPLAY_FLIGHT;
-      // println("STATE_PAUSED > STATE_DISPLAY_FLIGHT");
-      //}
-
-      break;
-    case STATE_SEEK:
-      currentState = STATE_PLAY;
-      println("STATE_SEEK > STATE_PLAY");
-      break;
-    }
-    scheduleTimeLineButtonPress = false;
-    lastButtonPress= millis();
-  }
-  //println(TIME, FADE_TIME, TRAJECTORY_SHOW_TIME, CRASH_INFO_SHOW_TIME);
-}
-
-//just prevents clutter
-void stuff() {
-  // image(background, width*(1 - SCALE)*0.5, height*(1 - SCALE)*0.5, width*SCALE, height*SCALE);
-
-
-
-  //s.rotate(phi);
-
-  /*
-  String d = "Hello World!!!&#*";
-   fill(232,26,154);
-   drawArcTextCentered(d, mouseX, mouseY);
-   println((mouseX-width)/scaleFactor, (mouseY-height)/scaleFactor);
-   */
-  // fill(28,229,142,300);
-  // drawArcTextCentered(d, mouseX, mouseY);
-
-  //text("Hello", 0, 48);
-
-  /*
-  for (Datum d : data) {
-   timeline.drawDate(d, 5 * scaleFactor, 40 * scaleFactor);
-   }
-   */
 }
 
 void drawMask(float s) {
@@ -289,77 +210,6 @@ void drawLegend() {
     translate(-width * 0.5, -height * 0.5);
     ellipse (width-1654*scaleFactor, height-1507*scaleFactor, 15*scaleFactor, 15*scaleFactor);
     popMatrix();
-  }
-}
-
-void updateState() {
-  switch(currentState) {
-  case STATE_PLAY:
-    /*
-    boolean flightFound = false;
-     if (activeFlight == null) {
-     int i = 0;
-     while (i < myFlights.size() && !flightFound) {
-     CrashFlight cf = myFlights.get(i);
-     if (cf.myDatum.normMoment > TIME) {
-     setActiveFlight(cf);
-     flightFound = true;
-     }
-     i++;
-     }
-     }
-     if (aboutFlightTime(TIME, activeFlight)) {
-     FLIGHT_TIME = 0;
-     currentState = STATE_DISPLAY_FLIGHT;
-     println("PLAY > STATE_DISPLAY_FLIGHT");
-     } else {
-     TIME += TIME_INC;
-     }
-     */
-    break;
-  case STATE_SEEK:
-    /*
-    TIME += SEEK_INC;
-     FLIGHT_TIME = 0;
-     if (abs(SEEK_TIME - TIME) < SEEK_EPSILON) {
-     currentState = STATE_DISPLAY_FLIGHT_THEN_PAUSE;
-     println("STATE_SEEK > STATE_DISPLAY_FLIGHT_THEN_PAUSE");
-     }
-     */
-    break;
-    /*
-  case STATE_DISPLAY_FLIGHT:
-     
-     FLIGHT_TIME += FLIGHT_TIME_INC;
-     activeFlight.display(FLIGHT_TIME);
-     if (activeFlight.finished) {
-     activeFlight = null;
-     currentState = STATE_PLAY;
-     println("STATE_DISPLAY_FLIGHT > STATE_PLAY");
-     TIME += TIME_INC;
-     FLIGHT_TIME = 0;
-     }
-     break;
-     */
-  case STATE_DISPLAY_FLIGHT_THEN_PAUSE:
-    /*
-    //TODO: »freeze« display
-     FLIGHT_TIME += FLIGHT_TIME_INC;
-     activeFlight.display(FLIGHT_TIME);
-     if (activeFlight.pausable) {
-     ////activeFlight = null;
-     currentState = STATE_PAUSED;
-     println("STATE_DISPLAY_FLIGHT_THEN_PAUSE > STATE_PAUSED");
-     }
-     */
-    break;
-  case STATE_PAUSED:
-    /*
-    if (activeFlight != null) {
-     activeFlight.display(FLIGHT_TIME);
-     }
-     */
-    break;
   }
 }
 

@@ -140,4 +140,9 @@ class CrashFlight {
     drawRadialText(myDatum.occupants + "", planePosXY, depAngle - HALF_PI, 0, refRadius);
     popStyle();
   }
+  
+  @Override
+  String toString() {
+    return myDatum.toString();
+  }
 }

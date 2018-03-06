@@ -94,6 +94,16 @@ void drawTangentialText(String theText, float x, float y) {
   popMatrix();
 }
 
+void drawRadialText(String s, PVector p, float angle, float angle2, float radius) {
+  pushMatrix();
+  translate(p.x,p.y);
+  rotate(angle);
+  translate(radius,0);
+  rotate(angle2);
+  text(s,0,0);
+  popMatrix();
+}
+
 PVector incrementRadially(PVector src, float delta) {
   PVector result = src.copy();
   result.sub(new PVector(width * 0.5, height * 0.5));
@@ -138,18 +148,9 @@ void setActiveFlight(CrashFlight theFlight) {
   //println(degrees(ddlon));
   while (abs(ddlon) > PI) {
     ddlon -= signum(ddlon) * TWO_PI;
-    //println(degrees(ddlon));
   }
-  /*
-  if (abs(ddlon) > HALF_PI) {
-    ddlon = ddlon - signum(ddlon) * PI;
-    println(degrees(ddlon));
-  }
-  */
-  //println(degrees(ddlon));
   
   nextDeltaLon = deltaLon + ddlon;
-  //println(degrees(nextDeltaLon), degrees(deltaLon), "******");
   
   float ddlonp = nextDeltaLonPost - deltaLonPost;
   while (abs(ddlonp) > PI) {

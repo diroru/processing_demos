@@ -72,7 +72,7 @@ void setup() {
   pixelDensity(displayDensity());
   scaleFactor = width / 1920f;
   println(scaleFactor);
-  TARGET_SIZE = 1200 * scaleFactor;
+  TARGET_SIZE = 1000 * scaleFactor;
   background = loadImage("background_map.png");
   corpusFont = loadFont("SourceSansPro-Regular-44.vlw");
   corpusFontBold = loadFont("SourceSansPro-Bold-48.vlw");
@@ -99,12 +99,12 @@ void setup() {
 
 void draw() {
   background(255, 0, 0);
-  
+
   pushMatrix();
   translate(width*0.5, height*0.5);
   rotate(ORIENTATION);  
   translate(-width*0.5, -height*0.5);
-  
+
   updateShader();
   shader(shader);
   shape(quad);
@@ -119,6 +119,12 @@ void draw() {
   }
   popMatrix();
   
+  /*
+  if (activeFlight != null) {
+    activeFlight.display(FLIGHT_TIME);
+  }
+  */
+
   updateState();
 }
 
@@ -258,15 +264,17 @@ void updateState() {
     FLIGHT_TIME += FLIGHT_TIME_INC;
     activeFlight.display(FLIGHT_TIME);
     if (activeFlight.pausable) {
-      //activeFlight = null;
+      ////activeFlight = null;
       currentState = STATE_PAUSED;
       println("STATE_DISPLAY_FLIGHT_THEN_PAUSE > STATE_PAUSED");
     }
     break;
   case STATE_PAUSED:
+    
     if (activeFlight != null) {
       activeFlight.display(FLIGHT_TIME);
     }
+    
     break;
   }
 }
@@ -275,7 +283,7 @@ void updateShader() {
   //deltaLat = 0;
   //deltaLon = 0;
   //deltaLonPost = 0;
-  mapScale = 2;
+  //mapScale = 2;
   shader.set("deltaLat", deltaLat);
   shader.set("deltaLon", deltaLon);
   shader.set("deltaLonPost", deltaLonPost); //TODO: +/-ORIENTATION?

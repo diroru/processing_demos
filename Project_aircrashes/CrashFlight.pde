@@ -6,7 +6,7 @@ class CrashFlight {
   boolean coordsValid;
   Timeline myTimeline;
   float myStartMoment, myEndMoment;
-  float minRadius = 1, maxRadius = 50;
+  float minRadius = 3 * scaleFactor, maxRadius = 200 * scaleFactor;
   float rOcc, rFat;
   Float progressTime;
   CrashFlight previousFlight = null, nextFlight = null;
@@ -90,14 +90,15 @@ class CrashFlight {
 
     PVector depXY = getGeodeticPoint(dep);
     PVector dstXY = getGeodeticPoint(dst);
+    
     noStroke();
     fill(255, alpha);
     pushStyle();
-    textSize(18 * scaleFactor);
-    //drawArcTextCentered(myDatum.depCountry, depXY);
-    //drawArcTextCentered(myDatum.dstCountry, dstXY);
-    //textAlign(CENTER, TOP);
-    //drawTangentialText(myDatum.depCountry, depXY);
+    textFont(corpusFontBold);
+    textSize(36 * scaleFactor);
+
+    float crashRadius = rOcc * scaleFactor;
+    
     float depAngle = atan2(depXY.y - height * 0.5, depXY.x - width * 0.5);
     float dstAngle = atan2(dstXY.y - height * 0.5, dstXY.x - width * 0.5);
     float planeAngle = atan2(planePosXY.y - height * 0.5, planePosXY.x - width * 0.5);
@@ -105,42 +106,13 @@ class CrashFlight {
     float depRadius = PVector.dist(depXY, new PVector(width*0.5, height*0.5));
     float dstRadius = PVector.dist(dstXY, new PVector(width*0.5, height*0.5));
     float planeRadius = PVector.dist(planePosXY, new PVector(width*0.5, height*0.5)) - 15 * scaleFactor;
+
+    float refRadius = rOcc * scaleFactor + 5;
+
+    textAlign(CENTER, TOP);
+    drawTangentialTextPolar(myDatum.depShort, depAngle, depRadius + max(refRadius, 30 * scaleFactor));
+    drawTangentialTextPolar(myDatum.dstShort, dstAngle, dstRadius + max(refRadius, 30 * scaleFactor));
     
-    int firstH = RIGHT;
-    int secondH = LEFT;
-    int firstV = BOTTOM;
-    int secondV = TOP;
-    float dAngle = radians(1);
-    float dRadius = 5 * scaleFactor;
-
-    if (depAngle < dstAngle) {
-      firstH = LEFT;
-      secondH = RIGHT;
-      depAngle -= dAngle;
-      dstAngle += dAngle;
-    } else {
-      depAngle += dAngle;
-      dstAngle -= dAngle;
-    }
-
-    if (depRadius > dstRadius) {
-      firstV = TOP;
-      secondV = BOTTOM;
-      depRadius += dRadius;
-      dstRadius -= dRadius;
-    } else {
-      depRadius -= dRadius;
-      dstRadius += dRadius;
-    }
-    textAlign(firstH, firstV);
-    drawTangentialTextPolar(myDatum.depShort, depAngle, depRadius);
-    textAlign(secondH, secondV);
-    drawTangentialTextPolar(myDatum.dstShort, dstAngle, dstRadius);
-
-    //drawTangentialText(myDatum.depShort, depXY);
-    //textAlign(CENTER, BOTTOM);
-    //drawTangentialText(myDatum.dstCountry, dstXY);
-    //drawTangentialText(myDatum.dstShort, dstXY);
     ellipseMode(RADIUS);
     fill(255, alpha);
     noStroke();
@@ -165,10 +137,16 @@ class CrashFlight {
     
     if (displayAll) {
       pushStyle();
-      textAlign(CENTER, BOTTOM);
+      //textAlign(CENTER, BOTTOM);
       textFont(corpusFontBold);
       textSize(30 * scaleFactor);
-      drawTangentialTextPolar(new String[]{myDatum.fatalities+ "/", myDatum.occupants + ""}, new color[]{color(RED), color(GREEN)}, alpha, planeAngle, planeRadius);
+      textAlign(RIGHT, CENTER);
+      fill(RED);
+      drawRadialText(myDatum.fatalities + "", planePosXY, depAngle + HALF_PI, PI, refRadius);
+      textAlign(LEFT, CENTER);
+      fill(GREEN);
+      drawRadialText((myDatum.occupants - myDatum.fatalities) + "", planePosXY, depAngle - HALF_PI, 0, refRadius);
+      //drawTangentialTextPolar(new String[]{myDatum.fatalities + "/", (myDatum.occupants - myDatum.fatalities) + ""}, new color[]{color(RED), color(GREEN)}, alpha, planeAngle, planeRadius);
       //drawTangentialText(new String[]{myDatum.fatalities+ " / ", myDatum.occupants + ""}, new color[]{color(RED), color(GREEN)}, alpha, planePosXY.x, planePosXY.y);
       popStyle();
     }

@@ -63,7 +63,7 @@ float MIN_MAP_SCALE = 0.1;
 float MAX_MAP_SCALE = 2.5;
 float deltaLat = 0f, deltaLon = 0f, deltaLonPost = 0f, mapScale = MAX_MAP_SCALE;
 
-float SPEED_FACTOR = 0.5;
+float SPEED_FACTOR = 1;
 float SEEK_DURATION = 6 * SPEED_FACTOR; // in seconds
 float TRAJECTORY_SHOW_DURATION = 3 * SPEED_FACTOR; // in seconds
 float CRASH_INFO_SHOW_DURATION = 3 * SPEED_FACTOR; // in seconds

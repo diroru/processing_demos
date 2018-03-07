@@ -256,8 +256,12 @@ void showFlight() {
 }
 
 void fadeOut() {
+  fadeOut(CRASH_INFO_SHOW_DURATION);
+}
+
+void fadeOut(Float delay) {
   Ani.killAll();
-  fadeOutAni = Ani.to(this, FADE_DURATION, CRASH_INFO_SHOW_DURATION, "FADE_TIME", 0, Ani.getDefaultEasing(), "onEnd:callbackAfterFlightShown");
+  fadeOutAni = Ani.to(this, FADE_DURATION, delay, "FADE_TIME", 0, Ani.getDefaultEasing(), "onEnd:callbackAfterFlightShown");
   fadeOutAni.start();
 }
 

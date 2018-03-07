@@ -78,10 +78,11 @@ public class CrashDot {  //<>// //<>//
     switch(e.getAction()) {
     case MouseEvent.MOVE:
       mouseOver = mouseOver(mouseX, mouseY);
-      
+      /*
       if (mouseOver)  {
         println("MOUSE OVER", myDatum);
       }
+      */
       
       //println(mouseX, mouseY);
       break;
@@ -91,10 +92,10 @@ public class CrashDot {  //<>// //<>//
       if(mouseOver) {
         nextFlightCandidate = getFlightByDatum(myDatum);
         println("SEEKING to", myDatum, nextFlightCandidate);
-        int[] d = getDatumFromNormMoment(nextFlightCandidate.myDatum.normMoment);
-        println(d);
+        //int[] d = getDatumFromNormMoment(nextFlightCandidate.myDatum.normMoment);
+        //println(d);
         currentState = STATE_PLAY;
-        fadeOut();
+        fadeOut(0f);
         //updateSequence(getFlightByDatum(myDatum));
         /*
         SEEK_TIME = myNormTime;

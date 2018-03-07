@@ -157,7 +157,7 @@ class CrashFlight {
 }
 
 String[] getTokens(String src) {
-  int i0 = src.indexOf("|");
+  int i0 = src.indexOf("·");
   int i1 = src.indexOf("(");
   
   String s0 = "";

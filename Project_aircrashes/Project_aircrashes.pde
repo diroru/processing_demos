@@ -9,8 +9,7 @@ PImage background;
 float scaleFactor;
 PFont corpusFont;
 PFont corpusFontBold;
-Table worstData;
-Table unusualData;
+Table myData;
 
 Timeline timeline;
 //float TIME_INC = 0.001; //used to be 0.00007
@@ -162,7 +161,7 @@ void drawMask(float s) {
 
 void drawLegend() {
   textFont(corpusFont);
-  String s = "100 worst and unusual Aircrashes   1933 – 2014";
+  String s = "147 worst and unusual Aircrashes   1933 \u2014 2014";
 
   fill(255);
 

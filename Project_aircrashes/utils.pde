@@ -1,5 +1,12 @@
 //TODO: font settings
 
+void drawArcTextCenteredPolar(String theText, float theta, float radius) {
+  float x = width * 0.5 + cos(theta) * radius;
+  float y = height * 0.5 + sin(theta) * radius;
+  drawArcTextCentered(theText, x, y);
+}
+
+
 void drawArcTextCentered(String theText, PVector v) {
   drawArcTextCentered(theText, v.x, v.y);
 }
@@ -56,30 +63,68 @@ void drawTangentialText(char theText, float x, float y) {
   drawTangentialText(theText + "", x, y);
 }
 
-void drawTangentialText(String[] theTextTokens, color[] colors, float x, float y) {
-  drawTangentialText(theTextTokens, colors, 255, x, y);
+void drawTangentialTextPolar(String[] theTextTokens, PFont[] theTextFonts, Float[] theTextSizes, color[] colors, float theta, float radius) {
+  float x = width * 0.5 + cos(theta) * radius;
+  float y = height * 0.5 + sin(theta) * radius;
+  drawTangentialText(theTextTokens, theTextFonts, theTextSizes, colors, 255, x, y);
 }
 
-void drawTangentialText(String[] theTextTokens, color[] colors, float alpha, float x, float y) {
+void drawTangentialText(String[] theTextTokens, color[] colors, float x, float y) {
+  drawTangentialText(theTextTokens, null, null, colors, 255, x, y);
+}
+
+void drawTangentialText(String[] theTextTokens, PFont[] theTextFonts, Float[] theTextSizes, color[] colors, float alpha, float x, float y) {
   float dx = x - width*0.5;
   float dy = y - height*0.5;
   float angle = atan2(dy, dx) - HALF_PI;
 
+  textAlign(LEFT, TOP);
+  float fullWidth = 0f;
+  for (int i = 0; i < theTextTokens.length; i++) {
+    try {
+      textFont(theTextFonts[i]);
+    } 
+    catch (Exception e) {
+    }
+    try {
+      textSize(theTextSizes[i]);
+    } 
+    catch (Exception e) {
+    }
+    fullWidth += textWidth(theTextTokens[i]);
+  }
+
   pushMatrix();
   translate(x, y);
   rotate(angle);
+  translate(-fullWidth*0.5, 0);
+
   for (int i = 0; i < theTextTokens.length; i++) {
-    fill(colors[i], alpha);
+    try {
+      fill(colors[i], alpha);
+    } 
+    catch (Exception e) {
+    }
+    try {
+      textFont(theTextFonts[i]);
+    } 
+    catch (Exception e) {
+    }
+    try {
+      textSize(theTextSizes[i]);
+    } 
+    catch (Exception e) {
+    }
     text(theTextTokens[i], 0, 0);
     translate(textWidth(theTextTokens[i]), 0);
   }
   popMatrix();
 }
 
-void drawTangentialTextPolar(String[] theTextTokens, color[] colors, float alpha, float theta, float radius) {
+void drawTangentialTextPolar(String[] theTextTokens, PFont[] theTextFonts, Float[] theTextSizes, color[] colors, float alpha, float theta, float radius) {
   float x = width*0.5 + cos(theta) * radius;
   float y = height*0.5 + sin(theta) * radius;
-  drawTangentialText(theTextTokens, colors, alpha, x, y);
+  drawTangentialText(theTextTokens, theTextFonts, theTextSizes, colors, alpha, x, y);
 }
 
 void drawTangentialText(String theText, float x, float y) {

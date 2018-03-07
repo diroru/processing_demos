@@ -100,9 +100,18 @@ class CrashFlight {
 
     float refRadius = rOcc * scaleFactor + 5;
 
-    textAlign(CENTER, TOP);
-    drawTangentialTextPolar(myDatum.depShort, depAngle, depRadius + max(refRadius, 30 * scaleFactor));
-    drawTangentialTextPolar(myDatum.dstShort, dstAngle, dstRadius + max(refRadius, 30 * scaleFactor));
+    
+    String[] depStrings = getTokens(myDatum.depShort);
+    String[] dstStrings = getTokens(myDatum.dstShort);
+    PFont[] fonts = new PFont[]{corpusFont, corpusFontBold, corpusFont};
+    Float[] sizes = new Float[]{36 * scaleFactor, 36 * scaleFactor, 36 * scaleFactor};
+    drawTangentialTextPolar(depStrings, fonts, sizes, null, depAngle, depRadius + max(refRadius, 30 * scaleFactor));
+    drawTangentialTextPolar(dstStrings, fonts, sizes, null, dstAngle, dstRadius + max(refRadius, 30 * scaleFactor));
+    //textAlign(CENTER, TOP);
+    //drawTangentialTextPolar(myDatum.depShort, depAngle, depRadius + max(refRadius, 30 * scaleFactor));
+    //drawTangentialTextPolar(myDatum.dstShort, dstAngle, dstRadius + max(refRadius, 30 * scaleFactor));
+    //drawArcTextCenteredPolar(myDatum.depShort, depAngle, depRadius + max(refRadius, 30 * scaleFactor));
+    //drawArcTextCenteredPolar(myDatum.dstShort, dstAngle, dstRadius + max(refRadius, 30 * scaleFactor));
 
     ellipseMode(RADIUS);
     fill(255, globalAlpha);
@@ -130,7 +139,7 @@ class CrashFlight {
     pushStyle();
     //textAlign(CENTER, BOTTOM);
     textFont(corpusFontBold);
-    textSize(30 * scaleFactor);
+    textSize(60 * scaleFactor);
     textAlign(RIGHT, CENTER);
     fill(RED, radiusAnimationFactor*255);
     drawRadialText(myDatum.fatalities + "", planePosXY, depAngle + HALF_PI, PI, refRadius);
@@ -145,4 +154,27 @@ class CrashFlight {
   String toString() {
     return myDatum.toString();
   }
+}
+
+String[] getTokens(String src) {
+  int i0 = src.indexOf("|");
+  int i1 = src.indexOf("(");
+  
+  String s0 = "";
+  String s1 = "";
+  String s2 = "";
+  if (i0 > 0) {
+    s0 = src.substring(0, i0);
+  }
+  if (i1 > 0) {
+    s2 = src.substring(i1, src.length());
+  }
+  if (i0 > 0 && i1 > 0) {
+    s1 = src.substring(i0, i1);
+  } else if (i1 > 0) {
+    s1 = src.substring(0, i1);
+  } else {
+    s1 = src;
+  }
+  return new String[]{s0, s1, s2};
 }

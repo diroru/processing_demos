@@ -1,19 +1,6 @@
 void initData(Timeline tl) {
-  worstData = loadTable("180131_toProcess_worst.tsv", "header"); 
-  unusualData = loadTable("180131_toProcess_unusual.tsv", "header");
-  for (TableRow tr : worstData.rows()) {
-    Datum d = new Datum(tr, tl);
-    phaseCodes.add(d.phaseCode);
-    MIN_FATALITIES = min(d.fatalities, MIN_FATALITIES);
-    MAX_FATALITIES = max(d.fatalities, MAX_FATALITIES);
-    MIN_OCCUPANTS = min(d.occupants, MIN_OCCUPANTS);
-    MAX_OCCUPANTS = max(d.occupants, MAX_OCCUPANTS);
-
-    if (!data.contains(d)) {
-      data.add(d);
-    }
-  }
-  for (TableRow tr : unusualData.rows()) {
+  myData = loadTable("180307_plane-crashes_worst+unusual.csv", "header"); 
+  for (TableRow tr : myData.rows()) {
     Datum d = new Datum(tr, tl);
     phaseCodes.add(d.phaseCode);
     MIN_FATALITIES = min(d.fatalities, MIN_FATALITIES);

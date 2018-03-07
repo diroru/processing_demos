@@ -98,9 +98,9 @@ PVector rotateAroundAxis(PVector v, PVector axis, float theta) {
 }
 
 PVector xyzToLatLon(PVector xyz) {
-  //xyz.normalize();
-  //float lat = atan2(xyz.z, sqrt(xyz.y * xyz.y + xyz.x * xyz.x));
-  float lat = asin(xyz.z);
+  xyz.normalize();
+  float lat = atan2(xyz.z, sqrt(xyz.y * xyz.y + xyz.x * xyz.x));
+  //float lat = asin(xyz.z);
   float lon = atan2(xyz.y, xyz.x);
   return new PVector(lat, lon);
 }
